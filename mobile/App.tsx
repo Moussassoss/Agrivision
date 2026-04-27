@@ -7,9 +7,9 @@ import { AuthProvider, useAuth } from "./src/context/AuthContext";
 // Screens
 import LoginScreen      from "./src/screens/LoginScreen";
 import RegisterScreen   from "./src/screens/RegisterScreen";
-// import HomeScreen       from "./src/screens/HomeScreen";
-// import ResultScreen     from "./src/screens/ResultScreen";
-// import HistoryScreen    from "./src/screens/HistoryScreen";
+import HomeScreen       from "./src/screens/HomeScreen";
+import ResultScreen     from "./src/screens/ResultScreen";
+import HistoryScreen    from "./src/screens/HistoryScreen";
 import ForgotPasswordScreen from "./src/screens/ForgotPasswordScreen";
 import WelcomeScreen        from "./src/screens/WelcomeScreen";
 
@@ -31,9 +31,9 @@ const Navigation = () => {
       {user ? (
         // ── Authenticated screens ──────────────────
         <>
-          {/* <Stack.Screen name="Home"    component={HomeScreen} />
+          <Stack.Screen name="Home"    component={HomeScreen} />
           <Stack.Screen name="Result"  component={ResultScreen} />
-          <Stack.Screen name="History" component={HistoryScreen} /> */}
+          <Stack.Screen name="History" component={HistoryScreen} />
         </>
       ) : (
         // ── Auth screens ───────────────────────────
