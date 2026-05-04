@@ -28,7 +28,6 @@ export default function LoginScreen({ navigation }: any) {
     try {
       await signIn(email.trim().toLowerCase(), password);
     } catch (e: any) {
-      console.log("Login error:", JSON.stringify(e));
       Alert.alert(
         "Login failed",
         e?.response?.data?.detail || "Incorrect email or password"

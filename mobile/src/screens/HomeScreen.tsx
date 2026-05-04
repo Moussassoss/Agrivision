@@ -95,7 +95,7 @@ export default function HomeScreen({ navigation }: any) {
       );
       setSoilOverride({ nitrogen: "", phosphorus: "", potassium: "", ph: "" });
       setShowOverride(false);
-      navigation.replace("Result", { result });
+      navigation.navigate("Result", { result });
     } catch (e: any) {
       Alert.alert(
         "Error",

@@ -153,7 +153,7 @@ export default function ResultScreen({ route, navigation }: any) {
         {/* ── Actions ── */}
         <TouchableOpacity
           style={styles.primaryBtn}
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.popToTop()}
         >
           <Text style={styles.primaryBtnText}>🔄  Get new recommendation</Text>
         </TouchableOpacity>
