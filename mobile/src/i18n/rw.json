@@ -7,7 +7,9 @@
     "home": "Ahabanza",
     "history": "Amateka",
     "cancel": "Hagarika",
-    "source": "Inkomoko:"
+    "source": "Inkomoko:",
+    "save": "Bika",
+    "confirm": "Emeza"
   },
   "welcome": {
     "tagline": "Inama z'ibihingwa zinoze\nzishingiye kuri AI n'amakuru y'ubutaka",
@@ -114,6 +116,7 @@
     "weatherSource": "🌦️ OpenWeather + 🌧️ NASA POWER (igihembwe)",
     "newRecommendation": "🔄  Inama nshya",
     "viewAllPast": "📋  Reba inama zose zaramaze guhabwa",
+    "plantingGuide": "🌱  Uburyo bwo Gutera",
     "locationRequired": "Aho Uri Bisabwa",
     "locationRequiredMsg": "AgriVision ikeneye aho uri kugira ngo ikurure amakuru y'ubutaka n'ikirere.",
     "locationError": "Gushakisha aho uri ntibyakunze. Ongera ugerageze.",
@@ -146,12 +149,405 @@
     "weatherSource": "🌦️ OpenWeather + 🌧️ NASA POWER",
     "newRecommendation": "🔄  Bona inama nshya",
     "viewAllPast": "📋  Reba inama zose zaramaze guhabwa",
+    "plantingGuide": "🌱  Reba Uburyo bwo Gutera",
     "temperature": "Ubushyuhe",
     "humidity": "Ubuhehere",
     "rainfall": "Imvura"
   },
+  "profile": {
+    "title": "Umwirondoro Wanjye",
+    "name": "Amazina Yose",
+    "email": "Imeyili",
+    "phone": "Telefone",
+    "noPhone": "Nta numero ya telefone ishyizwe",
+    "settings": "Igenamigambi",
+    "language": "Ururimi",
+    "location": "Uruhushya rwo Kumenya Aho Uri",
+    "locationBtn": "Hindura Uruhushya rw'Aho Uri",
+    "locationGranted": "Uruhushya rwo kumenya aho uri ruratanzwe",
+    "locationDenied": "Uruhushya rwanzwe — kanda hano ugerageze",
+    "security": "Umutekano",
+    "changePassword": "Hindura Ijambo ry'ibanga",
+    "changePasswordTitle": "Hindura Ijambo ry'ibanga",
+    "changePasswordSub": "Tuzakohereza ikimenyetso kuri imeyili yawe",
+    "requestToken": "Ohereza Ikimenyetso",
+    "tokenSentTitle": "Ikimenyetso Cyoherejwe",
+    "tokenSentMsg": "Injiza ikimenyetso n'ijambo ry'ibanga rishya hano munsi.",
+    "tokenLabel": "Ikimenyetso cyo Guhindura",
+    "tokenPlaceholder": "Injiza ikimenyetso hano",
+    "newPassword": "Ijambo ry'ibanga Rishya",
+    "passwordPlaceholder": "Nibura inyuguti 8",
+    "confirmPassword": "Emeza Ijambo ry'ibanga Rishya",
+    "savePassword": "Bika Ijambo ry'ibanga Rishya",
+    "passwordChanged": "Ijambo ry'ibanga Ryahinduwe",
+    "passwordChangedMsg": "Ijambo ry'ibanga ryawe ryahinduwe. Injira nanone.",
+    "logout": "Sohoka",
+    "logoutTitle": "Sohoka",
+    "logoutConfirm": "Urifuza gusohoka?",
+    "logoutConfirmTitle": "Sohoka",
+    "logoutConfirmMsg": "Urifuza gusohoka?",
+    "fillAllFields": "Uzuza imyanya yose",
+    "passwordMismatch": "Amagambo y'ibanga ntahuye",
+    "passwordTooShort": "Ijambo ry'ibanga rigomba kuba nibura inyuguti 8",
+    "tokenError": "Ikimenyetso kitari cyo cyangwa cyarangiye",
+    "somethingWentWrong": "Hari ikintu cyabuze",
+    "accountInfo": "Amakuru y'Konti",
+    "locationAccess": "Uruhushya rwo Kumenya Aho Uri",
+    "request": "Saba",
+    "changePasswordHint": "Tuzakohereza kode yo guhindura kuri imeyili yawe yanditswe.",
+    "sendResetCode": "Ohereza Kode yo Guhindura",
+    "sendingCode": "Kohereza kode...",
+    "codeSentHint": "Kode yoherejwe kuri imeyili yawe. Injiza hano hamwe n'ijambo ry'ibanga rishya.",
+    "resetCode": "Kode yo Guhindura",
+    "resetCodePlaceholder": "Injiza kode hano",
+    "newPasswordPlaceholder": "Nibura inyuguti 8",
+    "confirmPasswordPlaceholder": "Subiramo ijambo ry'ibanga rishya",
+    "updatePassword": "Hindura Ijambo ry'ibanga",
+    "updatingPassword": "Guhindura ijambo ry'ibanga...",
+    "resetTokenError": "Kode yanze koherezwa. Gerageza nanone.",
+    "enterToken": "Injiza kode yo guhindura",
+    "resetError": "Kode itari yo cyangwa yarangiye. Gerageza nanone."
+  },
   "language": {
     "switchTo": "EN",
     "name": "Ikinyarwanda"
+  },
+  "crops": {
+    "rice": "Umuceri",
+    "maize": "Ibigori",
+    "chickpea": "Pwa Mato",
+    "kidneybeans": "Ibishyimbo",
+    "pigeonpeas": "Ambaride",
+    "mothbeans": "Pwa Nto",
+    "mungbean": "Indengu",
+    "blackgram": "Pwa z'Umukara",
+    "lentil": "Amashaza",
+    "pomegranate": "Pomegranate",
+    "banana": "Ibitoki",
+    "mango": "Imyembe",
+    "grapes": "Inzabibu",
+    "watermelon": "Paseki",
+    "muskmelon": "Melon",
+    "apple": "Pumu",
+    "orange": "Inyanya",
+    "papaya": "Ibipapaye",
+    "coconut": "Uruzi",
+    "cotton": "Pamba",
+    "jute": "Jute",
+    "coffee": "Ikawa"
+  },
+  "plantingSeasons": {
+    "rice":        "Igihembwe A (Nzeli–Gashyantare) — bisaba imirima ifuye",
+    "maize":       "Igihembwe A cyangwa B — tera mu ntangiriro y'imvura",
+    "chickpea":    "Igihembwe B (Werurwe–Kamena) — birhanganira ubusumo",
+    "kidneybeans": "Igihembwe A cyangwa B — ubutaka bufite utuzimu bwiza",
+    "pigeonpeas":  "Igihembwe A (Nzeli–Gashyantare) — birhanganira ubuche",
+    "mothbeans":   "Igihembwe B (Werurwe–Kamena) — bisabwa imvura nke",
+    "mungbean":    "Igihembwe B (Werurwe–Kamena) — bigura vuba",
+    "blackgram":   "Igihembwe B (Werurwe–Kamena) — bisaba ubushyuhe n'ubusumo",
+    "lentil":      "Igihembwe A (Nzeli–Gashyantare) — bisaba ubushyuhe buto",
+    "pomegranate": "Biba mu mwaka wose — kimera nyuma y'amezi 5–7",
+    "banana":      "Biba mu mwaka wose — vuna nyuma y'amezi 9–12",
+    "mango":       "Tera mu ntangiriro y'imvura — kimera nyuma y'imyaka 3–5",
+    "grapes":      "Tera mu gihe cy'ubusumo — tema nyuma yo gusarura",
+    "watermelon":  "Igihembwe B (Werurwe–Kamena) — bisaba ubushyuhe n'ubusumo",
+    "muskmelon":   "Igihembwe B (Werurwe–Kamena) — bisaba izuba ryinshi",
+    "apple":       "Tera mu gihe cy'ubushyuhe buto — bisaba klimati y'umusozi",
+    "orange":      "Biba mu mwaka wose — kimera nyuma y'imyaka 3–5",
+    "papaya":      "Biba mu mwaka wose — kimera nyuma y'amezi 6–9",
+    "coconut":     "Biba mu mwaka wose — bisaba akarere k'inyanja",
+    "cotton":      "Igihembwe A (Nzeli–Gashyantare) — bisaba gihe kirekire cy'ubusumo",
+    "jute":        "Igihembwe A (Nzeli–Gashyantare) — bisaba ubuhehere bwinshi",
+    "coffee":      "Biba mu mwaka wose — imisozi y'u Rwanda ikunzwe"
+  },
+  "guide": {
+    "plantingGuideFor": "Uburyo bwo Gutera — {{crop}}",
+    "requirements": "Ibisabwa",
+    "steps": "Intambwe Zikurikirana",
+    "tips": "Inama z'Inzobere",
+    "rice": {
+      "requirements": "Imirima ifuye · Ubushyuhe 22–32°C · pH 5.5–6.5 · Amazi menshi",
+      "steps": [
+        "Fanana no gutegura umurima; wubake inkuta zo gutunga amazi ya 5–10 cm",
+        "Manura imbuto mu mazi amasaha 24, suka hanyuma tegereza iminsi 2–3 kugeza ibimera bigaragara",
+        "Terura inzuki z'ibyumweru 3–4, 20 cm zikurikiranye mu mirongo ya 25 cm",
+        "Shyira DAP mu gutera; ongeraho urea mu gihe cy'iterwa (ibyumweru 3–4)",
+        "Kuramo ibyatsi ku ibyumweru 2 na 6; witonde indwara ya blast n'uduti bwamaro",
+        "Nyuza umurima ibyumweru 2 mbere yo gusarura; sesa igihe 85% by'imbuto zitukutse"
+      ],
+      "tips": "Igihembwe A (Nzeli–Gashyantare) gitanga umusaruro mwiza mu misozi y'u Rwanda."
+    },
+    "maize": {
+      "requirements": "Ubutaka bwiza bwumye neza · Ubushyuhe 18–27°C · pH 5.8–7.0 · Imvura 500–800 mm",
+      "steps": [
+        "Turuka ubutaka kugeza 30 cm hanyuma wongere ibiribwa biva mu giti",
+        "Tera imbuto 3 cm mu butaka, 30 cm zikurikiranye mu mirongo ya 75 cm",
+        "Shyira umote wa DAP (50 kg/ha) mu migezi mu gutera",
+        "Ongeraho CAN cyangwa urea igihe ibigori bigeze 30–40 cm uburebure",
+        "Kuramo ibyatsi ku ibyumweru 2 na 6 nyuma yo gutera",
+        "Witonde uduti bwa FAW; koresha insecticide nibisabwa; sesa igihe imifuriko irakaye"
+      ],
+      "tips": "Hindura na ibishyimbo kugira ngo ugeze azote mu butaka no kugabanya ingaruka mbi."
+    },
+    "chickpea": {
+      "requirements": "Ubutaka bworoshye bwumye neza · Ubushyuhe 15–25°C · pH 6.0–7.5 · Amazi make",
+      "steps": [
+        "Tegura ubutaka bworoshye bwumye neza; irinde ahantu hafite amazi menshi",
+        "Manura imbuto na bagiteri ya Rhizobium kugira ngo zigeze azote mu kirere",
+        "Tera imbuto 5 cm mu butaka, 25 cm zikurikiranye mu mirongo ya 45 cm",
+        "Shyira umote w'fosifor mu gutera; irinde kongera azote nyinshi",
+        "Niza make cyane — pwa mato irhanganira ubusumo neza cyane",
+        "Witonde uduti bw'imitsi; koresha neem cyangwa insecticide yemewe",
+        "Sesa igihe imitsi iritukura iramvutse; fata, umeshe kugeza 10% bk'amazi"
+      ],
+      "tips": "Itewe neza nyuma y'ibihingwa by'imyaka — igeza azote mu butaka."
+    },
+    "kidneybeans": {
+      "requirements": "Ubutaka buryoshye bwumye neza · Ubushyuhe 16–24°C · pH 6.0–7.0 · Amazi yo hagati",
+      "steps": [
+        "Tegura ubutaka bworoshye bwumye neza; irinde ubutaka bugari cyangwa bufite amazi",
+        "Tera imbuto 4 cm mu butaka, 20 cm zikurikiranye mu mirongo ya 60 cm",
+        "Shyira DAP nke (25 kg/ha) mu migezi mu gutera",
+        "Niza kenshi mu gihe cy'amabuye n'imitsi igura",
+        "Kuramo ibyatsi ku ibyumweru 2 na 5; shyira imisumba yo kubika amazi",
+        "Witonde uduti bw'imizi n'indwara ya angular leaf spot",
+        "Sesa igihe 90% by'imitsi ikaze kandi imbuto zikavugana mu mutsi"
+      ],
+      "tips": "Hindura na ibigori buri gihembwe kugira ngo wirinde indwara z'ubutaka."
+    },
+    "pigeonpeas": {
+      "requirements": "Ubwoko bwinshi bw'ubutaka · Ubushyuhe 18–38°C · pH 5.0–7.0 · Birhanganira ubuche cyane",
+      "steps": [
+        "Ntukeneye gutegura ubutaka kenshi; kuramo ibyatsi hanyuma uguture ubutaka bw'hejuru",
+        "Tera imbuto 3 ku rwobo, 5 cm mu butaka, 60 cm zikurikiranye mu mirongo ya 1.5 m",
+        "Sisitamo 2 mu rwobo nyuma y'inzuki gusa",
+        "Shyira umote w'fosifor nke mu gutera",
+        "Niza mu ntangiriro gusa; ambaride irhanganira ubuche neza cyane",
+        "Genzura Maruca pod borer; koresha neem cyangwa insecticide yemewe",
+        "Sesa imitsi y'icyatsi kugira ngo ubone ibiryo cyangwa siga ikaze isabe"
+      ],
+      "tips": "Ikunzwe mu kurinda ubutaka ku misozi; ubwoko buhoraho buramara imyaka 3–5."
+    },
+    "mothbeans": {
+      "requirements": "Ubutaka bwa m'ibyondo · Ubushyuhe 24–38°C · pH 6.0–7.5 · Imvura nke cyane",
+      "steps": [
+        "Tegura ubutaka bworoshye bwa m'ibyondo; irinde ahantu hafite amazi cyangwa igicucu",
+        "Tera imbuto 3 cm mu butaka, 20 cm zikurikiranye mu mirongo ya 45 cm nyuma y'imvura y'imperuka",
+        "Ntukeneye umote kenshi — pwa nto irhanganira ubutaka butonze",
+        "Niza make cyane — igihingwa gikunda guhinga mu gihe cy'ubusumo bw'Igihembwe B",
+        "Kuramo ibyatsi rimwe gusa ku cyumweru cya 2; ikurura kuzima mu maguru masha",
+        "Witonde aphids n'indwara ya powdery mildew mu guhe cy'ubuhehere",
+        "Sesa igihe 70% by'imitsi yeze; tema ubwoko bw'ibimera ibyumye"
+      ],
+      "tips": "Ikoreshwa neza nk'igihingwa gikinga ubutaka mu gihe cy'ubusumo."
+    },
+    "mungbean": {
+      "requirements": "Ubutaka bwiza bwumye neza · Ubushyuhe 25–35°C · pH 6.2–7.2 · Amazi yo hagati",
+      "steps": [
+        "Tegura urutaka rworoshye rwumye neza",
+        "Tera imbuto 3 cm mu butaka, 15 cm zikurikiranye mu mirongo ya 45 cm",
+        "Shyira DAP nke (20 kg/ha) mu gutera",
+        "Niza buhoro buri minsi 5–7; irinde amazi menshi",
+        "Kuramo ibyatsi ku ibyumweru 2 na 4 nyuma yo gutera",
+        "Witonde yellow mosaic virus isakazwa na whitefly; genzura vuba",
+        "Sesa ukurikije imitsi yaka (inshuro 2–3 ku murima) mu minsi 60–90"
+      ],
+      "tips": "Igihembwe gito gituma ikunzwa gutera hagati y'ibihembwe binini."
+    },
+    "blackgram": {
+      "requirements": "Ubutaka bworoshye bwumye · Ubushyuhe 25–35°C · pH 6.0–7.0 · Ubushyuhe n'ubusumo",
+      "steps": [
+        "Tegura ubutaka bworoshye bwumye neza; irinde ubutaka bugari n'ahantu hafite amazi",
+        "Tera imbuto 3–4 cm mu butaka, 20 cm zikurikiranye mu mirongo ya 45 cm",
+        "Shyira fosifor mu gutera; irinde azote — igihingwa kiyitera cyubwite",
+        "Niza buhoro rimwe ku cyumweru mu gihe cy'ubusumo bw'icyakabiri",
+        "Kuramo ibyatsi ku ibyumweru 2 na 5 nyuma yo gutera",
+        "Genzura uduti bw'imizi n'indwara ya yellow mosaic; kura ibimera birwaye",
+        "Sesa igihe 80% by'imitsi yituka; umeshe hanyuma usase"
+      ],
+      "tips": "Igihingwa cy'indyo ikungahaye — gifasha mu mutekano w'ibiribwa no guteza imbere ubutaka."
+    },
+    "lentil": {
+      "requirements": "Ubutaka bwiza bwumye · Ubushyuhe 7–27°C · pH 6.0–8.0 · Klimati y'umusozi utunutse",
+      "steps": [
+        "Turuka no gutegura urutaka rworoshye; kura amabuye n'ibintu binini",
+        "Manura imbuto na Rhizobium; tera 4 cm mu butaka, 10 cm mu mirongo ya 30 cm",
+        "Shyira umote w'fosifor mu gutera; ntukeneye azote ugeze inoculation",
+        "Niza make — amashaza akunda klimati itonutse n'ibintu byumye",
+        "Kuramo ibyatsi vuba (ibyumweru 2 na 4); amashaza atsinda cyane n'ibyatsi",
+        "Genzura Ascochyta blight n'aphids; kura ibimera birwaye vuba",
+        "Sesa igihe imitsi y'epfo iramvura; umeshe ibimera byose hanyuma usase"
+      ],
+      "tips": "Ikunda imisozi hejuru ya 1700 m mu Rwanda."
+    },
+    "pomegranate": {
+      "requirements": "Ubutaka bwumye neza · Ubushyuhe 25–38°C · pH 5.5–7.5 · Birhanganira ubuche",
+      "steps": [
+        "Tema imbohe 60×60×60 cm; uzuze n'umote n'urutaka rw'hejuru",
+        "Tera inzuki cyangwa amashami akuze 5–6 m zikurikiranye",
+        "Shyira kg 10 z'umote mu gutera no mu mwaka wose",
+        "Niza inzuki buri cyumweru; ibimera byakuze niza mu gihe cy'ubusumo gusa",
+        "Tema kugira ngo ugereshe izuba mu igiti; kura amashami y'epfo buri mwaka",
+        "Shyira NPK (200 g) inshuro 3 mu mwaka",
+        "Sesa igihe imbuto zitukutse cyane kandi zagira amahirwe yo guturika"
+      ],
+      "tips": "Kinga imbuto zingira inkoko ya fruit fly ukoresheje amasaho cyangwa neem."
+    },
+    "banana": {
+      "requirements": "Ubutaka buryoshye bwumye neza · Ubushyuhe 15–35°C · pH 5.5–7.0 · Amazi mu mwaka wose",
+      "steps": [
+        "Tema imbohe 60×60×60 cm; shyira kg 10 z'umote hasi",
+        "Tera inzuki z'inkoni nziza 3 m zikurikiranye hose",
+        "Shyira imisumba (cm 15) inzunguruka buri giti kugira ngo ubike amazi",
+        "Shyira umote wa NPK (g 200 ku giti) buri mezi 3",
+        "Kura inzuki zose usoze imwe yo kuzimba gusa ku giti",
+        "Shora ibiti birebire n'ingobyi za bamba kugira ngo zirinde umuyaga",
+        "Sesa igihe imbuto zigura hanyuma ibara ritangira guhinduka (amezi 9–12)"
+      ],
+      "tips": "Bika inzuki imwe gusa yo kuzimba ku giti cya nyina nyuma yo gusarura."
+    },
+    "mango": {
+      "requirements": "Ubutaka bwimbitse bwumye neza · Ubushyuhe 24–30°C · pH 5.5–7.5 · Gihe cy'ubusumo mu gufurika",
+      "steps": [
+        "Tema imbohe ya 1 m × 1 m × 1 m; zuzuza n'urutaka n'umote wa kg 20",
+        "Tera inzuki zakinjijwe uburetwa 10 m zikurikiranye mu ntangiriro y'imvura",
+        "Niza inshuro 2 ku cyumweru mu mezi 6 ya mbere; gabanya igihe igiti gikuze",
+        "Shyira NPK (g 300) inshuro 3 mu mwaka mu biti bito",
+        "Tema buri mwaka kugira ngo ugereshe ibiti; kura amashami apfuye",
+        "Genzura mango seed weevil n'anthracnose; fuka mu gihe cy'imitsi igura",
+        "Sesa igihe imbuto zihindura ibara kandi zigira ubworoherane buto"
+      ],
+      "tips": "Inzuki zakinjijwe uburetwa zitera imbuto vuba kandi zitanga umusaruro mwiza."
+    },
+    "grapes": {
+      "requirements": "Ubutaka bwa m'ibyondo bwumye · Ubushyuhe 15–30°C · pH 6.0–7.0 · Igihembwe cy'ubusumo",
+      "steps": [
+        "Shyira imizigo y'inzabibu n'inzoka z'ibiti mbere yo gutera",
+        "Tera amashami akuze 1.5 m mu mirongo ya 3 m mu gihe cy'ubusumo",
+        "Shora umugozi w'ibiti; kura amashami y'iside mu mwaka wa mbere",
+        "Shyira umote n'umote wa potasiyumu mu ntangiriro y'ubusumo",
+        "Tema amashami cyane nyuma yo gusarura — siga ibanga 2 ku gatete",
+        "Genzura powdery mildew; fuka n'umuti w'ubuhumyi wavanywe",
+        "Sesa igihe inzabibu zinozwa cyane kandi ziri na sukari ihagije"
+      ],
+      "tips": "Izuba ryinshi n'umwuka mwiza ni ngombwa kugira ngo ubone imbuto nziza."
+    },
+    "watermelon": {
+      "requirements": "Ubutaka bwa m'ibyondo · Ubushyuhe 22–32°C · pH 6.0–7.0 · Ubushyuhe n'izuba",
+      "steps": [
+        "Tegura imirima iraise 30 cm hejuru; shyira umote n'urutaka rwa m'ibyondo",
+        "Tera imbuto 3 ku rwobo, 1.5 m zikurikiranye mu mirongo ya 2 m",
+        "Sisitamo inzuki nziza 1–2 ku rwobo nyuma y'inzuki",
+        "Shyira NPK mu gutera; ongeraho azote mu gihe cy'imizabibu",
+        "Niza cyane rimwe ku cyumweru; gabanya amazi igihe imbuto zigura",
+        "Funga imyaka mu gitondo igihe ntabunnyiki; genzura aphids",
+        "Sesa igihe umugozi hafi y'imbuto uyumye kandi inda iri umuhondo"
+      ],
+      "tips": "Koresha drip irrigation kugira ngo amakuru y'imbuto atarasaza."
+    },
+    "muskmelon": {
+      "requirements": "Ubutaka bwa sandy loam · Ubushyuhe 24–35°C · pH 6.0–7.5 · Ubushyuhe n'izuba ryinshi",
+      "steps": [
+        "Tegura imirima iraise hamwe n'ubutaka bwa m'ibyondo bwumye bwujuje umote",
+        "Tera imbuto 2 cm mu butaka, 1 m zikurikiranye mu mirongo ya 1.5 m",
+        "Shyira DAP mu gutera na CAN mu gihe cy'imizabibu",
+        "Niza kenshi ariko wirinde kugishamikira amakuru cyangwa imbuto",
+        "Sisitamo inzuki nziza 1–2 ku rwobo nyuma y'inzuki",
+        "Funga imyaka mu gitondo kugira ngo imbuto zishobore gutera; genzura powdery mildew",
+        "Sesa igihe imbuto zimuka ibivumba byo kuvumba kandi zivana vuba na murimo"
+      ],
+      "tips": "Dindiza imbuto hejuru y'ubutaka ukoresheje inzabibu nto kugira ngo wirinde ubune."
+    },
+    "apple": {
+      "requirements": "Ubutaka bwimbitse bwumye · Ubushyuhe 12–22°C · pH 5.5–6.5 · Umusozi hejuru ya 2000 m",
+      "steps": [
+        "Hitamo ahantu h'umusozi hejuru ya 2000 m; irinde ahantu h'urubura",
+        "Tema imbohe ya 1 m × 1 m; tera inzuki zakinjijwe uburetwa 6 m zikurikiranye",
+        "Niza buri cyumweru mu mwaka wa mbere kugira ngo imizi igere burebure",
+        "Shyira umote wa kg 20 buri mwaka na NPK inshuro 2 mu mwaka",
+        "Tema kugira ngo igiti gihinduke igishusho cy'igice; kura amashami yo hejuru kenshi",
+        "Fuka uduti bwa codling moth n'indwara ya scab mu gihe cy'icyimburiro",
+        "Sesa igihe imbuto zigura neza kandi zivana vuba ku giti"
+      ],
+      "tips": "Ubwoko bwa Anna na Dorsett Golden bwakora neza mu misozi y'u Rwanda."
+    },
+    "orange": {
+      "requirements": "Ubutaka bwimbitse bwumye · Ubushyuhe 15–35°C · pH 5.5–7.0 · Amazi mu mwaka wose",
+      "steps": [
+        "Tema imbohe ya 1 m × 1 m × 0.6 m; zuzuza n'urutaka n'umote wa kg 15",
+        "Tera inzuki zakinjijwe uburetwa zemewe 6 m zikurikiranye mu ntangiriro y'imvura",
+        "Niza kenshi mu myaka 2 ya mbere; shyira imisumba myinshi inzunguruka igiti",
+        "Shyira umote wa NPK w'inyanya buri mezi 3–4 mu mwaka wose",
+        "Tema buri mwaka kugira ngo ukure amashami apfuye n'ayanyuranyije",
+        "Genzura citrus psylla n'indwara ya greening; kura ibiti birwaye vuba",
+        "Sesa igihe imbuto zihinduka imihondo-itukura kandi zinonoka (imyaka 3–5)"
+      ],
+      "tips": "Gura gusa inzuki zakinjijwe uburetwa zemewe — zirwanya indwara."
+    },
+    "papaya": {
+      "requirements": "Ubutaka buryoshye bwumye · Ubushyuhe 22–32°C · pH 5.5–7.0 · Ahantu hatarimo umuyaga",
+      "steps": [
+        "Tema imbohe 60×60×60 cm; zuzuza n'umote n'urutaka",
+        "Tera imbuto 3 ku rwobo, 2.5 m zikurikiranye; sisitamo 1 nyuma y'inzuki",
+        "Menya igitsina mu gufurika (amezi 4–5): bika 1 gore ku babibi 10 b'ibitsina by'inyagira",
+        "Shyira NPK buri kwezi mu mezi 6 ya mbere, hanyuma buri mezi 2",
+        "Shyira imisumba myinshi; niza inshuro 2 ku cyumweru mu gihe cy'ubusumo",
+        "Kura vuba ibimera birwaye ring spot virus",
+        "Sesa igihe uruhande rumwe rw'imbuto ruhinduka umuhondo (amezi 6–9)"
+      ],
+      "tips": "Subiramo gutera kenshi — ubuzima bw'umusaruro ni imyaka 3–4 gusa."
+    },
+    "coconut": {
+      "requirements": "Ubutaka bwa m'ibyondo bw'inkombe · Ubushyuhe 27–32°C · pH 5.0–8.0 · Ubuhehere bwinshi, ahantu hanini",
+      "steps": [
+        "Hitamo imbuto nziza; tereza mu ishyamba ry'inzuki inshuro 3–6 z'amezi",
+        "Tera inzuki mu imbohe ya 1 m × 1 m × 1 m, 8 m × 8 m zikurikiranye",
+        "Shyira umote wa kg 10 na NPK ya g 500 ku giti inshuro 2 mu mwaka",
+        "Niza mu gihe cy'ubusumo; kurinda ubutaka bugire utuzimu bwiza mu mvura",
+        "Kura amashami y'ibuye kenshi kugira ngo ugabanya ikibanza cy'uduti",
+        "Koresha pheromone traps kugira ngo ugenzure rhinoceros beetle",
+        "Sesa igihe imbuto zihindura ibara — imbuto zikura mu myaka 4–6"
+      ],
+      "tips": "Inzuki zikura neza hasi ya 400 m; shyira imisumba myinshi kugira ngo ubike amazi."
+    },
+    "cotton": {
+      "requirements": "Ubutaka bwimbitse bwa clay-loam · Ubushyuhe 21–35°C · pH 5.8–8.0 · Gihe kirekire cy'ubusumo",
+      "steps": [
+        "Turuka ubutaka kugeza 30 cm mbere y'imvura; tegura urutaka rworoshye",
+        "Tera imbuto 3 cm mu butaka, 25 cm mu mirongo ya 90 cm",
+        "Shyira NPK mu gutera; ongeraho azote mu gihe cy'iterwa",
+        "Genzura bollworm na whitefly ukoresheje insecticide zemewe",
+        "Kuramo ibyatsi inshuro 2–3 mu ntangiriro y'iterwa",
+        "Tegereza amababi agwa ubwite cyangwa koresha defoliant yemewe",
+        "Fata pamba mu gihe cy'ubusumo gusa; bika mu mifuko myiza n'imeze"
+      ],
+      "tips": "Irinde guhindura na izindi nka malvaceae; suzuma pH mbere yo gutera."
+    },
+    "jute": {
+      "requirements": "Ubutaka bwa clay-loam cyangwa silty · Ubushyuhe 24–37°C · pH 6.0–7.5 · Ubuhehere bwinshi",
+      "steps": [
+        "Tegura urutaka rworoshye; sasira imbuto ubwira cyangwa utera mu mirongo ya 25 cm",
+        "Sisitamo inzuki 5–8 cm mu murongo nyuma y'ibyumweru 2",
+        "Shyira azote mu gutera no nyuma y'ibyumweru 4",
+        "Niza niba imvura itahagije — jute isaba mm 500–600 ku gihembwe",
+        "Kuramo ibyatsi inshuro 2 mu kwezi kwa mbere; ikurura kuzima vuba",
+        "Genzura hairy caterpillar n'indwara ya stem rot mu gihe cy'imvura nyinshi",
+        "Sesa mu gufurika (amezi 3–4); shyira mu mazi iminsi 10–20 kugira ngo imyurane"
+      ],
+      "tips": "Gutera mu mazi biroroshya inzuki kandi bituma gukurura imyunyu byoroshoka."
+    },
+    "coffee": {
+      "requirements": "Ubutaka bw'umuriro w'umusozi · Ubushyuhe 15–24°C · pH 6.0–6.5 · Umusozi, gihe cy'ubusumo mu gufurika",
+      "steps": [
+        "Tera mu imbohe 60×60×60 cm, 2.7 m × 2.7 m; ongeraho ibiti bigukiriza igicucu",
+        "Shyira imisumba myinshi (cm 15 z'imishumba y'ikawa cyangwa inyasi) inzunguruka",
+        "Shyira NPK (g 200) mu ntangiriro y'imvura; ongeraho urea hagati y'igihembwe",
+        "Tema kugira ngo igiti gibe umugoroba umwe mu myaka 2 ya mbere; bika amashami 3–4",
+        "Genzura coffee berry borer; koresha BGI traps no gusara vuba",
+        "Fata cyangwa bikura katakazo rwinshi ruteye rwa cherry itukutse gusa",
+        "Siga, yumvisha, ara, hanyuma umeshe inzabibu ku meza y'imesho iraise"
+      ],
+      "tips": "Injira mu koperative kugira ngo ubone igiciro cy'ikawa y'u Rwanda Fully Washed."
+    }
   }
 }

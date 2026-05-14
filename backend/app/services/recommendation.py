@@ -30,47 +30,95 @@ PLANTING_CALENDAR = {
     "coffee":       "Plant year-round — Rwanda highlands ideal",
 }
 
-# ── Why this crop fits ──────────────────────────────
-def _build_reason(crop: str, soil: dict, weather: dict) -> str:
-    """Generate a short agronomic explanation for the recommendation."""
-    reasons = []
+PLANTING_CALENDAR_RW = {
+    "rice":         "Igihembwe A (Nzeli–Gashyantare) — bisaba imirima ifuye",
+    "maize":        "Igihembwe A cyangwa B — tera mu ntangiriro y'imvura",
+    "chickpea":     "Igihembwe B (Werurwe–Kamena) — birhanganira ubusumo",
+    "kidneybeans":  "Igihembwe A cyangwa B — ubutaka bufite utuzimu bwiza",
+    "pigeonpeas":   "Igihembwe A (Nzeli–Gashyantare) — birhanganira ubuche",
+    "mothbeans":    "Igihembwe B (Werurwe–Kamena) — bisabwa imvura nke",
+    "mungbean":     "Igihembwe B (Werurwe–Kamena) — bigura vuba",
+    "blackgram":    "Igihembwe B (Werurwe–Kamena) — bisaba ubushyuhe n'ubusumo",
+    "lentil":       "Igihembwe A (Nzeli–Gashyantare) — bisaba ubushyuhe buto",
+    "pomegranate":  "Biba mu mwaka wose — kimera nyuma y'amezi 5–7",
+    "banana":       "Biba mu mwaka wose — vuna nyuma y'amezi 9–12",
+    "mango":        "Tera mu ntangiriro y'imvura — kimera nyuma y'imyaka 3–5",
+    "grapes":       "Tera mu gihe cy'ubusumo — tema nyuma yo gusarura",
+    "watermelon":   "Igihembwe B (Werurwe–Kamena) — bisaba ubushyuhe n'ubusumo",
+    "muskmelon":    "Igihembwe B (Werurwe–Kamena) — bisaba izuba ryinshi",
+    "apple":        "Tera mu gihe cy'ubushyuhe buto — bisaba klimati y'umusozi",
+    "orange":       "Biba mu mwaka wose — kimera nyuma y'imyaka 3–5",
+    "papaya":       "Biba mu mwaka wose — kimera nyuma y'amezi 6–9",
+    "coconut":      "Biba mu mwaka wose — bisaba akarere k'inyanja",
+    "cotton":       "Igihembwe A (Nzeli–Gashyantare) — bisaba gihe kirekire cy'ubusumo",
+    "jute":         "Igihembwe A (Nzeli–Gashyantare) — bisaba ubuhehere bwinshi",
+    "coffee":       "Biba mu mwaka wose — imisozi y'u Rwanda ikunzwe",
+}
 
-    ph = soil["ph"]
-    n  = soil["nitrogen"]
-    p  = soil["phosphorus"]
-    k  = soil["potassium"]
+
+def _build_reason(crop: str, soil: dict, weather: dict, lang: str = "en") -> str:
+    """Generate a short agronomic explanation for the recommendation."""
+    ph       = soil["ph"]
+    n        = soil["nitrogen"]
+    p        = soil["phosphorus"]
+    k        = soil["potassium"]
     temp     = weather["temperature"]
-    humidity = weather["humidity"]
     rainfall = weather["rainfall"]
 
-    # pH insight
-    if ph < 5.5:
-        reasons.append(f"soil is acidic (pH {ph}) — consider liming before planting")
-    elif ph > 7.5:
-        reasons.append(f"soil is alkaline (pH {ph}) — sulfur amendment may help")
+    if lang == "rw":
+        reasons = []
+        if ph < 5.5:
+            reasons.append(f"ubutaka bufite acid (pH {ph}) — kongera lime mbere yo gutera")
+        elif ph > 7.5:
+            reasons.append(f"ubutaka bufite alkaline (pH {ph}) — sulphur irashobora gufasha")
+        else:
+            reasons.append(f"pH y'ubutaka {ph} iri neza ku gihingwa")
+
+        if n < 10:
+            reasons.append("azote ni nke — shyira umote w'azote")
+        if p < 15:
+            reasons.append("fosifor ni nke — shyira DAP cyangwa TSP")
+        if k < 100:
+            reasons.append("potasiyumu iri mu rugero — umote wa potash ntibisabwa cyane")
+
+        if rainfall > 1500:
+            reasons.append(f"imvura nyinshi ({rainfall:.0f} mm) ikunda ibihingwa bisaba amazi menshi")
+        elif rainfall < 600:
+            reasons.append(f"imvura nke ({rainfall:.0f} mm) — igihingwa kirhanganira ubuche cyatoranijwe")
+        else:
+            reasons.append(f"imvura ({rainfall:.0f} mm/mwaka) iri neza")
+
+        if temp < 15:
+            reasons.append(f"ubushyuhe buto ({temp:.1f}°C) bukunda ibihingwa by'umusozi")
+        elif temp > 30:
+            reasons.append(f"ubushyuhe bwinshi ({temp:.1f}°C) bukunda ibihingwa bya tropique")
     else:
-        reasons.append(f"soil pH {ph} is suitable")
+        reasons = []
+        if ph < 5.5:
+            reasons.append(f"soil is acidic (pH {ph}) — consider liming before planting")
+        elif ph > 7.5:
+            reasons.append(f"soil is alkaline (pH {ph}) — sulfur amendment may help")
+        else:
+            reasons.append(f"soil pH {ph} is suitable")
 
-    # Nutrient insight
-    if n < 10:
-        reasons.append("nitrogen is low — apply nitrogen-rich fertilizer")
-    if p < 15:
-        reasons.append("phosphorus is low — apply DAP or TSP")
-    if k < 100:
-        reasons.append("potassium is moderate — potash fertilizer optional")
+        if n < 10:
+            reasons.append("nitrogen is low — apply nitrogen-rich fertilizer")
+        if p < 15:
+            reasons.append("phosphorus is low — apply DAP or TSP")
+        if k < 100:
+            reasons.append("potassium is moderate — potash fertilizer optional")
 
-    # Climate insight
-    if rainfall > 1500:
-        reasons.append(f"high rainfall ({rainfall:.0f}mm) suits water-loving crops")
-    elif rainfall < 600:
-        reasons.append(f"low rainfall ({rainfall:.0f}mm) — drought-tolerant crop selected")
-    else:
-        reasons.append(f"rainfall ({rainfall:.0f}mm/yr) is adequate")
+        if rainfall > 1500:
+            reasons.append(f"high rainfall ({rainfall:.0f}mm) suits water-loving crops")
+        elif rainfall < 600:
+            reasons.append(f"low rainfall ({rainfall:.0f}mm) — drought-tolerant crop selected")
+        else:
+            reasons.append(f"rainfall ({rainfall:.0f}mm/yr) is adequate")
 
-    if temp < 15:
-        reasons.append(f"cool temperature ({temp:.1f}°C) favors highland crops")
-    elif temp > 30:
-        reasons.append(f"high temperature ({temp:.1f}°C) suits tropical crops")
+        if temp < 15:
+            reasons.append(f"cool temperature ({temp:.1f}°C) favors highland crops")
+        elif temp > 30:
+            reasons.append(f"high temperature ({temp:.1f}°C) suits tropical crops")
 
     return ". ".join(reasons[:3]).capitalize() + "."
 
@@ -79,33 +127,20 @@ def build_recommendations(
     predictions: list[dict],
     soil: dict,
     weather: dict,
+    lang: str = "en",
 ) -> list[dict]:
     """
     Enrich raw ML predictions with planting calendar and agronomic reasons.
-
-    Args:
-        predictions: [{"crop": "maize", "confidence": 0.95}, ...]
-        soil:        soil dict from iSDAsoil service
-        weather:     weather dict from weather service
-
-    Returns:
-        [
-            {
-                "crop": "maize",
-                "confidence": 0.95,
-                "planting_season": "Season A or B...",
-                "why": "Soil pH 6.2 is suitable. Rainfall adequate..."
-            },
-            ...
-        ]
+    Supports 'en' (English) and 'rw' (Kinyarwanda) via the lang parameter.
     """
+    calendar = PLANTING_CALENDAR_RW if lang == "rw" else PLANTING_CALENDAR
     results = []
     for pred in predictions:
         crop = pred["crop"]
         results.append({
             "crop":            crop,
             "confidence":      pred["confidence"],
-            "planting_season": PLANTING_CALENDAR.get(crop, "Consult local agronomist"),
-            "why":             _build_reason(crop, soil, weather),
+            "planting_season": calendar.get(crop, "Consult local agronomist"),
+            "why":             _build_reason(crop, soil, weather, lang),
         })
     return results

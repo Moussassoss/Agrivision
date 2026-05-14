@@ -27,12 +27,10 @@ const CROP_EMOJI: Record<string, string> = {
   jute: "🌿", coffee: "☕",
 };
 
-const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-
 export default function HomeScreen({ navigation }: any) {
   const { t } = useTranslation();
   const { language, toggleLanguage } = useLanguage();
-  const { user, signOut }                       = useAuth();
+  const { user }                                 = useAuth();
   const [location, setLocation]                 = useState<{ lat: number; lon: number } | null>(null);
   const [locationName, setLocationName]         = useState("");
   const [loadingLocation, setLoadingLocation]   = useState(false);
@@ -100,6 +98,7 @@ export default function HomeScreen({ navigation }: any) {
         location.lat,
         location.lon,
         hasOverride ? override : undefined,
+        language,
       );
       setResult(data);
     } catch (e: any) {
@@ -144,7 +143,7 @@ export default function HomeScreen({ navigation }: any) {
           <TouchableOpacity onPress={toggleLanguage} style={styles.langBtn}>
             <Text style={styles.langBtnText}>🌐 {t("language.switchTo")}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={signOut} style={styles.avatarBtn}>
+          <TouchableOpacity onPress={() => navigation.navigate("Profile")} style={styles.avatarBtn}>
             <Text style={styles.avatarText}>
               {user?.full_name?.charAt(0).toUpperCase() || "A"}
             </Text>
@@ -285,7 +284,7 @@ export default function HomeScreen({ navigation }: any) {
                   {t("home.bestCrop")}
                 </Text>
                 <Text style={{ color: "#fff", fontSize: 30, fontWeight: "700" }}>
-                  {capitalize(topCrop.crop)}
+                  {t(`crops.${topCrop.crop}`, { defaultValue: topCrop.crop })}
                 </Text>
                 <View style={{ width: "100%", gap: 4 }}>
                   <View style={styles.barBg}>
@@ -306,6 +305,12 @@ export default function HomeScreen({ navigation }: any) {
                 <View style={styles.whyBox}>
                   <Text style={styles.whyText}>💡  {topCrop.why}</Text>
                 </View>
+                <TouchableOpacity
+                  style={styles.guideBtn}
+                  onPress={() => navigation.navigate("PlantingGuide", { cropKey: topCrop.crop })}
+                >
+                  <Text style={styles.guideBtnText}>{t("home.plantingGuide")}</Text>
+                </TouchableOpacity>
               </View>
             </View>
 
@@ -317,7 +322,7 @@ export default function HomeScreen({ navigation }: any) {
                   {result.top_crops.slice(1).map((crop: any, i: number) => (
                     <View key={i} style={styles.altCard}>
                       <Text style={{ fontSize: 30 }}>{CROP_EMOJI[crop.crop] || "🌱"}</Text>
-                      <Text style={styles.altName}>{capitalize(crop.crop)}</Text>
+                      <Text style={styles.altName}>{t(`crops.${crop.crop}`, { defaultValue: crop.crop })}</Text>
                       <View style={styles.altPill}>
                         <Text style={styles.altPillText}>
                           {Math.round(crop.confidence * 100)}%
@@ -486,6 +491,8 @@ const styles = StyleSheet.create({
   dataTileUnit:    { fontSize: 12, fontWeight: "400", color: "#888" },
   sourceTag:       { fontSize: 11, color: "#aaa", textAlign: "right" },
 
+  guideBtn:        { backgroundColor: "rgba(255,255,255,0.15)", borderRadius: 12, paddingVertical: 10, paddingHorizontal: 20, borderWidth: 0.5, borderColor: "rgba(255,255,255,0.3)" },
+  guideBtnText:    { color: "#fff", fontWeight: "700", fontSize: 13, textAlign: "center" },
   primaryBtn:      { backgroundColor: "#2D6A4F", borderRadius: 14, padding: 16, alignItems: "center" },
   primaryBtnText:  { color: "#fff", fontWeight: "700", fontSize: 15 },
   secondaryBtn:    { borderRadius: 14, padding: 14, alignItems: "center", borderWidth: 0.5, borderColor: "#DCDCDC" },
