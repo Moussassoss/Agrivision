@@ -137,6 +137,41 @@
     "loadError": "Gukurura amateka ntibyakunze",
     "disclaimer": "Inama zishingiye kuri AI. Buri gihe ubaze inzobere mu buhinzi."
   },
+  "onboarding": {
+    "slide1Title": "Murakaza neza kuri AgriVision",
+    "slide1Desc": "Inama z'ibihingwa zikoresheje AI n'amakuru y'ubutaka n'ikirere by'ukuri — yakozwe ku bahinzi b'u Rwanda.",
+    "slide2Title": "Inama Zinonosoye",
+    "slide2Desc": "Imashini yacu isesengura amakuru y'ubutaka avuye kuri satelite, ikirere cy'igihe, n'ahantu wawe kugirango igusabire ibihingwa byiza.",
+    "slide3Title": "Amabwiriza Intambwe ku Ntambwe",
+    "slide3Desc": "Bona amabwiriza arambuye yo gutera hamwe n'imikorere ikomeyeho ku gihingwa cyose cyasabwe.",
+    "slide4Title": "Indimi Ebyiri",
+    "slide4Desc": "Koresha AgriVision mu Cyongereza cyangwa Ikinyarwanda. Hindura igihe cyose mu mwirondoro wawe.",
+    "skip": "Simbuka",
+    "next": "Komeza →",
+    "getStarted": "Tangira"
+  },
+  "howItWorks": {
+    "title": "Uburyo Bikorwa",
+    "heroSub": "Inama z'ibihingwa zikoresheje AI n'amakuru y'ukuri avuye kuri satelite n'ikirere",
+    "accuracyTitle": "Imikorere y'Imashini",
+    "accuracySub": "Yarindwa kuri sampulli 2,200 z'ubutaka ku bihingwa 22",
+    "pipelineTitle": "Uburyo inama iterwa",
+    "step1Title": "Ahantu hawe ku GPS",
+    "step1Desc": "Porogaramu isoma ahantu wawe neza hakoreshejwe GPS ya telephone yawe — nta makuru abazwa.",
+    "step2Title": "Amakuru y'Ubutaka — iSDAsoil",
+    "step2Desc": "Azote, Fosifor, Potasiyumu, na pH biva kuri satelite ku hantu hawe neza biva kuri API ya iSDAsoil.",
+    "step3Title": "Ikirere — OpenWeather + NASA",
+    "step3Desc": "Ubushyuhe n'ubuhehere bw'igihe biva kuri OpenWeather, hamwe n'imvura y'igihembwe ivuye kuri NASA POWER.",
+    "step4Title": "Iteganyo ry'Imashini ya AI",
+    "step4Desc": "Imashini ya Random Forest yarindwe kuri sampulli 2,200 yagira ibihingwa 3 byiza hamwe n'amanota y'icyizere.",
+    "step5Title": "Inama Yuzuye",
+    "step5Desc": "Ibisubizo biringanizwa n'igihe cy'gutera, impamvu z'ubuhinzi, n'inama z'imbolea mu rurimi rwawe.",
+    "sourcesTitle": "Inkomoko z'amakuru",
+    "sourceIsda": "Ikarita y'ubutaka kuri satelite kuri 30m — N, P, K, pH kuri Afurika yose",
+    "sourceOw": "Ubushyuhe n'ubuhehere bw'igihe biva ku birindiro 40,000+ ku isi",
+    "sourceNasa": "Amakuru y'imvura y'imyaka 30 avuye mu bubiko bw'ikirere cya NASA POWER",
+    "datasetNote": "Imashini yarindwe kuri Dataset ya Crop Recommendation (Kaggle). Icyitonderwa: dataset ivuye India; inama zihurijwe n'ikirere cy'u Rwanda."
+  },
   "result": {
     "title": "Inama",
     "bestCrop": "Igihingwa cyiza ku murima wawe",
@@ -150,6 +185,11 @@
     "newRecommendation": "🔄  Bona inama nshya",
     "viewAllPast": "📋  Reba inama zose zaramaze guhabwa",
     "plantingGuide": "🌱  Reba Uburyo bwo Gutera",
+    "fertilizerTitle": "Inama z'Imbolea",
+    "share": "Sangira",
+    "shareTitle": "Inama y'Igihingwa",
+    "shareFooter": "Yakozwe na AgriVision AI 🌱",
+    "shareError": "Ntibishoboye gusangira ibisubizo",
     "temperature": "Ubushyuhe",
     "humidity": "Ubuhehere",
     "rainfall": "Imvura"
@@ -206,7 +246,12 @@
     "updatingPassword": "Guhindura ijambo ry'ibanga...",
     "resetTokenError": "Kode yanze koherezwa. Gerageza nanone.",
     "enterToken": "Injiza kode yo guhindura",
-    "resetError": "Kode itari yo cyangwa yarangiye. Gerageza nanone."
+    "resetError": "Kode itari yo cyangwa yarangiye. Gerageza nanone.",
+    "darkMode": "Uburyo bw'Ijoro",
+    "darkModeOn": "Irangwa ry'ijoro rikoreshwa",
+    "darkModeOff": "Irangwa ry'umurango rikoreshwa",
+    "howItWorks": "Uburyo Bikorwa",
+    "howItWorksSub": "Menya uburyo AI ikorana ubushakashatsi"
   },
   "language": {
     "switchTo": "EN",
