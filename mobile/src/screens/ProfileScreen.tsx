@@ -15,6 +15,7 @@ import * as Location from "expo-location";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
+import { useTheme } from "../context/ThemeContext";
 import { forgotPassword, resetPassword } from "../services/api";
 
 type PasswordStep = "idle" | "sending" | "awaitingCode" | "resetting" | "done";
@@ -23,6 +24,7 @@ export default function ProfileScreen({ navigation }: any) {
   const { t } = useTranslation();
   const { user, signOut } = useAuth();
   const { language, toggleLanguage } = useLanguage();
+  const { colors, isDark, toggleTheme } = useTheme();
 
   const [passwordStep, setPasswordStep] = useState<PasswordStep>("idle");
   const [resetToken, setResetToken]     = useState("");
@@ -107,15 +109,15 @@ export default function ProfileScreen({ navigation }: any) {
   };
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+    <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]}>
+      <StatusBar barStyle={colors.statusBar} backgroundColor={colors.background} />
 
       {/* Top bar */}
-      <View style={styles.topBar}>
+      <View style={[styles.topBar, { borderBottomColor: colors.borderLight, backgroundColor: colors.background }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-          <Text style={styles.backText}>{t("common.back")}</Text>
+          <Text style={[styles.backText, { color: colors.primary }]}>{t("common.back")}</Text>
         </TouchableOpacity>
-        <Text style={styles.topTitle}>{t("profile.title")}</Text>
+        <Text style={[styles.topTitle, { color: colors.text }]}>{t("profile.title")}</Text>
         <View style={{ width: 60 }} />
       </View>
 
@@ -134,8 +136,8 @@ export default function ProfileScreen({ navigation }: any) {
 
         {/* User info card */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>{t("profile.accountInfo")}</Text>
-          <View style={styles.infoCard}>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>{t("profile.accountInfo")}</Text>
+          <View style={[styles.infoCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
             <InfoRow icon="👤" label={t("profile.name")}  value={user?.full_name || "—"} />
             <InfoRow icon="📧" label={t("profile.email")} value={user?.email    || "—"} />
             {user?.phone && (
@@ -146,8 +148,8 @@ export default function ProfileScreen({ navigation }: any) {
 
         {/* Settings */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>{t("profile.settings")}</Text>
-          <View style={styles.infoCard}>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>{t("profile.settings")}</Text>
+          <View style={[styles.infoCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
 
             {/* Language toggle */}
             <View style={styles.settingRow}>
@@ -167,7 +169,25 @@ export default function ProfileScreen({ navigation }: any) {
               </TouchableOpacity>
             </View>
 
-            <View style={styles.divider} />
+            <View style={[styles.divider, { backgroundColor: colors.border }]} />
+
+            {/* Dark mode */}
+            <View style={styles.settingRow}>
+              <View style={styles.settingLeft}>
+                <Text style={styles.settingIcon}>{isDark ? "🌙" : "☀️"}</Text>
+                <View>
+                  <Text style={[styles.settingLabel, { color: colors.text }]}>{t("profile.darkMode")}</Text>
+                  <Text style={[styles.settingValue, { color: colors.textSecondary }]}>
+                    {isDark ? t("profile.darkModeOn") : t("profile.darkModeOff")}
+                  </Text>
+                </View>
+              </View>
+              <TouchableOpacity style={[styles.toggleBtn, { backgroundColor: colors.primarySurface }]} onPress={toggleTheme}>
+                <Text style={[styles.toggleBtnText, { color: colors.primary }]}>{isDark ? "🌙" : "☀️"}</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={[styles.divider, { backgroundColor: colors.border }]} />
 
             {/* Location */}
             <View style={styles.settingRow}>
@@ -188,10 +208,23 @@ export default function ProfileScreen({ navigation }: any) {
           </View>
         </View>
 
+        {/* How it works */}
+        <TouchableOpacity
+          style={[styles.infoCard, { backgroundColor: colors.primarySurface, borderColor: colors.border, flexDirection: "row", alignItems: "center", gap: 12 }]}
+          onPress={() => navigation.navigate("HowItWorks")}
+        >
+          <Text style={{ fontSize: 24 }}>🔬</Text>
+          <View style={{ flex: 1 }}>
+            <Text style={[styles.settingLabel, { color: colors.primary }]}>{t("profile.howItWorks")}</Text>
+            <Text style={[styles.settingValue, { color: colors.textSecondary }]}>{t("profile.howItWorksSub")}</Text>
+          </View>
+          <Text style={[styles.settingIcon, { color: colors.primary }]}>›</Text>
+        </TouchableOpacity>
+
         {/* Change password */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>{t("profile.changePassword")}</Text>
-          <View style={styles.infoCard}>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>{t("profile.changePassword")}</Text>
+          <View style={[styles.infoCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
 
             {(passwordStep === "idle" || passwordStep === "done") && (
               <View>

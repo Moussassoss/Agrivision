@@ -1,3 +1,4 @@
+from app.services.fertilizer import get_fertilizer_advice
 from app.utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -142,5 +143,12 @@ def build_recommendations(
             "confidence":      pred["confidence"],
             "planting_season": calendar.get(crop, "Consult local agronomist"),
             "why":             _build_reason(crop, soil, weather, lang),
+            "fertilizer":      get_fertilizer_advice(
+                                   crop,
+                                   soil["nitrogen"],
+                                   soil["phosphorus"],
+                                   soil["potassium"],
+                                   lang,
+                               ),
         })
     return results

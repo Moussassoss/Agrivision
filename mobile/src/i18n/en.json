@@ -152,7 +152,47 @@
     "plantingGuide": "🌱  View Planting Guide",
     "temperature": "Temperature",
     "humidity": "Humidity",
-    "rainfall": "Rainfall"
+    "rainfall": "Rainfall",
+    "fertilizerTitle": "Fertilizer Advice",
+    "share": "Share",
+    "shareTitle": "Crop Recommendation",
+    "shareFooter": "Generated with AgriVision AI 🌱",
+    "shareError": "Could not share result"
+  },
+  "onboarding": {
+    "slide1Title": "Welcome to AgriVision",
+    "slide1Desc": "AI-powered crop recommendations using real soil and weather data — built for Rwandan farmers.",
+    "slide2Title": "Smart Recommendations",
+    "slide2Desc": "Our ML model analyses satellite soil data, live weather, and your GPS location to suggest the best crops.",
+    "slide3Title": "Step-by-Step Guides",
+    "slide3Desc": "Get detailed planting guides with animated instructions for every recommended crop.",
+    "slide4Title": "Two Languages",
+    "slide4Desc": "Use AgriVision in English or Kinyarwanda. Switch anytime from your profile.",
+    "skip": "Skip",
+    "next": "Next →",
+    "getStarted": "Get Started"
+  },
+  "howItWorks": {
+    "title": "How It Works",
+    "heroSub": "AI-powered crop recommendations from real satellite and weather data",
+    "accuracyTitle": "ML Model Accuracy",
+    "accuracySub": "Trained on 2,200 crop-soil samples across 22 crop types",
+    "pipelineTitle": "How a recommendation is made",
+    "step1Title": "Your GPS location",
+    "step1Desc": "The app reads your exact coordinates using your phone's GPS — no manual input needed.",
+    "step2Title": "Soil data — iSDAsoil",
+    "step2Desc": "Satellite-derived Nitrogen, Phosphorus, Potassium, and pH values for your exact location from the iSDAsoil API.",
+    "step3Title": "Weather — OpenWeather + NASA",
+    "step3Desc": "Live temperature and humidity from OpenWeather, combined with seasonal rainfall from NASA POWER.",
+    "step4Title": "AI model prediction",
+    "step4Desc": "A Random Forest model trained on 2,200 samples predicts the top 3 crops with confidence scores.",
+    "step5Title": "Rich recommendation",
+    "step5Desc": "Results are enriched with planting calendar, agronomic reasoning, and fertilizer advice in your language.",
+    "sourcesTitle": "Data sources",
+    "sourceIsda": "Satellite soil maps at 30m resolution — N, P, K, pH for all of Africa",
+    "sourceOw": "Real-time temperature and humidity from 40,000+ weather stations worldwide",
+    "sourceNasa": "30-year seasonal rainfall averages from NASA's POWER climate database",
+    "datasetNote": "ML model trained on the Crop Recommendation Dataset (Kaggle). Note: dataset is India-origin; recommendations are calibrated for Rwanda's climate context."
   },
   "profile": {
     "title": "My Profile",
@@ -206,7 +246,12 @@
     "updatingPassword": "Updating password...",
     "resetTokenError": "Failed to send reset code. Please try again.",
     "enterToken": "Please enter the reset code",
-    "resetError": "Invalid or expired code. Please try again."
+    "resetError": "Invalid or expired code. Please try again.",
+    "darkMode": "Dark Mode",
+    "darkModeOn": "Dark theme active",
+    "darkModeOff": "Light theme active",
+    "howItWorks": "How It Works",
+    "howItWorksSub": "Learn about the AI methodology"
   },
   "language": {
     "switchTo": "RW",

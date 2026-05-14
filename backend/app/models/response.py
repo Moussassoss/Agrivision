@@ -19,12 +19,19 @@ class WeatherData(BaseModel):
     source: str = Field(..., description="'openweather' or 'nasa_power'")
 
 
+class FertilizerAdvice(BaseModel):
+    """Fertilizer recommendation items + application note."""
+    items: list[str] = Field(..., description="Per-nutrient advice lines")
+    note: str = Field(..., description="General application guidance")
+
+
 class CropRecommendation(BaseModel):
     """A single recommended crop with confidence and advice."""
     crop: str = Field(..., description="Crop name e.g. 'maize'")
     confidence: float = Field(..., ge=0, le=1, description="Model confidence 0-1")
     planting_season: str = Field(..., description="Best planting window")
     why: str = Field(..., description="Short human-readable reason")
+    fertilizer: FertilizerAdvice = Field(..., description="Soil-based fertilizer advice")
 
 
 class RecommendResponse(BaseModel):

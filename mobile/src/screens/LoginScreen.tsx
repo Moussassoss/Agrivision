@@ -13,10 +13,12 @@ import {
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
 
 export default function LoginScreen({ navigation }: any) {
   const { t } = useTranslation();
   const { signIn } = useAuth();
+  const { colors } = useTheme();
   const [email, setEmail]       = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading]   = useState(false);
@@ -44,7 +46,7 @@ export default function LoginScreen({ navigation }: any) {
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView contentContainerStyle={[styles.container, { backgroundColor: colors.surface }]}>
         {/* Logo / Header */}
         <View style={styles.header}>
           <Text style={styles.logo}>🌱</Text>
@@ -53,23 +55,23 @@ export default function LoginScreen({ navigation }: any) {
         </View>
 
         {/* Form */}
-        <View style={styles.form}>
-          <Text style={styles.label}>{t("login.email")}</Text>
+        <View style={[styles.form, { backgroundColor: colors.background }]}>
+          <Text style={[styles.label, { color: colors.text }]}>{t("login.email")}</Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { backgroundColor: colors.inputBg, borderColor: colors.inputBorder, color: colors.text }]}
             placeholder={t("login.emailPlaceholder")}
-            placeholderTextColor="#aaa"
+            placeholderTextColor={colors.textMuted}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
             autoCapitalize="none"
           />
 
-          <Text style={styles.label}>{t("login.password")}</Text>
+          <Text style={[styles.label, { color: colors.text }]}>{t("login.password")}</Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { backgroundColor: colors.inputBg, borderColor: colors.inputBorder, color: colors.text }]}
             placeholder={t("login.passwordPlaceholder")}
-            placeholderTextColor="#aaa"
+            placeholderTextColor={colors.textMuted}
             value={password}
             onChangeText={setPassword}
             secureTextEntry
