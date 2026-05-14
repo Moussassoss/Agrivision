@@ -66,11 +66,13 @@ export const getRecommendation = async (
     phosphorus?: number;
     potassium?: number;
     ph?: number;
-  }
+  },
+  lang = "en",
 ) => {
   const res = await api.post("/crop", {
     location: { latitude, longitude },
     soil_override: soilOverride || null,
+    lang,
   });
   return res.data;
 };

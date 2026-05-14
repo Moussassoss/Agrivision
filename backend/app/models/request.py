@@ -26,6 +26,7 @@ class RecommendRequest(BaseModel):
     """
     location: LocationInput
     soil_override: Optional[SoilOverride] = None
+    lang: Optional[str] = Field("en", description="Response language: 'en' or 'rw'")
 
     model_config = {
         "json_schema_extra": {

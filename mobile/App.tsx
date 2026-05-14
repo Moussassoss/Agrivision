@@ -12,8 +12,10 @@ import RegisterScreen   from "./src/screens/RegisterScreen";
 import HomeScreen       from "./src/screens/HomeScreen";
 import ResultScreen     from "./src/screens/ResultScreen";
 import HistoryScreen    from "./src/screens/HistoryScreen";
-import ForgotPasswordScreen from "./src/screens/ForgotPasswordScreen";
-import WelcomeScreen        from "./src/screens/WelcomeScreen";
+import ForgotPasswordScreen  from "./src/screens/ForgotPasswordScreen";
+import WelcomeScreen         from "./src/screens/WelcomeScreen";
+import ProfileScreen         from "./src/screens/ProfileScreen";
+import PlantingGuideScreen   from "./src/screens/PlantingGuideScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -33,12 +35,14 @@ const Navigation = () => {
       {user ? (
         // ── Authenticated screens ──────────────────
         <>
-          <Stack.Screen name="Home"    component={HomeScreen} />
+          <Stack.Screen name="Home"          component={HomeScreen} />
           <Stack.Screen
             name="Result"
             component={ResultScreen}
             getId={({ params }) => String((params as any)?.key)}/>
-          <Stack.Screen name="History" component={HistoryScreen} />
+          <Stack.Screen name="History"       component={HistoryScreen} />
+          <Stack.Screen name="Profile"       component={ProfileScreen} />
+          <Stack.Screen name="PlantingGuide" component={PlantingGuideScreen} />
         </>
       ) : (
         // ── Auth screens ───────────────────────────
