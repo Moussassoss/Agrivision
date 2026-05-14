@@ -32,7 +32,10 @@ const Navigation = () => {
         // ── Authenticated screens ──────────────────
         <>
           <Stack.Screen name="Home"    component={HomeScreen} />
-          <Stack.Screen name="Result"  component={ResultScreen} />
+          <Stack.Screen
+            name="Result"
+            component={ResultScreen}
+            getId={({ params }) => String((params as any)?.key)}/>
           <Stack.Screen name="History" component={HistoryScreen} />
         </>
       ) : (

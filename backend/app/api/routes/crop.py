@@ -39,7 +39,8 @@ async def recommend(
 
     # ── 1. Soil data ────────────────────────────────
     try:
-        soil = await get_soil_data(lat, lon)
+        raw_soil = await get_soil_data(lat, lon)
+        soil = dict(raw_soil)
     except Exception as e:
         raise HTTPException(status_code=503, detail=f"Could not fetch soil data: {e}")
 
