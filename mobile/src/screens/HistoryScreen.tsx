@@ -39,8 +39,6 @@ const CROP_EMOJI: Record<string, string> = {
   coffee:      "☕",
 };
 
-const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-
 export default function HistoryScreen({ navigation }: any) {
   const { t } = useTranslation();
   const [records, setRecords]       = useState<any[]>([]);
@@ -155,7 +153,7 @@ export default function HistoryScreen({ navigation }: any) {
                     </Text>
                     <View>
                       <Text style={styles.cardCropName}>
-                        {capitalize(topCrop.crop)}
+                        {t(`crops.${topCrop.crop}`, { defaultValue: topCrop.crop })}
                       </Text>
                       <Text style={styles.cardDate}>
                         {formatDate(record.created_at)}
@@ -186,7 +184,7 @@ export default function HistoryScreen({ navigation }: any) {
                     {others.map((c: any, i: number) => (
                       <View key={i} style={styles.otherChip}>
                         <Text style={styles.otherChipText}>
-                          {CROP_EMOJI[c.crop] || "🌱"} {capitalize(c.crop)}
+                          {CROP_EMOJI[c.crop] || "🌱"} {t(`crops.${c.crop}`, { defaultValue: c.crop })}
                         </Text>
                       </View>
                     ))}

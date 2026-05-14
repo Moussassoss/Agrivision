@@ -35,8 +35,6 @@ const CROP_EMOJI: Record<string, string> = {
   coffee:      "☕",
 };
 
-const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-
 export default function ResultScreen({ route, navigation }: any) {
   const { t } = useTranslation();
   const { result } = route.params;
@@ -67,7 +65,7 @@ export default function ResultScreen({ route, navigation }: any) {
             {CROP_EMOJI[topCrop.crop] || "🌱"}
           </Text>
           <Text style={styles.heroLabel}>{t("result.bestCrop")}</Text>
-          <Text style={styles.heroCrop}>{capitalize(topCrop.crop)}</Text>
+          <Text style={styles.heroCrop}>{t(`crops.${topCrop.crop}`, { defaultValue: topCrop.crop })}</Text>
 
           {/* Confidence bar */}
           <View style={styles.barWrap}>
@@ -93,6 +91,14 @@ export default function ResultScreen({ route, navigation }: any) {
           <View style={styles.whyBox}>
             <Text style={styles.whyText}>💡  {topCrop.why}</Text>
           </View>
+
+          {/* Planting guide */}
+          <TouchableOpacity
+            style={styles.guideBtn}
+            onPress={() => navigation.navigate("PlantingGuide", { cropKey: topCrop.crop })}
+          >
+            <Text style={styles.guideBtnText}>{t("result.plantingGuide")}</Text>
+          </TouchableOpacity>
         </View>
 
         {/* ── Other options ── */}
@@ -105,7 +111,7 @@ export default function ResultScreen({ route, navigation }: any) {
                   <Text style={styles.altEmoji}>
                     {CROP_EMOJI[crop.crop] || "🌱"}
                   </Text>
-                  <Text style={styles.altName}>{capitalize(crop.crop)}</Text>
+                  <Text style={styles.altName}>{t(`crops.${crop.crop}`, { defaultValue: crop.crop })}</Text>
                   <View style={styles.altPill}>
                     <Text style={styles.altPillText}>
                       {Math.round(crop.confidence * 100)}%
@@ -400,6 +406,23 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#795548",
     lineHeight: 18,
+  },
+
+  // ── Guide button ───────────────────────────────
+  guideBtn: {
+    backgroundColor: "rgba(255,255,255,0.15)",
+    borderRadius: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderWidth: 0.5,
+    borderColor: "rgba(255,255,255,0.3)",
+    marginTop: 4,
+  },
+  guideBtnText: {
+    color: "#fff",
+    fontWeight: "700",
+    fontSize: 13,
+    textAlign: "center",
   },
 
   // ── Buttons ────────────────────────────────────

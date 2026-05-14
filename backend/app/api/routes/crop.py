@@ -76,7 +76,7 @@ async def recommend(
         raise HTTPException(status_code=500, detail=f"Prediction error: {e}")
 
     # ── 4. Build rich recommendations ───────────────
-    enriched = build_recommendations(predictions, soil, weather)
+    enriched = build_recommendations(predictions, soil, weather, lang=body.lang or "en")
 
 # ── 5. Save to history ──────────────────────────
    
