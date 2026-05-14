@@ -13,7 +13,9 @@ import {
   Animated,
 } from "react-native";
 import * as Location from "expo-location";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
+import { useLanguage } from "../context/LanguageContext";
 import { getRecommendation } from "../services/api";
 
 const CROP_EMOJI: Record<string, string> = {
@@ -28,6 +30,8 @@ const CROP_EMOJI: Record<string, string> = {
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 export default function HomeScreen({ navigation }: any) {
+  const { t } = useTranslation();
+  const { language, toggleLanguage } = useLanguage();
   const { user, signOut }                       = useAuth();
   const [location, setLocation]                 = useState<{ lat: number; lon: number } | null>(null);
   const [locationName, setLocationName]         = useState("");
@@ -42,7 +46,6 @@ export default function HomeScreen({ navigation }: any) {
 
   useEffect(() => { requestLocation(); }, []);
 
-  // Animate result in when it arrives
   useEffect(() => {
     if (result) {
       fadeAnim.setValue(0);
@@ -57,8 +60,7 @@ export default function HomeScreen({ navigation }: any) {
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
-        Alert.alert("Location Required",
-          "AgriVision needs your location to fetch soil and weather data.");
+        Alert.alert(t("home.locationRequired"), t("home.locationRequiredMsg"));
         return;
       }
       const loc = await Location.getCurrentPositionAsync({
@@ -73,7 +75,7 @@ export default function HomeScreen({ navigation }: any) {
         setLocationName([p.district, p.city, p.country].filter(Boolean).join(", "));
       }
     } catch {
-      Alert.alert("Error", "Could not get your location. Please try again.");
+      Alert.alert(t("common.error"), t("home.locationError"));
     } finally {
       setLoadingLocation(false);
     }
@@ -81,13 +83,12 @@ export default function HomeScreen({ navigation }: any) {
 
   const handleGetRecommendation = async () => {
     if (!location) {
-      Alert.alert("No Location", "Please allow location access first.");
+      Alert.alert(t("home.noLocation"), t("home.noLocationMsg"));
       return;
     }
     setLoadingRec(true);
-    setResult(null); // Always clear previous result before new fetch
+    setResult(null);
     try {
-      // Read override values fresh at call time
       const override: any = {};
       if (soilOverride.nitrogen)   override.nitrogen   = parseFloat(soilOverride.nitrogen);
       if (soilOverride.phosphorus) override.phosphorus = parseFloat(soilOverride.phosphorus);
@@ -95,9 +96,6 @@ export default function HomeScreen({ navigation }: any) {
       if (soilOverride.ph)         override.ph         = parseFloat(soilOverride.ph);
 
       const hasOverride = Object.keys(override).length > 0;
-
-      console.log("Sending override:", hasOverride ? override : "none (using satellite)");
-
       const data = await getRecommendation(
         location.lat,
         location.lon,
@@ -105,8 +103,8 @@ export default function HomeScreen({ navigation }: any) {
       );
       setResult(data);
     } catch (e: any) {
-      Alert.alert("Error",
-        e?.response?.data?.detail || "Could not get recommendation.");
+      Alert.alert(t("common.error"),
+        e?.response?.data?.detail || t("home.recError"));
     } finally {
       setLoadingRec(false);
     }
@@ -128,7 +126,7 @@ export default function HomeScreen({ navigation }: any) {
       <View style={styles.topBar}>
         <View>
           <Text style={styles.greeting}>
-            Hello, {user?.full_name?.split(" ")[0]} 👋
+            {t("home.greeting", { name: user?.full_name?.split(" ")[0] })}
           </Text>
           <TouchableOpacity onPress={requestLocation} style={styles.locationRow}>
             <Text style={styles.locationPin}>📍</Text>
@@ -136,17 +134,22 @@ export default function HomeScreen({ navigation }: any) {
               <ActivityIndicator size="small" color="#4CAF50" style={{ marginLeft: 4 }} />
             ) : (
               <Text style={styles.locationText} numberOfLines={1}>
-                {locationName || "Detecting location..."}
+                {locationName || t("home.detectingLocation")}
               </Text>
             )}
             <Text style={styles.locationChevron}> ›</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={signOut} style={styles.avatarBtn}>
-          <Text style={styles.avatarText}>
-            {user?.full_name?.charAt(0).toUpperCase() || "A"}
-          </Text>
-        </TouchableOpacity>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <TouchableOpacity onPress={toggleLanguage} style={styles.langBtn}>
+            <Text style={styles.langBtnText}>🌐 {t("language.switchTo")}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={signOut} style={styles.avatarBtn}>
+            <Text style={styles.avatarText}>
+              {user?.full_name?.charAt(0).toUpperCase() || "A"}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <ScrollView
@@ -159,10 +162,8 @@ export default function HomeScreen({ navigation }: any) {
             {/* Hero card */}
             <View style={styles.heroCard}>
               <View style={styles.heroLeft}>
-                <Text style={styles.heroTitle}>Get your crop{"\n"}recommendation</Text>
-                <Text style={styles.heroSub}>
-                  AI-powered · Real soil data · Live weather
-                </Text>
+                <Text style={styles.heroTitle}>{t("home.heroTitle")}</Text>
+                <Text style={styles.heroSub}>{t("home.heroSub")}</Text>
                 <View style={{ flexDirection: "row", gap: 8 }}>
                   <TouchableOpacity
                     style={[
@@ -176,7 +177,7 @@ export default function HomeScreen({ navigation }: any) {
                     {loadingRec ? (
                       <ActivityIndicator color="#fff" size="small" />
                     ) : (
-                      <Text style={styles.heroBtnText}>Analyse my farm →</Text>
+                      <Text style={styles.heroBtnText}>{t("home.analyseBtn")}</Text>
                     )}
                   </TouchableOpacity>
                   {Object.values(soilOverride).some(v => v !== "") && (
@@ -193,7 +194,7 @@ export default function HomeScreen({ navigation }: any) {
             </View>
 
             {/* Auto data sources */}
-            <Text style={styles.sectionTitle}>Auto-fetched data</Text>
+            <Text style={styles.sectionTitle}>{t("home.autoFetchedData")}</Text>
             <View style={styles.sourceRow}>
               <SourceChip emoji="🛰️" label="iSDAsoil"    sub="N · P · K · pH" color="#E8F5E9" />
               <SourceChip emoji="🌦️" label="OpenWeather" sub="Temp · Humidity"  color="#E3F2FD" />
@@ -207,25 +208,21 @@ export default function HomeScreen({ navigation }: any) {
               activeOpacity={0.7}
             >
               <View>
-                <Text style={styles.overrideTitle}>Have lab soil results?</Text>
-                <Text style={styles.overrideSub}>
-                  Override satellite data with your lab values
-                </Text>
+                <Text style={styles.overrideTitle}>{t("home.labSoilTitle")}</Text>
+                <Text style={styles.overrideSub}>{t("home.labSoilSub")}</Text>
               </View>
               <Text style={styles.overrideChevron}>{showOverride ? "▲" : "▼"}</Text>
             </TouchableOpacity>
 
             {showOverride && (
               <View style={styles.overrideCard}>
-                <Text style={styles.overrideNote}>
-                  Leave blank to use satellite data automatically.
-                </Text>
+                <Text style={styles.overrideNote}>{t("home.labSoilNote")}</Text>
                 <View style={styles.inputGrid}>
                   {[
-                    { label: "Nitrogen (N) mg/kg",   key: "nitrogen" },
-                    { label: "Phosphorus (P) mg/kg", key: "phosphorus" },
-                    { label: "Potassium (K) mg/kg",  key: "potassium" },
-                    { label: "pH",                   key: "ph" },
+                    { label: t("home.nitrogenLabel"),   key: "nitrogen" },
+                    { label: t("home.phosphorusLabel"), key: "phosphorus" },
+                    { label: t("home.potassiumLabel"),  key: "potassium" },
+                    { label: t("home.phLabel"),         key: "ph" },
                   ].map(({ label, key }) => (
                     <View key={key} style={styles.inputGroup}>
                       <Text style={styles.inputLabel}>{label}</Text>
@@ -249,14 +246,14 @@ export default function HomeScreen({ navigation }: any) {
                     }
                     style={styles.clearBtn}
                   >
-                    <Text style={styles.clearBtnText}>Clear all values</Text>
+                    <Text style={styles.clearBtnText}>{t("home.clearValues")}</Text>
                   </TouchableOpacity>
                 )}
               </View>
             )}
 
             {/* History shortcut */}
-            <Text style={styles.sectionTitle}>Recent activity</Text>
+            <Text style={styles.sectionTitle}>{t("home.recentActivity")}</Text>
             <TouchableOpacity
               style={styles.historyCard}
               onPress={() => navigation.navigate("History")}
@@ -265,8 +262,8 @@ export default function HomeScreen({ navigation }: any) {
               <View style={styles.historyLeft}>
                 <Text style={styles.historyEmoji}>📋</Text>
                 <View>
-                  <Text style={styles.historyTitle}>Past recommendations</Text>
-                  <Text style={styles.historySub}>View your crop history</Text>
+                  <Text style={styles.historyTitle}>{t("home.pastRecs")}</Text>
+                  <Text style={styles.historySub}>{t("home.viewHistory")}</Text>
                 </View>
               </View>
               <Text style={styles.historyChevron}>›</Text>
@@ -274,7 +271,7 @@ export default function HomeScreen({ navigation }: any) {
           </>
         )}
 
-        {/* ── Result view — shown inline ── */}
+        {/* ── Result view ── */}
         {result && (
           <Animated.View style={{ opacity: fadeAnim, gap: 14 }}>
 
@@ -285,12 +282,11 @@ export default function HomeScreen({ navigation }: any) {
                   {CROP_EMOJI[topCrop.crop] || "🌱"}
                 </Text>
                 <Text style={{ color: "rgba(255,255,255,0.7)", fontSize: 13 }}>
-                  Best crop for your farm
+                  {t("home.bestCrop")}
                 </Text>
                 <Text style={{ color: "#fff", fontSize: 30, fontWeight: "700" }}>
                   {capitalize(topCrop.crop)}
                 </Text>
-                {/* Confidence bar */}
                 <View style={{ width: "100%", gap: 4 }}>
                   <View style={styles.barBg}>
                     <View
@@ -301,14 +297,12 @@ export default function HomeScreen({ navigation }: any) {
                     />
                   </View>
                   <Text style={{ color: "rgba(255,255,255,0.7)", fontSize: 12, textAlign: "right" }}>
-                    {Math.round(topCrop.confidence * 100)}% confidence
+                    {t("home.confidence", { value: Math.round(topCrop.confidence * 100) })}
                   </Text>
                 </View>
-                {/* Season */}
                 <View style={styles.badge}>
                   <Text style={styles.badgeText}>📅  {topCrop.planting_season}</Text>
                 </View>
-                {/* Why */}
                 <View style={styles.whyBox}>
                   <Text style={styles.whyText}>💡  {topCrop.why}</Text>
                 </View>
@@ -318,7 +312,7 @@ export default function HomeScreen({ navigation }: any) {
             {/* Other options */}
             {result.top_crops.length > 1 && (
               <>
-                <Text style={styles.sectionTitle}>Other good options</Text>
+                <Text style={styles.sectionTitle}>{t("home.otherOptions")}</Text>
                 <View style={styles.altRow}>
                   {result.top_crops.slice(1).map((crop: any, i: number) => (
                     <View key={i} style={styles.altCard}>
@@ -336,7 +330,7 @@ export default function HomeScreen({ navigation }: any) {
             )}
 
             {/* Soil used */}
-            <Text style={styles.sectionTitle}>Soil data used</Text>
+            <Text style={styles.sectionTitle}>{t("home.soilDataUsed")}</Text>
             <View style={styles.dataCard}>
               <View style={styles.dataGrid}>
                 <DataTile label="N"  value={`${result.soil_used.nitrogen}`}   unit="mg/kg" color="#E8F5E9" />
@@ -346,34 +340,34 @@ export default function HomeScreen({ navigation }: any) {
               </View>
               <Text style={styles.sourceTag}>
                 {result.soil_used.source === "isdasoil"
-                  ? "🛰️ iSDAsoil satellite"
+                  ? t("home.soilSourceSatellite")
                   : result.soil_used.source === "manual+isdasoil"
-                  ? "🧪 Manual + iSDAsoil"
-                  : "🧪 Manual input"}
+                  ? t("home.soilSourceManualSat")
+                  : t("home.soilSourceManual")}
               </Text>
             </View>
 
             {/* Weather used */}
-            <Text style={styles.sectionTitle}>Weather data used</Text>
+            <Text style={styles.sectionTitle}>{t("home.weatherDataUsed")}</Text>
             <View style={styles.dataCard}>
               <View style={styles.dataGrid}>
-                <DataTile label="Temp"     value={`${result.weather_used.temperature}`}              unit="°C"  color="#E3F2FD" />
-                <DataTile label="Humidity" value={`${result.weather_used.humidity}`}                 unit="%"   color="#E8F5E9" />
-                <DataTile label="Rainfall" value={`${Math.round(result.weather_used.rainfall)}`}     unit="mm"  color="#FFF8E1" />
+                <DataTile label="Temp"     value={`${result.weather_used.temperature}`}          unit="°C"  color="#E3F2FD" />
+                <DataTile label="Humidity" value={`${result.weather_used.humidity}`}              unit="%"   color="#E8F5E9" />
+                <DataTile label="Rainfall" value={`${Math.round(result.weather_used.rainfall)}`}  unit="mm"  color="#FFF8E1" />
               </View>
-              <Text style={styles.sourceTag}>🌦️ OpenWeather + 🌧️ NASA POWER (seasonal)</Text>
+              <Text style={styles.sourceTag}>{t("home.weatherSource")}</Text>
             </View>
 
             {/* Actions */}
             <TouchableOpacity style={styles.primaryBtn} onPress={handleReset}>
-              <Text style={styles.primaryBtnText}>🔄  New recommendation</Text>
+              <Text style={styles.primaryBtnText}>{t("home.newRecommendation")}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.secondaryBtn}
               onPress={() => navigation.navigate("History")}
             >
-              <Text style={styles.secondaryBtnText}>📋  View all past recommendations</Text>
+              <Text style={styles.secondaryBtnText}>{t("home.viewAllPast")}</Text>
             </TouchableOpacity>
 
           </Animated.View>
@@ -382,8 +376,8 @@ export default function HomeScreen({ navigation }: any) {
 
       {/* Bottom tab bar */}
       <View style={styles.tabBar}>
-        <TabItem emoji="🏠" label="Home"    active />
-        <TabItem emoji="📋" label="History" onPress={() => navigation.navigate("History")} />
+        <TabItem emoji="🏠" label={t("common.home")}    active />
+        <TabItem emoji="📋" label={t("common.history")} onPress={() => navigation.navigate("History")} />
       </View>
     </SafeAreaView>
   );
@@ -423,8 +417,10 @@ const styles = StyleSheet.create({
   greeting:        { fontSize: 18, fontWeight: "700", color: "#1a1a1a", marginBottom: 2 },
   locationRow:     { flexDirection: "row", alignItems: "center" },
   locationPin:     { fontSize: 12 },
-  locationText:    { fontSize: 13, color: "#4CAF50", fontWeight: "600", maxWidth: 200 },
+  locationText:    { fontSize: 13, color: "#4CAF50", fontWeight: "600", maxWidth: 160 },
   locationChevron: { fontSize: 16, color: "#4CAF50", fontWeight: "700" },
+  langBtn:         { backgroundColor: "#E8F5E9", borderRadius: 16, paddingHorizontal: 10, paddingVertical: 5 },
+  langBtnText:     { fontSize: 12, color: "#2D6A4F", fontWeight: "600" },
   avatarBtn:       { width: 40, height: 40, borderRadius: 20, backgroundColor: "#E8F5E9", alignItems: "center", justifyContent: "center" },
   avatarText:      { fontSize: 16, fontWeight: "700", color: "#2D6A4F" },
 

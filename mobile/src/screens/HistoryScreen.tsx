@@ -11,6 +11,7 @@ import {
   StatusBar,
   RefreshControl,
 } from "react-native";
+import { useTranslation } from "react-i18next";
 import { getHistory } from "../services/api";
 
 const CROP_EMOJI: Record<string, string> = {
@@ -41,6 +42,7 @@ const CROP_EMOJI: Record<string, string> = {
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 export default function HistoryScreen({ navigation }: any) {
+  const { t } = useTranslation();
   const [records, setRecords]       = useState<any[]>([]);
   const [loading, setLoading]       = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -52,7 +54,7 @@ export default function HistoryScreen({ navigation }: any) {
       const data = await getHistory(20);
       setRecords(data);
     } catch (e: any) {
-      Alert.alert("Error", e?.response?.data?.detail || "Could not load history");
+      Alert.alert(t("common.error"), e?.response?.data?.detail || t("history.loadError"));
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -81,9 +83,9 @@ export default function HistoryScreen({ navigation }: any) {
       {/* Top bar */}
       <View style={styles.topBar}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-          <Text style={styles.backText}>‹ Back</Text>
+          <Text style={styles.backText}>{t("common.back")}</Text>
         </TouchableOpacity>
-        <Text style={styles.topTitle}>History</Text>
+        <Text style={styles.topTitle}>{t("history.title")}</Text>
         <View style={{ width: 60 }} />
       </View>
 
@@ -91,22 +93,20 @@ export default function HistoryScreen({ navigation }: any) {
       {loading ? (
         <View style={styles.centered}>
           <ActivityIndicator size="large" color="#4CAF50" />
-          <Text style={styles.loadingText}>Loading history...</Text>
+          <Text style={styles.loadingText}>{t("history.loading")}</Text>
         </View>
 
       /* ── Empty ── */
       ) : records.length === 0 ? (
         <View style={styles.centered}>
           <Text style={styles.emptyEmoji}>🌱</Text>
-          <Text style={styles.emptyTitle}>No recommendations yet</Text>
-          <Text style={styles.emptySubtitle}>
-            Your past crop recommendations will appear here once you analyse your farm.
-          </Text>
+          <Text style={styles.emptyTitle}>{t("history.emptyTitle")}</Text>
+          <Text style={styles.emptySubtitle}>{t("history.emptySubtitle")}</Text>
           <TouchableOpacity
             style={styles.emptyBtn}
             onPress={() => navigation.goBack()}
           >
-            <Text style={styles.emptyBtnText}>Analyse my farm</Text>
+            <Text style={styles.emptyBtnText}>{t("history.analyseBtn")}</Text>
           </TouchableOpacity>
         </View>
 
@@ -124,7 +124,7 @@ export default function HistoryScreen({ navigation }: any) {
           }
         >
           <Text style={styles.countText}>
-            {records.length} recommendation{records.length !== 1 ? "s" : ""}
+            {t("history.recommendationCount", { count: records.length })}
           </Text>
 
           {records.map((record) => {
@@ -142,8 +142,7 @@ export default function HistoryScreen({ navigation }: any) {
                       top_crops:    record.top_crops,
                       soil_used:    record.soil,
                       weather_used: record.weather,
-                      disclaimer:
-                        "Recommendations are AI-assisted. Always consult a local agronomist.",
+                      disclaimer:   t("history.disclaimer"),
                     },
                   })
                 }
@@ -183,7 +182,7 @@ export default function HistoryScreen({ navigation }: any) {
                 {/* Other crops */}
                 {others.length > 0 && (
                   <View style={styles.othersRow}>
-                    <Text style={styles.othersLabel}>Also considered  </Text>
+                    <Text style={styles.othersLabel}>{t("history.alsoConsidered")}  </Text>
                     {others.map((c: any, i: number) => (
                       <View key={i} style={styles.otherChip}>
                         <Text style={styles.otherChipText}>
@@ -205,7 +204,7 @@ export default function HistoryScreen({ navigation }: any) {
                 </View>
 
                 {/* View arrow */}
-                <Text style={styles.viewArrow}>View details  ›</Text>
+                <Text style={styles.viewArrow}>{t("history.viewDetails")}</Text>
               </TouchableOpacity>
             );
           })}
@@ -216,10 +215,10 @@ export default function HistoryScreen({ navigation }: any) {
       <View style={styles.tabBar}>
         <TabItem
           emoji="🏠"
-          label="Home"
+          label={t("common.home")}
           onPress={() => navigation.navigate("Home")}
         />
-        <TabItem emoji="📋" label="History" active />
+        <TabItem emoji="📋" label={t("common.history")} active />
       </View>
 
     </SafeAreaView>

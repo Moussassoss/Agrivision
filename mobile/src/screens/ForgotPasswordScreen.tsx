@@ -11,32 +11,34 @@ import {
   Platform,
   ScrollView,
 } from "react-native";
+import { useTranslation } from "react-i18next";
 import { forgotPassword, resetPassword } from "../services/api";
 
 export default function ForgotPasswordScreen({ navigation }: any) {
-  const [step, setStep]         = useState<"email" | "reset">("email");
-  const [email, setEmail]       = useState("");
-  const [token, setToken]       = useState("");
+  const { t } = useTranslation();
+  const [step, setStep]               = useState<"email" | "reset">("email");
+  const [email, setEmail]             = useState("");
+  const [token, setToken]             = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [confirm, setConfirm]   = useState("");
-  const [loading, setLoading]   = useState(false);
+  const [confirm, setConfirm]         = useState("");
+  const [loading, setLoading]         = useState(false);
 
   // ── Step 1: Request reset token ─────────────────
   const handleRequestReset = async () => {
     if (!email) {
-      Alert.alert("Error", "Please enter your email address");
+      Alert.alert(t("common.error"), t("forgotPassword.enterEmail"));
       return;
     }
     setLoading(true);
     try {
       const res = await forgotPassword(email.trim().toLowerCase());
       Alert.alert(
-        "Token Generated",
-        `Your reset token is:\n\n${res.token}\n\nIn production this will be sent to your email.`,
-        [{ text: "Continue", onPress: () => setStep("reset") }]
+        t("forgotPassword.tokenGenerated"),
+        t("forgotPassword.tokenMessage", { token: res.token }),
+        [{ text: t("common.continue"), onPress: () => setStep("reset") }]
       );
     } catch (e: any) {
-      Alert.alert("Error", e?.response?.data?.detail || "Something went wrong");
+      Alert.alert(t("common.error"), e?.response?.data?.detail || t("forgotPassword.somethingWentWrong"));
     } finally {
       setLoading(false);
     }
@@ -45,27 +47,27 @@ export default function ForgotPasswordScreen({ navigation }: any) {
   // ── Step 2: Reset password with token ───────────
   const handleResetPassword = async () => {
     if (!token || !newPassword || !confirm) {
-      Alert.alert("Error", "Please fill in all fields");
+      Alert.alert(t("common.error"), t("forgotPassword.fillAllFields"));
       return;
     }
     if (newPassword !== confirm) {
-      Alert.alert("Error", "Passwords do not match");
+      Alert.alert(t("common.error"), t("forgotPassword.passwordMismatch"));
       return;
     }
     if (newPassword.length < 8) {
-      Alert.alert("Error", "Password must be at least 8 characters");
+      Alert.alert(t("common.error"), t("forgotPassword.passwordTooShort"));
       return;
     }
     setLoading(true);
     try {
       await resetPassword(token.trim(), newPassword);
       Alert.alert(
-        "Success! 🎉",
-        "Your password has been reset. Please log in with your new password.",
-        [{ text: "Log in", onPress: () => navigation.navigate("Login") }]
+        t("forgotPassword.successTitle"),
+        t("forgotPassword.successMessage"),
+        [{ text: t("forgotPassword.logInBtn"), onPress: () => navigation.navigate("Login") }]
       );
     } catch (e: any) {
-      Alert.alert("Error", e?.response?.data?.detail || "Invalid or expired token");
+      Alert.alert(t("common.error"), e?.response?.data?.detail || t("forgotPassword.invalidToken"));
     } finally {
       setLoading(false);
     }
@@ -81,12 +83,12 @@ export default function ForgotPasswordScreen({ navigation }: any) {
         <View style={styles.header}>
           <Text style={styles.logo}>🔐</Text>
           <Text style={styles.title}>
-            {step === "email" ? "Forgot Password" : "Reset Password"}
+            {step === "email" ? t("forgotPassword.titleEmail") : t("forgotPassword.titleReset")}
           </Text>
           <Text style={styles.subtitle}>
             {step === "email"
-              ? "Enter your email and we'll send you a reset token"
-              : "Enter the token you received and your new password"}
+              ? t("forgotPassword.subtitleEmail")
+              : t("forgotPassword.subtitleReset")}
           </Text>
         </View>
 
@@ -101,10 +103,10 @@ export default function ForgotPasswordScreen({ navigation }: any) {
         <View style={styles.form}>
           {step === "email" ? (
             <>
-              <Text style={styles.label}>Email Address</Text>
+              <Text style={styles.label}>{t("forgotPassword.emailAddress")}</Text>
               <TextInput
                 style={styles.input}
-                placeholder="farmer@example.com"
+                placeholder={t("forgotPassword.emailPlaceholder")}
                 placeholderTextColor="#aaa"
                 value={email}
                 onChangeText={setEmail}
@@ -120,36 +122,36 @@ export default function ForgotPasswordScreen({ navigation }: any) {
                 {loading ? (
                   <ActivityIndicator color="#fff" />
                 ) : (
-                  <Text style={styles.buttonText}>Send Reset Token</Text>
+                  <Text style={styles.buttonText}>{t("forgotPassword.sendTokenBtn")}</Text>
                 )}
               </TouchableOpacity>
             </>
           ) : (
             <>
-              <Text style={styles.label}>Reset Token</Text>
+              <Text style={styles.label}>{t("forgotPassword.resetToken")}</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Paste your reset token here"
+                placeholder={t("forgotPassword.tokenPlaceholder")}
                 placeholderTextColor="#aaa"
                 value={token}
                 onChangeText={setToken}
                 autoCapitalize="none"
               />
 
-              <Text style={styles.label}>New Password</Text>
+              <Text style={styles.label}>{t("forgotPassword.newPassword")}</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Min 8 characters"
+                placeholder={t("forgotPassword.passwordPlaceholder")}
                 placeholderTextColor="#aaa"
                 value={newPassword}
                 onChangeText={setNewPassword}
                 secureTextEntry
               />
 
-              <Text style={styles.label}>Confirm New Password</Text>
+              <Text style={styles.label}>{t("forgotPassword.confirmNewPassword")}</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Repeat new password"
+                placeholder={t("forgotPassword.confirmPasswordPlaceholder")}
                 placeholderTextColor="#aaa"
                 value={confirm}
                 onChangeText={setConfirm}
@@ -164,20 +166,20 @@ export default function ForgotPasswordScreen({ navigation }: any) {
                 {loading ? (
                   <ActivityIndicator color="#fff" />
                 ) : (
-                  <Text style={styles.buttonText}>Reset Password</Text>
+                  <Text style={styles.buttonText}>{t("forgotPassword.resetPasswordBtn")}</Text>
                 )}
               </TouchableOpacity>
 
               <TouchableOpacity onPress={() => setStep("email")}>
-                <Text style={styles.backText}>← Back</Text>
+                <Text style={styles.backText}>{t("forgotPassword.backLink")}</Text>
               </TouchableOpacity>
             </>
           )}
 
           <TouchableOpacity onPress={() => navigation.navigate("Login")}>
             <Text style={styles.linkText}>
-              Remember your password?{" "}
-              <Text style={styles.linkBold}>Log in</Text>
+              {t("forgotPassword.rememberPassword")}{" "}
+              <Text style={styles.linkBold}>{t("forgotPassword.logIn")}</Text>
             </Text>
           </TouchableOpacity>
         </View>
