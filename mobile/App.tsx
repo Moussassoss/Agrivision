@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ActivityIndicator, View } from "react-native";
 import { AuthProvider, useAuth } from "./src/context/AuthContext";
+import { LanguageProvider } from "./src/context/LanguageContext";
+import { initI18n } from "./src/i18n";
 
 // Screens
 import LoginScreen      from "./src/screens/LoginScreen";
@@ -42,8 +44,8 @@ const Navigation = () => {
         // ── Auth screens ───────────────────────────
         <>
           <Stack.Screen name="Welcome"       component={WelcomeScreen} />
-          <Stack.Screen name="Login"    component={LoginScreen} />
-          <Stack.Screen name="Register" component={RegisterScreen} />
+          <Stack.Screen name="Login"         component={LoginScreen} />
+          <Stack.Screen name="Register"      component={RegisterScreen} />
           <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
         </>
       )}
@@ -52,11 +54,27 @@ const Navigation = () => {
 };
 
 export default function App() {
+  const [i18nReady, setI18nReady] = useState(false);
+
+  useEffect(() => {
+    initI18n().then(() => setI18nReady(true));
+  }, []);
+
+  if (!i18nReady) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#2D6A4F" />
+      </View>
+    );
+  }
+
   return (
-    <AuthProvider>
-      <NavigationContainer>
-        <Navigation />
-      </NavigationContainer>
-    </AuthProvider>
+    <LanguageProvider>
+      <AuthProvider>
+        <NavigationContainer>
+          <Navigation />
+        </NavigationContainer>
+      </AuthProvider>
+    </LanguageProvider>
   );
 }

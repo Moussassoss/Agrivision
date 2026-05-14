@@ -11,9 +11,11 @@ import {
   Platform,
   ScrollView,
 } from "react-native";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
 
 export default function LoginScreen({ navigation }: any) {
+  const { t } = useTranslation();
   const { signIn } = useAuth();
   const [email, setEmail]       = useState("");
   const [password, setPassword] = useState("");
@@ -21,7 +23,7 @@ export default function LoginScreen({ navigation }: any) {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert("Error", "Please fill in all fields");
+      Alert.alert(t("common.error"), t("login.fillAllFields"));
       return;
     }
     setLoading(true);
@@ -29,8 +31,8 @@ export default function LoginScreen({ navigation }: any) {
       await signIn(email.trim().toLowerCase(), password);
     } catch (e: any) {
       Alert.alert(
-        "Login failed",
-        e?.response?.data?.detail || "Incorrect email or password"
+        t("login.loginFailed"),
+        e?.response?.data?.detail || t("login.incorrectCredentials")
       );
     } finally {
       setLoading(false);
@@ -47,15 +49,15 @@ export default function LoginScreen({ navigation }: any) {
         <View style={styles.header}>
           <Text style={styles.logo}>🌱</Text>
           <Text style={styles.title}>AgriVision</Text>
-          <Text style={styles.subtitle}>Smart crop recommendations{"\n"}for every farmer</Text>
+          <Text style={styles.subtitle}>{t("login.subtitle")}</Text>
         </View>
 
         {/* Form */}
         <View style={styles.form}>
-          <Text style={styles.label}>Email</Text>
+          <Text style={styles.label}>{t("login.email")}</Text>
           <TextInput
             style={styles.input}
-            placeholder="farmer@example.com"
+            placeholder={t("login.emailPlaceholder")}
             placeholderTextColor="#aaa"
             value={email}
             onChangeText={setEmail}
@@ -63,10 +65,10 @@ export default function LoginScreen({ navigation }: any) {
             autoCapitalize="none"
           />
 
-          <Text style={styles.label}>Password</Text>
+          <Text style={styles.label}>{t("login.password")}</Text>
           <TextInput
             style={styles.input}
-            placeholder="Your password"
+            placeholder={t("login.passwordPlaceholder")}
             placeholderTextColor="#aaa"
             value={password}
             onChangeText={setPassword}
@@ -76,7 +78,7 @@ export default function LoginScreen({ navigation }: any) {
           <TouchableOpacity
             onPress={() => navigation.navigate("ForgotPassword")}
           >
-            <Text style={styles.forgotText}>Forgot password?</Text>
+            <Text style={styles.forgotText}>{t("login.forgotPassword")}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -87,14 +89,14 @@ export default function LoginScreen({ navigation }: any) {
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
-              <Text style={styles.buttonText}>Login</Text>
+              <Text style={styles.buttonText}>{t("login.loginBtn")}</Text>
             )}
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => navigation.navigate("Register")}>
             <Text style={styles.linkText}>
-              Don't have an account?{" "}
-              <Text style={styles.linkBold}>Sign up</Text>
+              {t("login.noAccount")}{" "}
+              <Text style={styles.linkBold}>{t("login.signUp")}</Text>
             </Text>
           </TouchableOpacity>
         </View>

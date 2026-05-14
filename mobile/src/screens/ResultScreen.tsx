@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   StatusBar,
 } from "react-native";
+import { useTranslation } from "react-i18next";
 
 const CROP_EMOJI: Record<string, string> = {
   rice:        "🌾",
@@ -37,6 +38,7 @@ const CROP_EMOJI: Record<string, string> = {
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 export default function ResultScreen({ route, navigation }: any) {
+  const { t } = useTranslation();
   const { result } = route.params;
   const { top_crops, soil_used, weather_used, disclaimer } = result;
   const topCrop = top_crops[0];
@@ -48,9 +50,9 @@ export default function ResultScreen({ route, navigation }: any) {
       {/* Top bar */}
       <View style={styles.topBar}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-          <Text style={styles.backText}>‹ Back</Text>
+          <Text style={styles.backText}>{t("common.back")}</Text>
         </TouchableOpacity>
-        <Text style={styles.topTitle}>Recommendation</Text>
+        <Text style={styles.topTitle}>{t("result.title")}</Text>
         <View style={{ width: 60 }} />
       </View>
 
@@ -64,7 +66,7 @@ export default function ResultScreen({ route, navigation }: any) {
           <Text style={styles.heroEmoji}>
             {CROP_EMOJI[topCrop.crop] || "🌱"}
           </Text>
-          <Text style={styles.heroLabel}>Best crop for your farm</Text>
+          <Text style={styles.heroLabel}>{t("result.bestCrop")}</Text>
           <Text style={styles.heroCrop}>{capitalize(topCrop.crop)}</Text>
 
           {/* Confidence bar */}
@@ -78,7 +80,7 @@ export default function ResultScreen({ route, navigation }: any) {
               />
             </View>
             <Text style={styles.barLabel}>
-              {Math.round(topCrop.confidence * 100)}% confidence
+              {t("result.confidence", { value: Math.round(topCrop.confidence * 100) })}
             </Text>
           </View>
 
@@ -96,7 +98,7 @@ export default function ResultScreen({ route, navigation }: any) {
         {/* ── Other options ── */}
         {top_crops.length > 1 && (
           <>
-            <Text style={styles.sectionTitle}>Other good options</Text>
+            <Text style={styles.sectionTitle}>{t("result.otherOptions")}</Text>
             <View style={styles.altRow}>
               {top_crops.slice(1).map((crop: any, i: number) => (
                 <View key={i} style={styles.altCard}>
@@ -119,7 +121,7 @@ export default function ResultScreen({ route, navigation }: any) {
         )}
 
         {/* ── Soil data ── */}
-        <Text style={styles.sectionTitle}>Soil data used</Text>
+        <Text style={styles.sectionTitle}>{t("result.soilDataUsed")}</Text>
         <View style={styles.dataCard}>
           <View style={styles.dataGrid}>
             <DataTile label="Nitrogen (N)"   value={`${soil_used.nitrogen}`}   unit="mg/kg" color="#E8F5E9" />
@@ -128,20 +130,20 @@ export default function ResultScreen({ route, navigation }: any) {
             <DataTile label="pH"             value={`${soil_used.ph}`}         unit=""      color="#FCE4EC" />
           </View>
           <Text style={styles.sourceTag}>
-            Source: {soil_used.source === "isdasoil" ? "🛰️ iSDAsoil satellite" : "🧪 Manual input"}
+            {t("common.source")} {soil_used.source === "isdasoil" ? t("result.soilSourceSatellite") : t("result.soilSourceManual")}
           </Text>
         </View>
 
         {/* ── Weather data ── */}
-        <Text style={styles.sectionTitle}>Weather data used</Text>
+        <Text style={styles.sectionTitle}>{t("result.weatherDataUsed")}</Text>
         <View style={styles.dataCard}>
           <View style={styles.dataGrid}>
-            <DataTile label="Temperature" value={`${weather_used.temperature}`} unit="°C"    color="#E3F2FD" />
-            <DataTile label="Humidity"    value={`${weather_used.humidity}`}    unit="%"     color="#E8F5E9" />
-            <DataTile label="Rainfall"    value={`${Math.round(weather_used.rainfall)}`} unit="mm/yr" color="#FFF8E1" />
+            <DataTile label={t("result.temperature")} value={`${weather_used.temperature}`}              unit="°C"    color="#E3F2FD" />
+            <DataTile label={t("result.humidity")}    value={`${weather_used.humidity}`}                 unit="%"     color="#E8F5E9" />
+            <DataTile label={t("result.rainfall")}    value={`${Math.round(weather_used.rainfall)}`}     unit="mm/yr" color="#FFF8E1" />
           </View>
           <Text style={styles.sourceTag}>
-            Source: 🌦️ OpenWeather + 🌧️ NASA POWER
+            {t("common.source")} {t("result.weatherSource")}
           </Text>
         </View>
 
@@ -155,14 +157,14 @@ export default function ResultScreen({ route, navigation }: any) {
           style={styles.primaryBtn}
           onPress={() => navigation.popToTop()}
         >
-          <Text style={styles.primaryBtnText}>🔄  Get new recommendation</Text>
+          <Text style={styles.primaryBtnText}>{t("result.newRecommendation")}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.secondaryBtn}
           onPress={() => navigation.navigate("History")}
         >
-          <Text style={styles.secondaryBtnText}>📋  View all past recommendations</Text>
+          <Text style={styles.secondaryBtnText}>{t("result.viewAllPast")}</Text>
         </TouchableOpacity>
 
       </ScrollView>

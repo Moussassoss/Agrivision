@@ -11,9 +11,11 @@ import {
   Platform,
   ScrollView,
 } from "react-native";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
 
 export default function RegisterScreen({ navigation }: any) {
+  const { t } = useTranslation();
   const { signUp } = useAuth();
   const [fullName, setFullName] = useState("");
   const [email, setEmail]       = useState("");
@@ -24,15 +26,15 @@ export default function RegisterScreen({ navigation }: any) {
 
   const handleRegister = async () => {
     if (!fullName || !email || !password || !confirm) {
-      Alert.alert("Error", "Please fill in all required fields");
+      Alert.alert(t("common.error"), t("register.fillRequired"));
       return;
     }
     if (password !== confirm) {
-      Alert.alert("Error", "Passwords do not match");
+      Alert.alert(t("common.error"), t("register.passwordMismatch"));
       return;
     }
     if (password.length < 8) {
-      Alert.alert("Error", "Password must be at least 8 characters");
+      Alert.alert(t("common.error"), t("register.passwordTooShort"));
       return;
     }
 
@@ -46,8 +48,8 @@ export default function RegisterScreen({ navigation }: any) {
       });
     } catch (e: any) {
       Alert.alert(
-        "Registration failed",
-        e?.response?.data?.detail || "Something went wrong"
+        t("register.registrationFailed"),
+        e?.response?.data?.detail || t("register.somethingWentWrong")
       );
     } finally {
       setLoading(false);
@@ -63,25 +65,25 @@ export default function RegisterScreen({ navigation }: any) {
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.logo}>🌱</Text>
-          <Text style={styles.title}>Create Account</Text>
-          <Text style={styles.subtitle}>Join AgriVision and grow smarter</Text>
+          <Text style={styles.title}>{t("register.title")}</Text>
+          <Text style={styles.subtitle}>{t("register.subtitle")}</Text>
         </View>
 
         {/* Form */}
         <View style={styles.form}>
-          <Text style={styles.label}>Full Name *</Text>
+          <Text style={styles.label}>{t("register.fullName")}</Text>
           <TextInput
             style={styles.input}
-            placeholder="Jean Pierre"
+            placeholder={t("register.fullNamePlaceholder")}
             placeholderTextColor="#aaa"
             value={fullName}
             onChangeText={setFullName}
           />
 
-          <Text style={styles.label}>Email *</Text>
+          <Text style={styles.label}>{t("register.email")}</Text>
           <TextInput
             style={styles.input}
-            placeholder="farmer@example.com"
+            placeholder={t("register.emailPlaceholder")}
             placeholderTextColor="#aaa"
             value={email}
             onChangeText={setEmail}
@@ -89,30 +91,30 @@ export default function RegisterScreen({ navigation }: any) {
             autoCapitalize="none"
           />
 
-          <Text style={styles.label}>Phone (optional)</Text>
+          <Text style={styles.label}>{t("register.phone")}</Text>
           <TextInput
             style={styles.input}
-            placeholder="+250788000000"
+            placeholder={t("register.phonePlaceholder")}
             placeholderTextColor="#aaa"
             value={phone}
             onChangeText={setPhone}
             keyboardType="phone-pad"
           />
 
-          <Text style={styles.label}>Password *</Text>
+          <Text style={styles.label}>{t("register.password")}</Text>
           <TextInput
             style={styles.input}
-            placeholder="Min 8 characters"
+            placeholder={t("register.passwordPlaceholder")}
             placeholderTextColor="#aaa"
             value={password}
             onChangeText={setPassword}
             secureTextEntry
           />
 
-          <Text style={styles.label}>Confirm Password *</Text>
+          <Text style={styles.label}>{t("register.confirmPassword")}</Text>
           <TextInput
             style={styles.input}
-            placeholder="Repeat your password"
+            placeholder={t("register.confirmPasswordPlaceholder")}
             placeholderTextColor="#aaa"
             value={confirm}
             onChangeText={setConfirm}
@@ -127,14 +129,14 @@ export default function RegisterScreen({ navigation }: any) {
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
-              <Text style={styles.buttonText}>Create Account</Text>
+              <Text style={styles.buttonText}>{t("register.createAccountBtn")}</Text>
             )}
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => navigation.navigate("Login")}>
             <Text style={styles.linkText}>
-              Already have an account?{" "}
-              <Text style={styles.linkBold}>Log in</Text>
+              {t("register.alreadyHaveAccount")}{" "}
+              <Text style={styles.linkBold}>{t("register.logIn")}</Text>
             </Text>
           </TouchableOpacity>
         </View>

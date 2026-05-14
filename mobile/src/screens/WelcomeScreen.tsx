@@ -6,20 +6,23 @@ import {
   StyleSheet,
   Animated,
   Dimensions,
-  ImageBackground,
   StatusBar,
 } from "react-native";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "../context/LanguageContext";
 
 const { width, height } = Dimensions.get("window");
 
 export default function WelcomeScreen({ navigation }: any) {
+  const { t } = useTranslation();
+  const { language, toggleLanguage } = useLanguage();
+
   const fadeAnim      = useRef(new Animated.Value(0)).current;
   const slideAnim     = useRef(new Animated.Value(40)).current;
   const buttonAnim    = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.sequence([
-      // Fade in logo + title
       Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
@@ -32,7 +35,6 @@ export default function WelcomeScreen({ navigation }: any) {
           useNativeDriver: true,
         }),
       ]),
-      // Then fade in buttons
       Animated.timing(buttonAnim, {
         toValue: 1,
         duration: 600,
@@ -45,14 +47,17 @@ export default function WelcomeScreen({ navigation }: any) {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
 
-      {/* Background gradient simulation */}
       <View style={styles.background} />
       <View style={styles.backgroundOverlay} />
 
-      {/* Decorative circles */}
       <View style={styles.circle1} />
       <View style={styles.circle2} />
       <View style={styles.circle3} />
+
+      {/* Language toggle */}
+      <TouchableOpacity style={styles.langToggle} onPress={toggleLanguage}>
+        <Text style={styles.langToggleText}>🌐 {t("language.switchTo")}</Text>
+      </TouchableOpacity>
 
       {/* Main content */}
       <Animated.View
@@ -61,23 +66,18 @@ export default function WelcomeScreen({ navigation }: any) {
           { opacity: fadeAnim, transform: [{ translateY: slideAnim }] },
         ]}
       >
-        {/* Logo */}
         <View style={styles.logoContainer}>
           <Text style={styles.logoEmoji}>🌱</Text>
         </View>
 
-        {/* Title */}
         <Text style={styles.title}>AgriVision</Text>
-        <Text style={styles.tagline}>
-          Smart crop recommendations{"\n"}powered by AI & real soil data
-        </Text>
+        <Text style={styles.tagline}>{t("welcome.tagline")}</Text>
 
-        {/* Features */}
         <View style={styles.features}>
-          <FeatureItem emoji="🛰️" text="Real soil data from satellites" />
-          <FeatureItem emoji="🌦️" text="Live weather & rainfall analysis" />
-          <FeatureItem emoji="🤖" text="AI-powered crop prediction" />
-          <FeatureItem emoji="📍" text="GPS-based recommendations" />
+          <FeatureItem emoji="🛰️" text={t("welcome.feature1")} />
+          <FeatureItem emoji="🌦️" text={t("welcome.feature2")} />
+          <FeatureItem emoji="🤖" text={t("welcome.feature3")} />
+          <FeatureItem emoji="📍" text={t("welcome.feature4")} />
         </View>
       </Animated.View>
 
@@ -87,7 +87,7 @@ export default function WelcomeScreen({ navigation }: any) {
           style={styles.primaryButton}
           onPress={() => navigation.navigate("Register")}
         >
-          <Text style={styles.primaryButtonText}>Get Started</Text>
+          <Text style={styles.primaryButtonText}>{t("welcome.getStarted")}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -95,8 +95,8 @@ export default function WelcomeScreen({ navigation }: any) {
           onPress={() => navigation.navigate("Login")}
         >
           <Text style={styles.secondaryButtonText}>
-            Already have an account?{" "}
-            <Text style={styles.secondaryButtonBold}>Log in</Text>
+            {t("welcome.alreadyHaveAccount")}{" "}
+            <Text style={styles.secondaryButtonBold}>{t("welcome.logIn")}</Text>
           </Text>
         </TouchableOpacity>
       </Animated.View>
@@ -155,6 +155,23 @@ const styles = StyleSheet.create({
     bottom: 80,
     right: -40,
   },
+  langToggle: {
+    position: "absolute",
+    top: 52,
+    right: 20,
+    backgroundColor: "rgba(255,255,255,0.15)",
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.3)",
+    zIndex: 10,
+  },
+  langToggleText: {
+    color: "#fff",
+    fontSize: 13,
+    fontWeight: "600",
+  },
   content: {
     flex: 1,
     alignItems: "center",
@@ -212,6 +229,7 @@ const styles = StyleSheet.create({
     color: "rgba(255,255,255,0.9)",
     fontSize: 14,
     fontWeight: "500",
+    flex: 1,
   },
   buttons: {
     paddingHorizontal: 32,
