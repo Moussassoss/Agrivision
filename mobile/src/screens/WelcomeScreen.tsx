@@ -70,7 +70,7 @@ export default function WelcomeScreen({ navigation }: any) {
           <Text style={styles.logoEmoji}>🌱</Text>
         </View>
 
-        <Text style={styles.title}>AgriVision</Text>
+        <Text style={styles.title}>CropVana</Text>
         <Text style={styles.tagline}>{t("welcome.tagline")}</Text>
 
         <View style={styles.features}>

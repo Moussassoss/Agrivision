@@ -27,7 +27,7 @@ export default function ResultScreen({ route, navigation }: any) {
     try {
       await Share.share({
         message:
-          `🌾 AgriVision — ${t("result.shareTitle")}\n\n` +
+          `🌾 CropVana — ${t("result.shareTitle")}\n\n` +
           `${t("result.bestCrop")}: ${cropName} (${Math.round(topCrop.confidence * 100)}%)\n` +
           `📅 ${topCrop.planting_season}\n\n` +
           `💡 ${topCrop.why}\n\n` +

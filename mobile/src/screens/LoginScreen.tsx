@@ -50,7 +50,7 @@ export default function LoginScreen({ navigation }: any) {
         {/* Logo / Header */}
         <View style={styles.header}>
           <Text style={styles.logo}>🌱</Text>
-          <Text style={styles.title}>AgriVision</Text>
+          <Text style={styles.title}>CropVana</Text>
           <Text style={styles.subtitle}>{t("login.subtitle")}</Text>
         </View>
 

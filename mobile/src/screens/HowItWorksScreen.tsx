@@ -42,7 +42,7 @@ export default function HowItWorksScreen({ navigation }: any) {
         {/* Hero */}
         <View style={[styles.hero, { backgroundColor: colors.heroBg }]}>
           <Text style={styles.heroEmoji}>🌱</Text>
-          <Text style={styles.heroTitle}>AgriVision</Text>
+          <Text style={styles.heroTitle}>CropVana</Text>
           <Text style={styles.heroSub}>{t("howItWorks.heroSub")}</Text>
         </View>
 

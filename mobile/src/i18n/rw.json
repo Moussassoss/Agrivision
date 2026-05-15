@@ -37,7 +37,7 @@
   },
   "register": {
     "title": "Fungura Konti",
-    "subtitle": "Injira muri AgriVision uhinze neza",
+    "subtitle": "Injira muri CropVana uhinze neza",
     "fullName": "Amazina Yose *",
     "fullNamePlaceholder": "Jean Pierre",
     "email": "Imeyili *",
@@ -118,7 +118,7 @@
     "viewAllPast": "📋  Reba inama zose zaramaze guhabwa",
     "plantingGuide": "🌱  Uburyo bwo Gutera",
     "locationRequired": "Aho Uri Bisabwa",
-    "locationRequiredMsg": "AgriVision ikeneye aho uri kugira ngo ikurure amakuru y'ubutaka n'ikirere.",
+    "locationRequiredMsg": "CropVana ikeneye aho uri kugira ngo ikurure amakuru y'ubutaka n'ikirere.",
     "locationError": "Gushakisha aho uri ntibyakunze. Ongera ugerageze.",
     "noLocation": "Nta Hantu",
     "noLocationMsg": "Banza ureke kugera aho uri.",
@@ -138,14 +138,14 @@
     "disclaimer": "Inama zishingiye kuri AI. Buri gihe ubaze inzobere mu buhinzi."
   },
   "onboarding": {
-    "slide1Title": "Murakaza neza kuri AgriVision",
+    "slide1Title": "Murakaza neza kuri CropVana",
     "slide1Desc": "Inama z'ibihingwa zikoresheje AI n'amakuru y'ubutaka n'ikirere by'ukuri — yakozwe ku bahinzi b'u Rwanda.",
     "slide2Title": "Inama Zinonosoye",
     "slide2Desc": "Imashini yacu isesengura amakuru y'ubutaka avuye kuri satelite, ikirere cy'igihe, n'ahantu wawe kugirango igusabire ibihingwa byiza.",
     "slide3Title": "Amabwiriza Intambwe ku Ntambwe",
     "slide3Desc": "Bona amabwiriza arambuye yo gutera hamwe n'imikorere ikomeyeho ku gihingwa cyose cyasabwe.",
     "slide4Title": "Indimi Ebyiri",
-    "slide4Desc": "Koresha AgriVision mu Cyongereza cyangwa Ikinyarwanda. Hindura igihe cyose mu mwirondoro wawe.",
+    "slide4Desc": "Koresha CropVana mu Cyongereza cyangwa Ikinyarwanda. Hindura igihe cyose mu mwirondoro wawe.",
     "skip": "Simbuka",
     "next": "Komeza →",
     "getStarted": "Tangira"
@@ -188,7 +188,7 @@
     "fertilizerTitle": "Inama z'Imbolea",
     "share": "Sangira",
     "shareTitle": "Inama y'Igihingwa",
-    "shareFooter": "Yakozwe na AgriVision AI 🌱",
+    "shareFooter": "Yakozwe na CropVana AI 🌱",
     "shareError": "Ntibishoboye gusangira ibisubizo",
     "temperature": "Ubushyuhe",
     "humidity": "Ubuhehere",

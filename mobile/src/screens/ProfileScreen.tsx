@@ -304,7 +304,7 @@ export default function ProfileScreen({ navigation }: any) {
 
         {/* Logout */}
         <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
-          <Text style={styles.logoutBtnText}>🚪  {t("profile.logout")}</Text>
+          <Text style={styles.logoutBtnText}>{t("profile.logout")}</Text>
         </TouchableOpacity>
 
       </ScrollView>
