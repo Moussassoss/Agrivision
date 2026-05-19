@@ -10,26 +10,27 @@ from sklearn.metrics import classification_report, accuracy_score
 
 # ── Paths ───────────────────────────────────────────
 BASE_DIR   = Path(__file__).parent
-DATA_PATH  = BASE_DIR.parent.parent / "data" / "Crop_recommendation.csv"
+DATA_PATH  = BASE_DIR.parent.parent / "data" / "Cropvana_Rwanda_Dataset_v2.xlsx"  # ← changed
 MODEL_PATH = BASE_DIR / "model.pkl"
 META_PATH  = BASE_DIR / "model_meta.json"
 
 
 def train():
     print("=" * 50)
-    print("  AgriVision — ML Training Pipeline")
+    print("  Cropvana — ML Training Pipeline")                                   # ← changed
     print("=" * 50)
 
     # ── 1. Load data ────────────────────────────────
     print("\n[1/6] Loading dataset...")
-    df = pd.read_csv(DATA_PATH)
-    print(f"      Rows: {len(df)} | Crops: {df['label'].nunique()}")
+    df = pd.read_excel(DATA_PATH, sheet_name="Cropvana_Rwanda_Dataset")          # ← changed
+    print(f"      Rows: {len(df)} | Crops: {df['Crop Label'].nunique()}")        # ← changed
 
     # ── 2. Features & target ────────────────────────
     print("\n[2/6] Preparing features...")
-    FEATURES = ['N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall']
+    FEATURES = ['N (mg/kg)', 'P (mg/kg)', 'K (mg/kg)',                          # ← changed
+                'Temperature (°C)', 'Humidity (%)', 'pH', 'Rainfall (mm)']      # ← changed
     X = df[FEATURES]
-    y = df['label']
+    y = df['Crop Label']                                                          # ← changed
 
     # Encode crop labels to integers
     le = LabelEncoder()
@@ -48,7 +49,7 @@ def train():
         X_scaled, y_encoded,
         test_size=0.2,
         random_state=42,
-        stratify=y_encoded,   # keep class balance
+        stratify=y_encoded,
     )
     print(f"      Train: {len(X_train)} | Test: {len(X_test)}")
 
@@ -59,7 +60,7 @@ def train():
         max_depth=None,
         min_samples_split=2,
         random_state=42,
-        n_jobs=-1,            # use all CPU cores
+        n_jobs=-1,
     )
     model.fit(X_train, y_train)
 
@@ -69,7 +70,6 @@ def train():
     acc = accuracy_score(y_test, y_pred)
     print(f"\n      Test accuracy : {acc * 100:.2f}%")
 
-    # Cross-validation (5-fold)
     cv_scores = cross_val_score(model, X_scaled, y_encoded, cv=5)
     print(f"      CV accuracy  : {cv_scores.mean() * 100:.2f}% "
           f"(+/- {cv_scores.std() * 100:.2f}%)")
@@ -80,12 +80,11 @@ def train():
         target_names=le.classes_
     ))
 
-    # Feature importance
     importances = dict(zip(FEATURES, model.feature_importances_.round(4).tolist()))
     print("      Feature importances:")
     for feat, imp in sorted(importances.items(), key=lambda x: -x[1]):
         bar = "█" * int(imp * 40)
-        print(f"        {feat:<12} {bar} {imp:.4f}")
+        print(f"        {feat:<20} {bar} {imp:.4f}")                             # ← wider spacing
 
     # ── Save model + metadata ────────────────────────
     print("\n Saving model...")
