@@ -68,7 +68,8 @@ def predict(
     # Build feature vector in the exact order the model was trained on
     features = pd.DataFrame(
         [[N, P, K, temperature, humidity, ph, rainfall]],
-        columns=["N", "P", "K", "temperature", "humidity", "ph", "rainfall"]
+        columns=["N (mg/kg)", "P (mg/kg)", "K (mg/kg)",
+                 "Temperature (°C)", "Humidity (%)", "pH", "Rainfall (mm)"]
     )
     features_scaled = scaler.transform(features)
 

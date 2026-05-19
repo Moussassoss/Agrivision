@@ -260,50 +260,48 @@
   "crops": {
     "rice": "Rice",
     "maize": "Maize",
-    "chickpea": "Chickpea",
     "kidneybeans": "Kidney Beans",
-    "pigeonpeas": "Pigeon Peas",
-    "mothbeans": "Moth Beans",
-    "mungbean": "Mung Bean",
     "blackgram": "Black Gram",
     "lentil": "Lentil",
-    "pomegranate": "Pomegranate",
     "banana": "Banana",
     "mango": "Mango",
-    "grapes": "Grapes",
     "watermelon": "Watermelon",
-    "muskmelon": "Muskmelon",
-    "apple": "Apple",
     "orange": "Orange",
     "papaya": "Papaya",
     "coconut": "Coconut",
-    "cotton": "Cotton",
-    "jute": "Jute",
-    "coffee": "Coffee"
+    "coffee": "Coffee",
+    "avocado": "Avocado",
+    "cassava": "Cassava",
+    "potato": "Potato",
+    "sorghum": "Sorghum",
+    "soybean": "Soybean",
+    "sweetpotato": "Sweet Potato",
+    "tea": "Tea",
+    "tomato": "Tomato",
+    "wheat": "Wheat"
   },
   "plantingSeasons": {
     "rice":        "Season A (Sep–Feb) — needs flooded fields",
     "maize":       "Season A or B — plant at start of rains",
-    "chickpea":    "Season B (Mar–Jun) — dry spell tolerant",
     "kidneybeans": "Season A or B — well-drained soils",
-    "pigeonpeas":  "Season A (Sep–Feb) — drought tolerant",
-    "mothbeans":   "Season B (Mar–Jun) — dry conditions",
-    "mungbean":    "Season B (Mar–Jun) — short growing cycle",
     "blackgram":   "Season B (Mar–Jun) — warm and dry",
     "lentil":      "Season A (Sep–Feb) — cool temperatures",
-    "pomegranate": "Plant year-round — fruit in 5–7 months",
     "banana":      "Plant year-round — harvest in 9–12 months",
     "mango":       "Plant at start of rains — fruit in 3–5 years",
-    "grapes":      "Plant in dry season — prune after harvest",
     "watermelon":  "Season B (Mar–Jun) — needs warm dry weather",
-    "muskmelon":   "Season B (Mar–Jun) — warm and sunny",
-    "apple":       "Plant in cool season — needs highland climate",
     "orange":      "Plant year-round — fruit in 3–5 years",
     "papaya":      "Plant year-round — fruit in 6–9 months",
     "coconut":     "Plant year-round — needs coastal/lowland area",
-    "cotton":      "Season A (Sep–Feb) — needs long dry spell",
-    "jute":        "Season A (Sep–Feb) — needs high humidity",
-    "coffee":      "Plant year-round — Rwanda highlands ideal"
+    "coffee":      "Plant year-round — Rwanda highlands ideal",
+    "avocado":     "Plant year-round — fruit in 3–5 years",
+    "cassava":     "Season A (Sep–Feb) — harvest in 9–12 months",
+    "potato":      "Season A or B — cool highlands preferred",
+    "sorghum":     "Season A (Sep–Feb) — drought tolerant cereal",
+    "soybean":     "Season A or B — improves soil nitrogen",
+    "sweetpotato": "Season A or B — ready in 3–5 months",
+    "tea":         "Plant year-round — highland 1500 m+ needed",
+    "tomato":      "Season A or B — warm, sheltered site",
+    "wheat":       "Season A (Sep–Feb) — highland cool climate"
   },
   "guide": {
     "plantingGuideFor": "Planting Guide — {{crop}}",
@@ -335,19 +333,6 @@
       ],
       "tips": "Intercrop with beans to naturally boost soil nitrogen and reduce risk."
     },
-    "chickpea": {
-      "requirements": "Light well-drained soil · Temp 15–25°C · pH 6.0–7.5 · Low water needs",
-      "steps": [
-        "Prepare light, well-drained soil; avoid waterlogged or heavy clay areas",
-        "Inoculate seeds with Rhizobium bacteria to fix atmospheric nitrogen",
-        "Plant seeds 5 cm deep, 25 cm apart in rows 45 cm apart",
-        "Apply phosphate fertilizer at planting; avoid excess nitrogen",
-        "Water sparingly — chickpea tolerates dry spells very well",
-        "Monitor for pod borer; use neem spray or approved pesticide",
-        "Harvest when pods turn yellow-brown; thresh and dry to 10 % moisture"
-      ],
-      "tips": "Best grown after cereal crops — it fixes nitrogen and improves soil fertility."
-    },
     "kidneybeans": {
       "requirements": "Fertile well-drained soil · Temp 16–24°C · pH 6.0–7.0 · Moderate moisture",
       "steps": [
@@ -360,45 +345,6 @@
         "Harvest when 90 % of pods are dry and seeds rattle inside the pod"
       ],
       "tips": "Rotate with maize each season to prevent disease buildup in the soil."
-    },
-    "pigeonpeas": {
-      "requirements": "Wide range of soils · Temp 18–38°C · pH 5.0–7.0 · Very drought tolerant",
-      "steps": [
-        "Minimal soil prep needed; loosen topsoil and remove weeds",
-        "Plant 3 seeds per hole, 5 cm deep, 60 cm apart in rows 1.5 m apart",
-        "Thin to 2 plants per hole after seedlings emerge",
-        "Apply a small amount of phosphate fertilizer at planting",
-        "Water only during establishment; pigeon pea handles drought very well",
-        "Control Maruca pod borer with neem extract or approved pesticide",
-        "Harvest green pods for fresh use or leave to dry for pulse storage"
-      ],
-      "tips": "Excellent for hillside erosion control; perennial varieties last 3–5 years."
-    },
-    "mothbeans": {
-      "requirements": "Sandy to loamy soil · Temp 24–38°C · pH 6.0–7.5 · Very dry conditions",
-      "steps": [
-        "Prepare light, sandy soil; avoid any waterlogged or shaded areas",
-        "Plant seeds 3 cm deep, 20 cm apart in rows 45 cm apart after last heavy rain",
-        "No fertilizer usually needed — moth bean tolerates poor soils",
-        "Do not over-water; it thrives naturally in dry Season B conditions",
-        "Weed once at week 2; canopy closes quickly and suppresses further weeds",
-        "Watch for aphids and powdery mildew in humid micro-climates",
-        "Harvest when 70 % of pods are ripe; thresh by beating dried plants"
-      ],
-      "tips": "Useful as a cover crop to protect and improve soil during dry spells."
-    },
-    "mungbean": {
-      "requirements": "Well-drained loamy soil · Temp 25–35°C · pH 6.2–7.2 · Moderate moisture",
-      "steps": [
-        "Prepare a fine, well-drained seedbed free of large clods",
-        "Plant seeds 3 cm deep, 15 cm apart in rows 45 cm apart",
-        "Apply a light dose of DAP (20 kg/ha) at planting",
-        "Water lightly every 5–7 days; avoid any waterlogging",
-        "Weed at weeks 2 and 4; mung bean has a short growth window",
-        "Watch for yellow mosaic virus spread by whiteflies; control early",
-        "Harvest in 2–3 pickings as individual pods mature (60–90 days)"
-      ],
-      "tips": "Short cycle makes it ideal to fill gaps between main cereal seasons."
     },
     "blackgram": {
       "requirements": "Well-drained light soil · Temp 25–35°C · pH 6.0–7.0 · Warm dry climate",
@@ -426,19 +372,6 @@
       ],
       "tips": "Best suited to highland areas above 1700 m elevation in Rwanda."
     },
-    "pomegranate": {
-      "requirements": "Well-drained soil · Temp 25–38°C · pH 5.5–7.5 · Drought tolerant",
-      "steps": [
-        "Dig planting holes 60×60×60 cm; fill with compost and topsoil",
-        "Plant seedlings or stem cuttings 5–6 m apart in rows",
-        "Apply 10 kg organic compost per tree at planting and annually",
-        "Irrigate young trees weekly; established trees only during dry spells",
-        "Prune to open canopy shape; remove suckers from base each year",
-        "Fertilize with NPK (200 g) three times per year",
-        "Harvest when fruits turn deep red and give a hollow sound when tapped"
-      ],
-      "tips": "Protect ripening fruit from fruit fly by bagging or neem oil sprays."
-    },
     "banana": {
       "requirements": "Deep fertile well-drained soil · Temp 15–35°C · pH 5.5–7.0 · Year-round moisture",
       "steps": [
@@ -465,19 +398,6 @@
       ],
       "tips": "Grafted trees produce fruit faster and yield better than seedling trees."
     },
-    "grapes": {
-      "requirements": "Well-drained sandy soil · Temp 15–30°C · pH 6.0–7.0 · Dry growing season",
-      "steps": [
-        "Erect a trellis system with posts and horizontal wires before planting",
-        "Plant rooted cuttings 1.5 m apart in rows 3 m apart during dry season",
-        "Train the main stem up the trellis; remove laterals in the first year",
-        "Apply compost and potassium fertilizer at the start of dry season",
-        "Prune canes heavily after harvest — leave only 2 buds per spur",
-        "Monitor for powdery mildew; spray with approved fungicide promptly",
-        "Harvest when berries are sweet and sugar content is adequate"
-      ],
-      "tips": "Full sun exposure and good air circulation are essential for quality fruit."
-    },
     "watermelon": {
       "requirements": "Sandy to loamy soil · Temp 22–32°C · pH 6.0–7.0 · Warm dry sunny weather",
       "steps": [
@@ -490,32 +410,6 @@
         "Harvest when the tendril near fruit dries and the belly spot turns yellow"
       ],
       "tips": "Use drip irrigation to keep leaves dry and prevent fungal disease spread."
-    },
-    "muskmelon": {
-      "requirements": "Sandy loam soil · Temp 24–35°C · pH 6.0–7.5 · Warm sunny conditions",
-      "steps": [
-        "Prepare raised beds with sandy, well-drained, compost-enriched soil",
-        "Plant seeds 2 cm deep, 1 m apart in rows 1.5 m apart",
-        "Apply DAP at planting and CAN at vine formation stage",
-        "Water regularly but avoid wetting leaves or developing fruits",
-        "Thin to the strongest 1–2 plants per hill after emergence",
-        "Hand-pollinate flowers early morning; monitor for powdery mildew",
-        "Harvest when fruit releases a sweet scent and slips easily from vine"
-      ],
-      "tips": "Raise fruits off soil with a small net or dry grass to prevent rot."
-    },
-    "apple": {
-      "requirements": "Deep well-drained soil · Temp 12–22°C · pH 5.5–6.5 · Highland 2000 m+",
-      "steps": [
-        "Choose a highland site above 2000 m; avoid frost pockets and valleys",
-        "Dig a 1 m × 1 m hole; plant grafted rootstock 6 m apart each way",
-        "Water weekly during the first year to ensure deep root establishment",
-        "Apply 20 kg compost annually and balanced NPK twice per year",
-        "Prune to an open vase shape; remove water shoots every season",
-        "Spray for codling moth and scab disease at bud-break",
-        "Harvest when fruits fully color and detach easily from the spur"
-      ],
-      "tips": "Anna and Dorsett Golden apple varieties perform well in Rwanda highlands."
     },
     "orange": {
       "requirements": "Deep well-drained soil · Temp 15–35°C · pH 5.5–7.0 · Year-round moisture",
@@ -556,32 +450,6 @@
       ],
       "tips": "Coconut grows best below 400 m elevation; mulch heavily to retain moisture."
     },
-    "cotton": {
-      "requirements": "Deep clay-loam soil · Temp 21–35°C · pH 5.8–8.0 · Long dry period after rains",
-      "steps": [
-        "Deep-till to 30 cm before the rains arrive; prepare a fine seedbed",
-        "Plant seeds 3 cm deep, 25 cm apart in rows 90 cm apart",
-        "Apply NPK at planting; top-dress with nitrogen at the squaring stage",
-        "Control bollworm and whitefly with scheduled approved pesticide sprays",
-        "Weed 2–3 times in early growth stages; canopy closes afterward",
-        "Wait for natural leaf drop before picking, or apply approved defoliant",
-        "Pick cotton only in dry weather; store in clean, dry bags"
-      ],
-      "tips": "Avoid rotating with other malvaceous crops; always test soil pH before planting."
-    },
-    "jute": {
-      "requirements": "Clay-loam to silty soil · Temp 24–37°C · pH 6.0–7.5 · High humidity",
-      "steps": [
-        "Prepare a fine seedbed; broadcast seeds thinly or sow in rows 25 cm apart",
-        "Thin seedlings to 5–8 cm spacing within rows after 2 weeks",
-        "Apply nitrogen fertilizer at planting and again at 4 weeks",
-        "Irrigate if rainfall is insufficient; jute needs 500–600 mm per season",
-        "Weed twice in the first month; crop closes canopy quickly after",
-        "Monitor for hairy caterpillar and stem rot in very wet conditions",
-        "Harvest at early flowering (3–4 months); ret bundled stems in water 10–20 days"
-      ],
-      "tips": "Water-retting softens the stalks and makes fiber extraction much easier."
-    },
     "coffee": {
       "requirements": "Deep volcanic soil · Temp 15–24°C · pH 6.0–6.5 · Highland, dry flowering period",
       "steps": [
@@ -594,6 +462,123 @@
         "Pulp, ferment, wash, and dry cherries on raised drying tables"
       ],
       "tips": "Join a cooperative to access premium Rwanda Fully Washed coffee prices."
+    },
+    "avocado": {
+      "requirements": "Deep well-drained fertile soil · Temp 15–30°C · pH 5.5–7.0 · Sheltered site",
+      "steps": [
+        "Dig holes 1 m × 1 m × 1 m; fill with 20 kg compost and topsoil mixture",
+        "Plant grafted seedlings 8–10 m apart at the start of the rainy season",
+        "Water twice weekly for the first 6 months until the tree is established",
+        "Apply NPK (200 g per tree) three times per year for the first 3 years",
+        "Prune to remove crossing branches and maintain an open, sunlit canopy",
+        "Monitor for anthracnose and root rot; avoid waterlogged soils",
+        "Harvest when fruits reach full size and skin color begins to change (3–5 years)"
+      ],
+      "tips": "Hass variety performs best in Rwanda's mid-altitude areas above 1400 m."
+    },
+    "cassava": {
+      "requirements": "Sandy loam to loamy soil · Temp 20–35°C · pH 5.5–7.0 · Drought tolerant",
+      "steps": [
+        "Prepare a deep, well-tilled seedbed; remove stumps and large stones",
+        "Cut healthy stems into 25–30 cm stakes; plant at 45° angle, 5–10 cm deep",
+        "Space stakes 1 m apart in rows 1 m apart for optimum canopy cover",
+        "Apply DAP (50 kg/ha) at planting; top-dress with urea 3 months after",
+        "Weed thoroughly at weeks 4 and 10 — cassava is sensitive to early competition",
+        "Monitor for cassava mosaic virus (yellow mosaic pattern); remove infected plants",
+        "Harvest when lower leaves yellow and roots are 3–5 cm thick (9–12 months)"
+      ],
+      "tips": "Always use certified virus-free planting material to prevent cassava mosaic disease."
+    },
+    "potato": {
+      "requirements": "Fertile well-drained loam · Temp 10–22°C · pH 5.5–6.5 · Highland 1500 m+",
+      "steps": [
+        "Prepare a well-tilled, ridged seedbed; incorporate 10 t/ha of organic compost",
+        "Plant certified seed tubers 30 cm apart in furrows 75 cm apart, 10 cm deep",
+        "Apply DAP (200 kg/ha) in the planting furrow at the time of planting",
+        "Earth up (hill soil around stems) when plants reach 20–25 cm height",
+        "Top-dress with CAN or urea 6–8 weeks after planting",
+        "Scout weekly for late blight; spray with approved fungicide at first sign",
+        "Harvest when vines die back naturally; dig carefully to avoid bruising tubers"
+      ],
+      "tips": "Rwanda's highlands provide ideal cool temperatures for premium potato production."
+    },
+    "sorghum": {
+      "requirements": "Wide range of soils · Temp 20–35°C · pH 5.5–7.5 · Very drought tolerant",
+      "steps": [
+        "Prepare a firm, well-tilled seedbed; sorghum germinates best in warm, moist soil",
+        "Plant seeds 3–5 cm deep, 15–20 cm apart in rows 60–75 cm apart",
+        "Apply DAP (50 kg/ha) at planting; top-dress with urea at 30 cm plant height",
+        "Thin to one strong plant per hill two weeks after emergence",
+        "Weed at weeks 3 and 6; sorghum competes poorly with weeds early on",
+        "Monitor for sorghum midge and striga weed; use resistant varieties where possible",
+        "Harvest when grain is hard and moisture content drops below 20 %"
+      ],
+      "tips": "Preferred in dry areas of Rwanda — sorghum yields where maize often fails."
+    },
+    "soybean": {
+      "requirements": "Well-drained fertile loam · Temp 20–30°C · pH 6.0–7.0 · Moderate moisture",
+      "steps": [
+        "Prepare a well-drained, fine seedbed; avoid compacted or waterlogged soils",
+        "Inoculate seeds with Bradyrhizobium bacteria immediately before planting",
+        "Plant seeds 3–4 cm deep, 5–10 cm apart in rows 45–60 cm apart",
+        "Apply phosphate fertilizer (DAP 50 kg/ha) at planting; skip nitrogen",
+        "Keep soil moist at flowering and pod-fill stages — these are critical periods",
+        "Weed at weeks 2 and 5; monitor for pod-sucking bugs and leaf rust",
+        "Harvest when 90 % of pods turn brown; thresh promptly to avoid shattering"
+      ],
+      "tips": "Inoculate seeds with Bradyrhizobium to maximize nitrogen fixation and yields."
+    },
+    "sweetpotato": {
+      "requirements": "Sandy loam soil · Temp 21–27°C · pH 5.5–6.5 · Moderate moisture",
+      "steps": [
+        "Prepare loose, ridged beds 30 cm high; incorporate compost for better drainage",
+        "Plant healthy vine cuttings (30–35 cm) horizontally into ridge tops",
+        "Space vines 30 cm apart in rows 90 cm apart; press firmly into soil",
+        "Apply potassium-rich fertilizer (MOP 60 kg/ha) 4 weeks after planting",
+        "Weed at weeks 2 and 5 before vines cover the ground",
+        "Lift a few roots to check size at 3 months; harvest all before rains return",
+        "Cure harvested roots in shade for 5–7 days to harden skins before storage"
+      ],
+      "tips": "Orange-fleshed varieties are vitamin A-rich and fetch premium prices in Rwanda."
+    },
+    "tea": {
+      "requirements": "Acidic loamy soil · Temp 13–25°C · pH 4.5–6.0 · Highland 1500 m+, high rainfall",
+      "steps": [
+        "Choose a highland site with reliable 1200 mm+ annual rainfall and no waterlogging",
+        "Plant rooted cuttings 1.2 m apart in rows 1.5 m apart at the start of rains",
+        "Apply CAN (150 kg/ha) at planting; acidify soil with sulfur if pH exceeds 6.0",
+        "Mulch heavily with grass or pruned material to retain moisture and suppress weeds",
+        "Prune to a flat table (plucking table) at 60 cm height in year 3",
+        "Harvest (pluck) the top two leaves and bud every 7–14 days during the growing season",
+        "Deliver fresh leaf to the factory within 6 hours of plucking to preserve quality"
+      ],
+      "tips": "Rwanda's highland tea commands premium prices — join a factory cooperative for best returns."
+    },
+    "tomato": {
+      "requirements": "Fertile well-drained soil · Temp 18–27°C · pH 5.5–7.0 · Sheltered, sunny site",
+      "steps": [
+        "Raise seedlings in a nursery for 3–4 weeks; harden off before transplanting",
+        "Transplant seedlings 45 cm apart in rows 75 cm apart into ridged beds",
+        "Install stakes or cages immediately after transplanting",
+        "Apply DAP at planting; top-dress with CAN every 3 weeks during growth",
+        "Tie stems to stakes as they grow; remove side shoots (suckers) weekly",
+        "Irrigate at the base — keep leaves dry to prevent blight and Septoria leaf spot",
+        "Harvest when fruits are firm and fully colored; pick every 2–3 days"
+      ],
+      "tips": "Stake plants early and remove suckers weekly — this doubles yield per plant."
+    },
+    "wheat": {
+      "requirements": "Well-drained loamy soil · Temp 10–22°C · pH 6.0–7.5 · Cool highland climate",
+      "steps": [
+        "Deep-till to 25 cm; apply 5 t/ha of compost and incorporate before planting",
+        "Broadcast or drill seeds at 120 kg/ha; cover with 3–5 cm of soil",
+        "Apply DAP (100 kg/ha) at sowing; top-dress with urea at tillering stage",
+        "Weed carefully at 3 and 6 weeks — wheat loses yield quickly to competition",
+        "Scout for stem rust and yellow rust; spray with approved fungicide at first sign",
+        "Avoid excessive nitrogen late in the season — it increases lodging risk",
+        "Harvest when grain is hard and moisture is below 14 %; thresh and dry promptly"
+      ],
+      "tips": "Best suited above 1800 m in Rwanda's cool highland zones; use certified rust-resistant seed."
     }
   }
 }

@@ -12,12 +12,11 @@ import { getRecommendation } from "../services/api";
 import { Skeleton } from "../components/Skeleton";
 
 const CROP_EMOJI: Record<string, string> = {
-  rice: "🌾", maize: "🌽", chickpea: "🫘", kidneybeans: "🫘",
-  pigeonpeas: "🌿", mothbeans: "🌱", mungbean: "🌱", blackgram: "🫘",
-  lentil: "🌿", pomegranate: "🍎", banana: "🍌", mango: "🥭",
-  grapes: "🍇", watermelon: "🍉", muskmelon: "🍈", apple: "🍏",
-  orange: "🍊", papaya: "🍈", coconut: "🥥", cotton: "☁️",
-  jute: "🌿", coffee: "☕",
+  rice: "🌾", maize: "🌽", kidneybeans: "🫘", blackgram: "🫘",
+  lentil: "🌿", banana: "🍌", mango: "🥭", watermelon: "🍉",
+  orange: "🍊", papaya: "🍈", coconut: "🥥", coffee: "☕",
+  avocado: "🥑", cassava: "🌿", potato: "🥔", sorghum: "🌾",
+  soybean: "🫘", sweetpotato: "🍠", tea: "🍵", tomato: "🍅", wheat: "🌾",
 };
 
 export default function HomeScreen({ navigation }: any) {

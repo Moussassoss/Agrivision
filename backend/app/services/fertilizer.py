@@ -5,37 +5,36 @@ Rules sourced from Rwanda MINAGRI guidelines and standard tropical agronomy.
 
 # Target NPK ranges per crop (mg/kg soil)
 CROP_NPK_TARGETS = {
-    # High N-demand cereals / cash crops
+    # Cereals / staples
     "rice":        {"N": (20, 50), "P": (10, 25), "K": (100, 180)},
     "maize":       {"N": (30, 60), "P": (15, 30), "K": (120, 200)},
-    "cotton":      {"N": (30, 60), "P": (15, 30), "K": (100, 180)},
-    "jute":        {"N": (30, 60), "P": (15, 25), "K": (100, 180)},
+    "sorghum":     {"N": (25, 50), "P": (15, 30), "K": (100, 180)},
+    "wheat":       {"N": (25, 50), "P": (15, 30), "K": (100, 180)},
     # Legumes — fix their own N, lower N targets
-    "chickpea":    {"N": (5, 20),  "P": (10, 25), "K": (80, 150)},
     "kidneybeans": {"N": (5, 20),  "P": (10, 25), "K": (80, 150)},
-    "pigeonpeas":  {"N": (5, 20),  "P": (10, 25), "K": (80, 150)},
-    "mothbeans":   {"N": (5, 20),  "P": (10, 25), "K": (80, 150)},
-    "mungbean":    {"N": (5, 20),  "P": (10, 25), "K": (80, 150)},
     "blackgram":   {"N": (5, 20),  "P": (10, 25), "K": (80, 150)},
     "lentil":      {"N": (5, 20),  "P": (10, 25), "K": (80, 150)},
+    "soybean":     {"N": (5, 20),  "P": (15, 30), "K": (100, 180)},
+    # Root / tuber crops
+    "cassava":     {"N": (20, 40), "P": (10, 20), "K": (120, 200)},
+    "potato":      {"N": (30, 60), "P": (20, 40), "K": (150, 250)},
+    "sweetpotato": {"N": (20, 40), "P": (15, 25), "K": (120, 200)},
     # Fruits / perennials
     "banana":      {"N": (30, 60), "P": (10, 20), "K": (150, 250)},
     "coffee":      {"N": (25, 50), "P": (10, 20), "K": (120, 200)},
     "mango":       {"N": (20, 40), "P": (10, 20), "K": (100, 180)},
     "papaya":      {"N": (25, 50), "P": (10, 20), "K": (120, 200)},
     "orange":      {"N": (20, 40), "P": (10, 20), "K": (100, 200)},
-    "pomegranate": {"N": (20, 40), "P": (10, 20), "K": (100, 180)},
+    "avocado":     {"N": (20, 40), "P": (10, 20), "K": (150, 250)},
     "coconut":     {"N": (20, 40), "P": (10, 20), "K": (150, 250)},
-    "apple":       {"N": (20, 40), "P": (10, 20), "K": (100, 180)},
-    "grapes":      {"N": (15, 30), "P": (10, 20), "K": (120, 200)},
-    # Cucurbits / melons
+    "tea":         {"N": (30, 60), "P": (10, 20), "K": (100, 180)},
+    # Vegetables / cucurbits
+    "tomato":      {"N": (30, 60), "P": (20, 35), "K": (150, 250)},
     "watermelon":  {"N": (20, 40), "P": (10, 20), "K": (100, 180)},
-    "muskmelon":   {"N": (20, 40), "P": (10, 20), "K": (100, 180)},
 }
 
 LEGUMES = {
-    "chickpea", "kidneybeans", "pigeonpeas",
-    "mothbeans", "mungbean", "blackgram", "lentil",
+    "kidneybeans", "blackgram", "lentil", "soybean",
 }
 
 DEFAULT_TARGET = {"N": (20, 40), "P": (10, 25), "K": (100, 180)}
