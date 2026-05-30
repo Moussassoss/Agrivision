@@ -119,6 +119,8 @@
     "plantingGuide": "🌱  Uburyo bwo Gutera",
     "locationRequired": "Aho Uri Bisabwa",
     "locationRequiredMsg": "CropVana ikeneye aho uri kugira ngo ikurure amakuru y'ubutaka n'ikirere.",
+    "locationDeniedMsg": "Kwinjira aho uri byanzwe. Reka mu Igenamiterere ry'igikoresho cyawe kugira ngo ukoreshe CropVana.",
+    "openSettings": "Fungura Igenamiterere",
     "locationError": "Gushakisha aho uri ntibyakunze. Ongera ugerageze.",
     "noLocation": "Nta Hantu",
     "noLocationMsg": "Banza ureke kugera aho uri.",

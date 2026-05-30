@@ -119,6 +119,8 @@
     "plantingGuide": "🌱  Planting Guide",
     "locationRequired": "Location Required",
     "locationRequiredMsg": "CropVana needs your location to fetch soil and weather data.",
+    "locationDeniedMsg": "Location access was denied. Please enable it in your device Settings to use CropVana.",
+    "openSettings": "Open Settings",
     "locationError": "Could not get your location. Please try again.",
     "noLocation": "No Location",
     "noLocationMsg": "Please allow location access first.",

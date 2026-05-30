@@ -3,11 +3,10 @@ import {
   View, Text, StyleSheet, TouchableOpacity,
   FlatList, Dimensions, Animated,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTranslation } from "react-i18next";
+import { useOnboarding } from "../context/OnboardingContext";
 
 const { width } = Dimensions.get("window");
-export const ONBOARDING_KEY = "@agrivision_onboarded";
 
 const SLIDES = [
   {
@@ -44,15 +43,17 @@ const SLIDES = [
   },
 ];
 
-export default function OnboardingScreen({ navigation }: any) {
+export default function OnboardingScreen() {
   const { t } = useTranslation();
+  const { completeOnboarding } = useOnboarding();
   const [activeIndex, setActiveIndex] = useState(0);
   const flatRef = useRef<FlatList>(null);
   const scrollX = useRef(new Animated.Value(0)).current;
 
+  // completeOnboarding sets onboarded=true in context → App.tsx re-renders
+  // and automatically shows the correct screen (Welcome or Home)
   const finish = async () => {
-    await AsyncStorage.setItem(ONBOARDING_KEY, "true").catch(() => {});
-    navigation.replace("Welcome");
+    await completeOnboarding();
   };
 
   const next = () => {

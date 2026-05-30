@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
   View, Text, TextInput, TouchableOpacity, StyleSheet,
-  ActivityIndicator, Alert, ScrollView, StatusBar, SafeAreaView, Animated,
+  ActivityIndicator, Alert, ScrollView, StatusBar, SafeAreaView, Animated, Linking,
 } from "react-native";
 import * as Location from "expo-location";
 import { useTranslation } from "react-i18next";
@@ -45,11 +45,28 @@ export default function HomeScreen({ navigation }: any) {
   const requestLocation = async () => {
     setLoadingLocation(true);
     try {
+      // Check current permission status before requesting
+      const { status: existing } = await Location.getForegroundPermissionsAsync();
+
+      if (existing === "denied") {
+        // OS won't re-show the dialog — send user to device Settings
+        Alert.alert(
+          t("home.locationRequired"),
+          t("home.locationDeniedMsg"),
+          [
+            { text: t("common.cancel"), style: "cancel" },
+            { text: t("home.openSettings"), onPress: () => Linking.openSettings() },
+          ]
+        );
+        return;
+      }
+
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
         Alert.alert(t("home.locationRequired"), t("home.locationRequiredMsg"));
         return;
       }
+
       const loc = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
       const lat = loc.coords.latitude;
       const lon = loc.coords.longitude;

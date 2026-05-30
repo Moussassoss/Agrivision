@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ActivityIndicator, View } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthProvider, useAuth } from "./src/context/AuthContext";
 import { LanguageProvider } from "./src/context/LanguageContext";
 import { ThemeProvider, useTheme } from "./src/context/ThemeContext";
+import { OnboardingProvider, useOnboarding } from "./src/context/OnboardingContext";
 import { initI18n } from "./src/i18n";
 
 // Screens
@@ -19,21 +19,16 @@ import WelcomeScreen         from "./src/screens/WelcomeScreen";
 import ProfileScreen         from "./src/screens/ProfileScreen";
 import PlantingGuideScreen   from "./src/screens/PlantingGuideScreen";
 import HowItWorksScreen      from "./src/screens/HowItWorksScreen";
-import OnboardingScreen, { ONBOARDING_KEY } from "./src/screens/OnboardingScreen";
+import OnboardingScreen      from "./src/screens/OnboardingScreen";
 
 const Stack = createNativeStackNavigator();
 
 const Navigation = () => {
   const { user, isLoading } = useAuth();
   const { colors } = useTheme();
-  const [onboarded, setOnboarded] = useState<boolean | null>(null);
+  const { onboarded } = useOnboarding();
 
-  useEffect(() => {
-    AsyncStorage.getItem(ONBOARDING_KEY)
-      .then((v) => setOnboarded(v === "true"))
-      .catch(() => setOnboarded(true));
-  }, []);
-
+  // Wait for both auth state and onboarding state to resolve
   if (isLoading || onboarded === null) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: colors.background }}>
@@ -44,7 +39,12 @@ const Navigation = () => {
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {user ? (
+      {!onboarded ? (
+        // ── Onboarding: shown first, before auth check ──────────
+        // Works for both new installs and returning logged-in users
+        <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+      ) : user ? (
+        // ── Authenticated screens ───────────────────────────────
         <>
           <Stack.Screen name="Home"          component={HomeScreen} />
           <Stack.Screen
@@ -57,8 +57,8 @@ const Navigation = () => {
           <Stack.Screen name="HowItWorks"    component={HowItWorksScreen} />
         </>
       ) : (
+        // ── Unauthenticated screens ─────────────────────────────
         <>
-          {!onboarded && <Stack.Screen name="Onboarding" component={OnboardingScreen} />}
           <Stack.Screen name="Welcome"        component={WelcomeScreen} />
           <Stack.Screen name="Login"          component={LoginScreen} />
           <Stack.Screen name="Register"       component={RegisterScreen} />
@@ -87,11 +87,13 @@ export default function App() {
   return (
     <ThemeProvider>
       <LanguageProvider>
-        <AuthProvider>
-          <NavigationContainer>
-            <Navigation />
-          </NavigationContainer>
-        </AuthProvider>
+        <OnboardingProvider>
+          <AuthProvider>
+            <NavigationContainer>
+              <Navigation />
+            </NavigationContainer>
+          </AuthProvider>
+        </OnboardingProvider>
       </LanguageProvider>
     </ThemeProvider>
   );
