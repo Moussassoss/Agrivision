@@ -5,3 +5,12 @@ dist
 *.log
 *.tmp
 *.expo
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+
+# OS
+.DS_Store
+Thumbs.db
