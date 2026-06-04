@@ -80,6 +80,39 @@ async def _fetch_property(
         return float(value)
 
 
+# ── Unit calibration ────────────────────────────────────────────────────────
+# iSDAsoil and the training dataset use different units / measurement methods.
+#
+# iSDAsoil returns:
+#   nitrogen_total       → total soil N in g/kg   (Rwanda typical: 0.5–3.5 g/kg)
+#   phosphorous_extract. → Mehlich-3 P in mg/kg   (Rwanda typical: 1–30 mg/kg)
+#   potassium_extract.   → exchangeable K in mg/kg (Rwanda typical: 20–200 mg/kg)
+#
+# Training dataset (Cropvana_Rwanda_Dataset_v2.xlsx) expects:
+#   N: 0–120  (mean 61)   — available N index
+#   P: 5–95   (mean 44)   — available P index
+#   K: 5–60   (mean 37)   — available K index
+#
+# Scale factors map iSDAsoil raw values → training-compatible values:
+#   N_SCALE = 40  → 1.5 g/kg × 40 ≈ 60  (near training mean)
+#   P_SCALE = 4.5 → 10 mg/kg × 4.5 ≈ 45 (near training mean)
+#   K_SCALE = 0.5 → 75 mg/kg × 0.5 ≈ 37 (near training mean)
+#
+# After scaling, values are clamped to the training bounds so the model
+# never has to extrapolate outside its fitted distribution.
+_N_SCALE = 40.0;  _N_MIN =  0.0; _N_MAX = 120.0
+_P_SCALE =  4.5;  _P_MIN =  5.0; _P_MAX =  95.0
+_K_SCALE =  0.5;  _K_MIN =  5.0; _K_MAX =  60.0
+
+
+def _calibrate(raw_n: float, raw_p: float, raw_k: float) -> tuple[float, float, float]:
+    """Scale iSDAsoil raw values into the training-data value range."""
+    n = max(_N_MIN, min(_N_MAX, raw_n * _N_SCALE))
+    p = max(_P_MIN, min(_P_MAX, raw_p * _P_SCALE))
+    k = max(_K_MIN, min(_K_MAX, raw_k * _K_SCALE))
+    return n, p, k
+
+
 async def get_soil_data(lat: float, lon: float) -> dict:
     """
     Fetch all soil properties needed for crop prediction.
@@ -87,9 +120,9 @@ async def get_soil_data(lat: float, lon: float) -> dict:
 
     Returns:
         {
-            "nitrogen":    float,  # mg/kg
-            "phosphorus":  float,  # mg/kg
-            "potassium":   float,  # mg/kg
+            "nitrogen":    float,  # calibrated to training range 0–120
+            "phosphorus":  float,  # calibrated to training range 5–95
+            "potassium":   float,  # calibrated to training range 5–60
             "ph":          float,
             "source":      "isdasoil"
         }
@@ -104,7 +137,11 @@ async def get_soil_data(lat: float, lon: float) -> dict:
     logger.info(f"Fetching soil data from iSDAsoil for ({lat}, {lon})...")
 
     try:
-        nitrogen, phosphorus, potassium, ph = await _fetch_all_properties(lat, lon)
+        raw_n, raw_p, raw_k, ph = await _fetch_all_properties(lat, lon)
+        logger.info(f"iSDAsoil raw values — N={raw_n} g/kg, P={raw_p} mg/kg, K={raw_k} mg/kg, pH={ph}")
+
+        nitrogen, phosphorus, potassium = _calibrate(raw_n, raw_p, raw_k)
+        logger.info(f"Calibrated values  — N={nitrogen:.1f}, P={phosphorus:.1f}, K={potassium:.1f}")
 
         result = {
             "nitrogen":   round(nitrogen,   2),
@@ -116,7 +153,6 @@ async def get_soil_data(lat: float, lon: float) -> dict:
 
         # Cache for 24 hours — soil doesn't change quickly
         cache_set(cache_key, result, ttl_seconds=86400)
-        logger.info(f"Soil data: {result}")
         return result
 
     except Exception as e:
