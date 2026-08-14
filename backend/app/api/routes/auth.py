@@ -177,6 +177,22 @@ async def forgot_password(
     return {"message": "If that email is registered, a reset code was sent."}
 
 
+@router.delete("/me", status_code=204)
+async def delete_account(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Permanently delete the authenticated user and all their data."""
+    # Clean up OTP tokens (not FK-linked to users table)
+    await db.execute(
+        delete(PasswordResetToken).where(PasswordResetToken.email == current_user.email)
+    )
+    # RecommendationHistory cascades automatically via FK ondelete="CASCADE"
+    await db.delete(current_user)
+    await db.commit()
+    logger.info(f"Account deleted: {current_user.email}")
+
+
 @router.post("/reset-password")
 async def reset_password(
     token: str,

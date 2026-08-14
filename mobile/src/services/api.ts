@@ -50,6 +50,10 @@ export const forgotPassword = async (email: string) => {
   return res.data;
 };
 
+export const deleteAccount = async () => {
+  await api.delete("/auth/me");
+};
+
 export const resetPassword = async (token: string, new_password: string) => {
   const res = await api.post(
     `/auth/reset-password?token=${token}&new_password=${new_password}`

@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
 import { useTheme } from "../context/ThemeContext";
-import { forgotPassword, resetPassword } from "../services/api";
+import { forgotPassword, resetPassword, deleteAccount } from "../services/api";
 
 type PasswordStep = "idle" | "sending" | "awaitingCode" | "resetting" | "done";
 
@@ -27,11 +27,14 @@ export default function ProfileScreen({ navigation }: any) {
   const { language, toggleLanguage } = useLanguage();
   const { colors, isDark, toggleTheme } = useTheme();
 
-  const [passwordStep, setPasswordStep] = useState<PasswordStep>("idle");
-  const [resetToken, setResetToken]     = useState("");
-  const [newPassword, setNewPassword]   = useState("");
-  const [confirmPass, setConfirmPass]   = useState("");
-  const [locStatus, setLocStatus]       = useState<string | null>(null);
+  const [passwordStep, setPasswordStep]   = useState<PasswordStep>("idle");
+  const [resetToken, setResetToken]       = useState("");
+  const [newPassword, setNewPassword]     = useState("");
+  const [confirmPass, setConfirmPass]     = useState("");
+  const [locStatus, setLocStatus]         = useState<string | null>(null);
+  const [showDeleteZone, setShowDeleteZone] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState("");
+  const [deleting, setDeleting]           = useState(false);
 
   const handleRequestLocation = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
@@ -84,6 +87,23 @@ export default function ProfileScreen({ navigation }: any) {
 
     if (passwordStep === "done") {
       setPasswordStep("idle");
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    const confirmWord = language === "rw" ? "SIBA" : "DELETE";
+    if (deleteConfirm.trim().toUpperCase() !== confirmWord) {
+      Alert.alert(t("common.error"), t("profile.deleteAccountTypeError"));
+      return;
+    }
+    setDeleting(true);
+    try {
+      await deleteAccount();
+      Alert.alert("", t("profile.deleteAccountSuccess"));
+      await signOut();
+    } catch {
+      Alert.alert(t("common.error"), t("profile.deleteAccountError"));
+      setDeleting(false);
     }
   };
 
@@ -335,6 +355,44 @@ export default function ProfileScreen({ navigation }: any) {
           </View>
         </View>
 
+        {/* Delete account */}
+        <View style={styles.section}>
+          {!showDeleteZone ? (
+            <TouchableOpacity
+              style={styles.deleteRevealBtn}
+              onPress={() => setShowDeleteZone(true)}
+            >
+              <Text style={styles.deleteRevealText}>{t("profile.deleteAccount")}</Text>
+            </TouchableOpacity>
+          ) : (
+            <View style={[styles.infoCard, { backgroundColor: "#FFF5F5", borderColor: "#FFCDD2", borderWidth: 1 }]}>
+              <Text style={styles.deleteDangerTitle}>⚠️  {t("profile.deleteAccount")}</Text>
+              <Text style={styles.deleteHint}>{t("profile.deleteAccountHint")}</Text>
+              <TextInput
+                style={styles.deleteInput}
+                value={deleteConfirm}
+                onChangeText={setDeleteConfirm}
+                placeholder={t("profile.deleteAccountConfirmPlaceholder")}
+                placeholderTextColor="#ccc"
+                autoCapitalize="characters"
+              />
+              <TouchableOpacity
+                style={[styles.deleteBtn, deleting && { opacity: 0.6 }]}
+                onPress={handleDeleteAccount}
+                disabled={deleting}
+              >
+                {deleting
+                  ? <ActivityIndicator color="#fff" />
+                  : <Text style={styles.deleteBtnText}>{t("profile.deleteAccountBtn")}</Text>
+                }
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => { setShowDeleteZone(false); setDeleteConfirm(""); }} style={styles.cancelBtn}>
+                <Text style={styles.cancelBtnText}>{t("common.cancel")}</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
+
         {/* Logout */}
         <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
           <Text style={styles.logoutBtnText}>{t("profile.logout")}</Text>
@@ -475,4 +533,29 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   logoutBtnText: { color: "#D32F2F", fontWeight: "700", fontSize: 15 },
+
+  deleteRevealBtn: { alignItems: "center", paddingVertical: 8 },
+  deleteRevealText: { fontSize: 13, color: "#B71C1C", fontWeight: "500" },
+
+  deleteDangerTitle: { fontSize: 15, fontWeight: "700", color: "#B71C1C", marginBottom: 6 },
+  deleteHint: { fontSize: 13, color: "#555", lineHeight: 19, marginBottom: 14 },
+  deleteInput: {
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#FFCDD2",
+    borderRadius: 10,
+    padding: 12,
+    fontSize: 14,
+    color: "#1a1a1a",
+    marginBottom: 12,
+    letterSpacing: 2,
+  },
+  deleteBtn: {
+    backgroundColor: "#C62828",
+    borderRadius: 12,
+    padding: 14,
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  deleteBtnText: { color: "#fff", fontWeight: "700", fontSize: 14 },
 });

@@ -69,7 +69,7 @@ async def send_welcome_email(to_email: str, full_name: str) -> bool:
 
                 <p style="font-size:13px;color:#9ca3af;line-height:1.6;margin:0;">
                   If you did not create this account, please ignore this email or contact us at
-                  <a href="mailto:hamatguire@gmail.com" style="color:#2D6A4F;">hamatguire@gmail.com</a>.
+                  <a href="mailto:ssossinfo88@gmail.com" style="color:#2D6A4F;">ssossinfo88@gmail.com</a>.
                 </p>
               </td>
             </tr>
