@@ -31,10 +31,10 @@ export default function ForgotPasswordScreen({ navigation }: any) {
     }
     setLoading(true);
     try {
-      const res = await forgotPassword(email.trim().toLowerCase());
+      await forgotPassword(email.trim().toLowerCase());
       Alert.alert(
-        t("forgotPassword.tokenGenerated"),
-        t("forgotPassword.tokenMessage", { token: res.token }),
+        t("forgotPassword.codeSentTitle"),
+        t("forgotPassword.codeSentMessage"),
         [{ text: t("common.continue"), onPress: () => setStep("reset") }]
       );
     } catch (e: any) {
