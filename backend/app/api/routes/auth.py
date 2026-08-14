@@ -150,14 +150,10 @@ async def forgot_password(
     Generate a 6-digit OTP and email it to the user.
     Always returns 200 so callers cannot enumerate registered emails.
     """
-    # Diagnostic: confirm key is loaded (remove after confirming emails work)
-    logger.warning(f"[DIAG] forgot-password called for: {email} | RESEND_API_KEY set: {bool(settings.resend_api_key)}")
-
     result = await db.execute(select(User).where(User.email == email))
     user   = result.scalar_one_or_none()
 
     if not user:
-        logger.warning(f"[DIAG] email {email} NOT found in DB — returning early")
         return {"message": "If that email is registered, a reset code was sent."}
 
     # Delete any previous unused tokens for this email

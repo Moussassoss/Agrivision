@@ -10,6 +10,7 @@ import {
   SafeAreaView,
   StatusBar,
   ActivityIndicator,
+  Linking,
 } from "react-native";
 import * as Location from "expo-location";
 import { useTranslation } from "react-i18next";
@@ -302,6 +303,38 @@ export default function ProfileScreen({ navigation }: any) {
           </View>
         </View>
 
+        {/* Legal */}
+        <View style={styles.section}>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>{t("profile.legal")}</Text>
+          <View style={[styles.infoCard, { backgroundColor: colors.card, borderColor: colors.border, gap: 0 }]}>
+            <TouchableOpacity
+              style={[styles.legalRow]}
+              onPress={() => Linking.openURL("https://moussassoss.github.io/agrivision/privacy-policy.html")}
+            >
+              <Text style={styles.settingIcon}>🔒</Text>
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.settingLabel, { color: colors.text }]}>{t("profile.privacyPolicy")}</Text>
+                <Text style={[styles.settingValue, { color: colors.textSecondary }]}>{t("profile.privacyPolicySub")}</Text>
+              </View>
+              <Text style={[styles.settingIcon, { color: colors.textSecondary }]}>›</Text>
+            </TouchableOpacity>
+
+            <View style={[styles.divider, { backgroundColor: colors.border }]} />
+
+            <TouchableOpacity
+              style={[styles.legalRow]}
+              onPress={() => Linking.openURL("https://moussassoss.github.io/agrivision/terms-of-service.html")}
+            >
+              <Text style={styles.settingIcon}>📄</Text>
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.settingLabel, { color: colors.text }]}>{t("profile.termsOfService")}</Text>
+                <Text style={[styles.settingValue, { color: colors.textSecondary }]}>{t("profile.termsOfServiceSub")}</Text>
+              </View>
+              <Text style={[styles.settingIcon, { color: colors.textSecondary }]}>›</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
         {/* Logout */}
         <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
           <Text style={styles.logoutBtnText}>{t("profile.logout")}</Text>
@@ -424,6 +457,13 @@ const styles = StyleSheet.create({
 
   cancelBtn:     { alignItems: "center", paddingVertical: 6 },
   cancelBtnText: { fontSize: 13, color: "#aaa" },
+
+  legalRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    paddingVertical: 12,
+  },
 
   logoutBtn: {
     backgroundColor: "#FFF0F0",

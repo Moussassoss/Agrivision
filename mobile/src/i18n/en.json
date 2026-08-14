@@ -253,7 +253,12 @@
     "darkModeOn": "Dark theme active",
     "darkModeOff": "Light theme active",
     "howItWorks": "How It Works",
-    "howItWorksSub": "Learn about the AI methodology"
+    "howItWorksSub": "Learn about the AI methodology",
+    "legal": "Legal",
+    "privacyPolicy": "Privacy Policy",
+    "privacyPolicySub": "How we handle your data",
+    "termsOfService": "Terms of Service",
+    "termsOfServiceSub": "Usage rules and disclaimer"
   },
   "language": {
     "switchTo": "RW",

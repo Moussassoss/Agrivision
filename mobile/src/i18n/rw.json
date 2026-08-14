@@ -253,7 +253,12 @@
     "darkModeOn": "Irangwa ry'ijoro rikoreshwa",
     "darkModeOff": "Irangwa ry'umurango rikoreshwa",
     "howItWorks": "Uburyo Bikorwa",
-    "howItWorksSub": "Menya uburyo AI ikorana ubushakashatsi"
+    "howItWorksSub": "Menya uburyo AI ikorana ubushakashatsi",
+    "legal": "Amategeko",
+    "privacyPolicy": "Politiki y'Ubuzima bwite",
+    "privacyPolicySub": "Uburyo tugenzura amakuru yawe",
+    "termsOfService": "Amategeko yo Gukoresha",
+    "termsOfServiceSub": "Amabwiriza n'igenamigambi"
   },
   "language": {
     "switchTo": "EN",
