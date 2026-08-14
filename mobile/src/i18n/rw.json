@@ -55,7 +55,12 @@
     "passwordMismatch": "Amagambo y'ibanga ntahuye",
     "passwordTooShort": "Ijambo ry'ibanga rigomba kuba nibura inyuguti 8",
     "registrationFailed": "Iyandikishe ntiyakunze",
-    "somethingWentWrong": "Hari ikintu cyabuze"
+    "somethingWentWrong": "Hari ikintu cyabuze",
+    "mustAcceptTerms": "Nyamuneka emeza Politiki y'Ubuzima bwite n'Amategeko yo Gukoresha kugira ngo ukomeze.",
+    "agreePrefix": "Ndemeye",
+    "and": "na",
+    "privacyPolicy": "Politiki y'Ubuzima bwite",
+    "termsOfService": "Amategeko yo Gukoresha"
   },
   "forgotPassword": {
     "titleEmail": "Wibagiwe Ijambo ry'ibanga",

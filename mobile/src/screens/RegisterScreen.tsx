@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Linking,
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
@@ -22,11 +23,16 @@ export default function RegisterScreen({ navigation }: any) {
   const [phone, setPhone]       = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm]   = useState("");
-  const [loading, setLoading]   = useState(false);
+  const [loading, setLoading]       = useState(false);
+  const [termsAccepted, setTerms]   = useState(false);
 
   const handleRegister = async () => {
     if (!fullName || !email || !password || !confirm) {
       Alert.alert(t("common.error"), t("register.fillRequired"));
+      return;
+    }
+    if (!termsAccepted) {
+      Alert.alert(t("common.error"), t("register.mustAcceptTerms"));
       return;
     }
     if (password !== confirm) {
@@ -121,10 +127,37 @@ export default function RegisterScreen({ navigation }: any) {
             secureTextEntry
           />
 
+          {/* Terms & Privacy acceptance */}
           <TouchableOpacity
-            style={[styles.button, loading && styles.buttonDisabled]}
+            style={styles.termsRow}
+            onPress={() => setTerms(!termsAccepted)}
+            activeOpacity={0.7}
+          >
+            <View style={[styles.checkbox, termsAccepted && styles.checkboxChecked]}>
+              {termsAccepted && <Text style={styles.checkmark}>✓</Text>}
+            </View>
+            <Text style={styles.termsText}>
+              {t("register.agreePrefix")}{" "}
+              <Text
+                style={styles.termsLink}
+                onPress={() => Linking.openURL("https://moussassoss.github.io/agrivision/privacy-policy.html")}
+              >
+                {t("register.privacyPolicy")}
+              </Text>
+              {" "}{t("register.and")}{" "}
+              <Text
+                style={styles.termsLink}
+                onPress={() => Linking.openURL("https://moussassoss.github.io/agrivision/terms-of-service.html")}
+              >
+                {t("register.termsOfService")}
+              </Text>
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.button, (loading || !termsAccepted) && styles.buttonDisabled]}
             onPress={handleRegister}
-            disabled={loading}
+            disabled={loading || !termsAccepted}
           >
             {loading ? (
               <ActivityIndicator color="#fff" />
@@ -209,6 +242,44 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     fontSize: 16,
+  },
+  termsRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: 10,
+    marginTop: 20,
+    marginBottom: 4,
+  },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderRadius: 5,
+    borderWidth: 1.5,
+    borderColor: "#2D6A4F",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 1,
+    flexShrink: 0,
+  },
+  checkboxChecked: {
+    backgroundColor: "#2D6A4F",
+  },
+  checkmark: {
+    color: "#fff",
+    fontSize: 13,
+    fontWeight: "700",
+    lineHeight: 15,
+  },
+  termsText: {
+    flex: 1,
+    fontSize: 13,
+    color: "#555",
+    lineHeight: 19,
+  },
+  termsLink: {
+    color: "#2D6A4F",
+    fontWeight: "600",
+    textDecorationLine: "underline",
   },
   linkText: {
     textAlign: "center",
