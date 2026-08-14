@@ -12,7 +12,7 @@ from app.config import get_settings
 from app.utils.logger import get_logger
 
 limiter = Limiter(key_func=get_remote_address)
-from app.services.email import send_password_reset_email
+from app.services.email import send_welcome_email, send_password_reset_email
 import bcrypt as _bcrypt
 from jose import JWTError, jwt
 from datetime import datetime, timedelta, timezone
@@ -94,6 +94,13 @@ async def register(request: Request, body: UserRegister, db: AsyncSession = Depe
     await db.refresh(user)
 
     logger.info(f"New user registered: {user.email}")
+
+    # Fire-and-forget — don't fail registration if email delivery fails
+    try:
+        await send_welcome_email(to_email=user.email, full_name=user.full_name)
+    except Exception as exc:
+        logger.error(f"Welcome email failed for {user.email}: {exc}")
+
     return {
         "message": "Account created successfully",
         "user_id": str(user.id),
