@@ -178,7 +178,7 @@ Data collected: email, name (account); GPS coordinates (per recommendation, used
 
 ## Author
 
-**Moussassoss** — [github.com/Moussassoss](https://github.com/Moussassoss) · [hamatguire@gmail.com](mailto:hamatguire@gmail.com)
+**Moussassoss** — [github.com/Moussassoss](https://github.com/Moussassoss) · [ssossinfo88@gmail.com](mailto:ssossinfo88@gmail.com)
 
 ---
 
