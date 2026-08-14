@@ -1,27 +1,33 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Request
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
-import bcrypt as _bcrypt
-from jose import JWTError, jwt
-from datetime import datetime, timedelta
-from typing import Annotated
-import uuid
-import secrets
+from sqlalchemy import select, delete
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 from app.db.database import get_db
-from app.db.models import User
+from app.db.models import User, PasswordResetToken
 from app.models.request import UserRegister
 from app.models.response import TokenResponse
 from app.config import get_settings
 from app.utils.logger import get_logger
 
+limiter = Limiter(key_func=get_remote_address)
+from app.services.email import send_password_reset_email
+import bcrypt as _bcrypt
+from jose import JWTError, jwt
+from datetime import datetime, timedelta, timezone
+from typing import Annotated
+import uuid
+import random
+
 logger   = get_logger(__name__)
 settings = get_settings()
 router   = APIRouter()
 
-# ── Password hashing ────────────────────────────────
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
+
+# ── Password helpers ────────────────────────────────
 
 def hash_password(password: str) -> str:
     return _bcrypt.hashpw(password.encode(), _bcrypt.gensalt()).decode()
@@ -32,30 +38,30 @@ def verify_password(plain: str, hashed: str) -> bool:
 
 
 def create_access_token(user_id: str, email: str) -> str:
-    expire = datetime.utcnow() + timedelta(
+    expire = datetime.now(timezone.utc) + timedelta(
         minutes=settings.access_token_expire_minutes
     )
-    payload = {
-        "sub":   user_id,
-        "email": email,
-        "exp":   expire,
-    }
-    return jwt.encode(payload, settings.secret_key, algorithm=settings.algorithm)
+    return jwt.encode(
+        {"sub": user_id, "email": email, "exp": expire},
+        settings.secret_key,
+        algorithm=settings.algorithm,
+    )
 
+
+# ── Auth dependency ─────────────────────────────────
 
 async def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)],
     db:    AsyncSession = Depends(get_db),
 ) -> User:
-    """FastAPI dependency — decode JWT and return the current user."""
     credentials_exception = HTTPException(
         status_code=401,
         detail="Invalid or expired token",
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        payload  = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
-        user_id  = payload.get("sub")
+        payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
+        user_id = payload.get("sub")
         if user_id is None:
             raise credentials_exception
     except JWTError:
@@ -71,9 +77,8 @@ async def get_current_user(
 # ── Routes ──────────────────────────────────────────
 
 @router.post("/register", status_code=201)
-async def register(body: UserRegister, db: AsyncSession = Depends(get_db)):
-    """Create a new farmer account."""
-    # Check email not already taken
+@limiter.limit("5/minute")
+async def register(request: Request, body: UserRegister, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(User).where(User.email == body.email))
     if result.scalar_one_or_none():
         raise HTTPException(status_code=400, detail="Email already registered")
@@ -97,11 +102,12 @@ async def register(body: UserRegister, db: AsyncSession = Depends(get_db)):
 
 
 @router.post("/login", response_model=TokenResponse)
+@limiter.limit("10/minute")
 async def login(
+    request: Request,
     form: OAuth2PasswordRequestForm = Depends(),
     db:   AsyncSession = Depends(get_db),
 ):
-    """Login with email + password, returns JWT token."""
     result = await db.execute(select(User).where(User.email == form.username))
     user   = result.scalar_one_or_none()
 
@@ -118,7 +124,6 @@ async def login(
 
 @router.get("/me")
 async def me(current_user: User = Depends(get_current_user)):
-    """Return the currently logged-in user's profile."""
     return {
         "user_id":   str(current_user.id),
         "email":     current_user.email,
@@ -127,44 +132,43 @@ async def me(current_user: User = Depends(get_current_user)):
     }
 
 
-# In-memory store for reset tokens
-# { token: {"email": str, "expires": datetime} }
-_reset_tokens: dict = {}
-
-
 @router.post("/forgot-password")
+@limiter.limit("3/minute")
 async def forgot_password(
+    request: Request,
     email: str,
     db: AsyncSession = Depends(get_db),
 ):
     """
-    Generate a password reset token.
-    In production: send this token via email.
-    For now: return it directly so you can test.
+    Generate a 6-digit OTP and email it to the user.
+    Always returns 200 so callers cannot enumerate registered emails.
     """
     result = await db.execute(select(User).where(User.email == email))
     user   = result.scalar_one_or_none()
 
-    # Always return success — don't reveal if email exists
     if not user:
-        return {"message": "If that email exists, a reset link was sent."}
+        # Return success regardless — don't reveal whether email exists
+        return {"message": "If that email is registered, a reset code was sent."}
 
-    token = secrets.token_urlsafe(32)
-    _reset_tokens[token] = {
-        "email":   email,
-        "expires": datetime.utcnow() + timedelta(hours=1),
-    }
+    # Delete any previous unused tokens for this email
+    await db.execute(
+        delete(PasswordResetToken).where(PasswordResetToken.email == email)
+    )
 
-    logger.info(f"Password reset token generated for {email}")
+    otp = f"{random.SystemRandom().randint(0, 999999):06d}"
+    expires_at = datetime.now(timezone.utc) + timedelta(minutes=settings.otp_expire_minutes)
 
-    # TODO: send email with token
-    # In production, send: https://yourapp.com/reset-password?token={token}
-    # For now we return it directly for testing:
-    return {
-        "message": "Reset token generated.",
-        "token":   token,   # Remove this line in production
-        "expires": "1 hour",
-    }
+    db.add(PasswordResetToken(email=email, otp=otp, expires_at=expires_at))
+    await db.commit()
+
+    # Send email (logs OTP to console if RESEND_API_KEY not set)
+    await send_password_reset_email(
+        to_email=email,
+        full_name=user.full_name,
+        otp=otp,
+    )
+
+    return {"message": "If that email is registered, a reset code was sent."}
 
 
 @router.post("/reset-password")
@@ -173,28 +177,33 @@ async def reset_password(
     new_password: str,
     db: AsyncSession = Depends(get_db),
 ):
-    """Reset password using the token from /forgot-password."""
     if len(new_password) < 8:
         raise HTTPException(status_code=400, detail="Password must be at least 8 characters")
 
-    entry = _reset_tokens.get(token)
-    if not entry:
-        raise HTTPException(status_code=400, detail="Invalid or expired reset token")
+    result = await db.execute(
+        select(PasswordResetToken).where(
+            PasswordResetToken.otp   == token,
+            PasswordResetToken.used  == False,  # noqa: E712
+        )
+    )
+    record = result.scalar_one_or_none()
 
-    if datetime.utcnow() > entry["expires"]:
-        del _reset_tokens[token]
-        raise HTTPException(status_code=400, detail="Reset token has expired")
+    if not record:
+        raise HTTPException(status_code=400, detail="Invalid or expired reset code")
 
-    result = await db.execute(select(User).where(User.email == entry["email"]))
-    user   = result.scalar_one_or_none()
+    if datetime.now(timezone.utc) > record.expires_at.replace(tzinfo=timezone.utc):
+        await db.delete(record)
+        await db.commit()
+        raise HTTPException(status_code=400, detail="Reset code has expired")
+
+    user_result = await db.execute(select(User).where(User.email == record.email))
+    user = user_result.scalar_one_or_none()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
     user.hashed_password = hash_password(new_password)
+    record.used = True
     await db.commit()
 
-    # Invalidate token after use
-    del _reset_tokens[token]
-
-    logger.info(f"Password reset successful for {entry['email']}")
+    logger.info(f"Password reset successful for {record.email}")
     return {"message": "Password updated successfully. Please log in again."}

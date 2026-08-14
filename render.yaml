@@ -3,9 +3,9 @@ services:
     name: cropvana-api
     runtime: python
     rootDir: backend
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
-    plan: free
+    buildCommand: pip install -r requirements.txt && python -m alembic upgrade head
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 2
+    plan: starter          # $7/month — no spin-down, 512 MB RAM
     envVars:
       - key: SECRET_KEY
         generateValue: true
@@ -19,6 +19,12 @@ services:
         sync: false
       - key: OPENWEATHER_API_KEY
         sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        value: "CropVana <onboarding@resend.dev>"
+      - key: SENTRY_DSN
+        sync: false
       - key: ALLOWED_ORIGINS
         value: '["*"]'
       - key: DEBUG
@@ -30,4 +36,4 @@ databases:
   - name: cropvana-db
     databaseName: cropvana
     user: cropvana
-    plan: free
+    plan: starter          # $7/month — 1 GB storage, daily backups, no expiry
