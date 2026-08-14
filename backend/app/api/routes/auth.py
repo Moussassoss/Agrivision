@@ -168,6 +168,9 @@ async def forgot_password(
     db.add(PasswordResetToken(email=email, otp=otp, expires_at=expires_at))
     await db.commit()
 
+    # Diagnostic: confirm key is loaded (remove after confirming emails work)
+    logger.warning(f"[DIAG] RESEND_API_KEY set: {bool(settings.resend_api_key)} | key starts with: {settings.resend_api_key[:6] if settings.resend_api_key else 'EMPTY'}")
+
     # Send email (logs OTP to console if RESEND_API_KEY not set)
     await send_password_reset_email(
         to_email=email,
