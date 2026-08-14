@@ -54,7 +54,7 @@ export default function HowItWorksScreen({ navigation }: any) {
             <Text style={[styles.accuracySub, { color: colors.textSecondary }]}>{t("howItWorks.accuracySub")}</Text>
           </View>
           <View style={[styles.accuracyBadge, { backgroundColor: colors.primary }]}>
-            <Text style={styles.accuracyValue}>97.3%</Text>
+            <Text style={styles.accuracyValue}>98.1%</Text>
           </View>
         </View>
 

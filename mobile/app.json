@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "mobile",
-    "slug": "mobile",
+    "name": "CropVana",
+    "slug": "cropvana",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash-icon.png",
@@ -13,7 +13,26 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.agrivision.cropvana",
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "CropVana uses your GPS location to retrieve local soil properties and weather data, which are essential for generating accurate crop recommendations tailored to your field.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "CropVana uses your GPS location to retrieve local soil properties and weather data, which are essential for generating accurate crop recommendations tailored to your field.",
+        "NSCameraUsageDescription": "CropVana does not use the camera.",
+        "NSPhotoLibraryUsageDescription": "CropVana does not access your photo library."
+      },
+      "privacyManifests": {
+        "NSPrivacyAccessedAPITypes": [
+          {
+            "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
+            "NSPrivacyAccessedAPITypeReasons": ["CA92.1"]
+          }
+        ]
+      },
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -21,13 +40,31 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.agrivision.cropvana",
+      "permissions": [
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-secure-store"
-    ]
+      "expo-secure-store",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "CropVana uses your GPS location to retrieve local soil properties and weather data for crop recommendations."
+        }
+      ]
+    ],
+    "extra": {
+      "privacyPolicyUrl": "https://moussassoss.github.io/agrivision/privacy-policy.html",
+      "termsOfServiceUrl": "https://moussassoss.github.io/agrivision/terms-of-service.html",
+      "eas": {
+        "projectId": "YOUR_EAS_PROJECT_ID"
+      }
+    }
   }
 }

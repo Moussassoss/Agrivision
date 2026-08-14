@@ -163,7 +163,7 @@
   },
   "onboarding": {
     "slide1Title": "Welcome to CropVana",
-    "slide1Desc": "AI-powered crop recommendations using real soil and weather data — built for Rwandan farmers.",
+    "slide1Desc": "AI-powered crop recommendations using real soil and weather data - built for Rwandan farmers.",
     "slide2Title": "Smart Recommendations",
     "slide2Desc": "Our ML model analyses satellite soil data, live weather, and your GPS location to suggest the best crops.",
     "slide3Title": "Step-by-Step Guides",
@@ -178,20 +178,20 @@
     "title": "How It Works",
     "heroSub": "AI-powered crop recommendations from real satellite and weather data",
     "accuracyTitle": "ML Model Accuracy",
-    "accuracySub": "Trained on 2,200 crop-soil samples across 22 crop types",
+    "accuracySub": "Trained on 2,100 crop-soil samples across 21 crop types",
     "pipelineTitle": "How a recommendation is made",
     "step1Title": "Your GPS location",
-    "step1Desc": "The app reads your exact coordinates using your phone's GPS — no manual input needed.",
-    "step2Title": "Soil data — iSDAsoil",
+    "step1Desc": "The app reads your exact coordinates using your phone's GPS no manual input needed.",
+    "step2Title": "Soil data iSDAsoil",
     "step2Desc": "Satellite-derived Nitrogen, Phosphorus, Potassium, and pH values for your exact location from the iSDAsoil API.",
-    "step3Title": "Weather — OpenWeather + NASA",
+    "step3Title": "Weather OpenWeather + NASA",
     "step3Desc": "Live temperature and humidity from OpenWeather, combined with seasonal rainfall from NASA POWER.",
     "step4Title": "AI model prediction",
-    "step4Desc": "A Random Forest model trained on 2,200 samples predicts the top 3 crops with confidence scores.",
+    "step4Desc": "A Random Forest model trained on 2,100 samples predicts the top 3 crops with confidence scores.",
     "step5Title": "Rich recommendation",
     "step5Desc": "Results are enriched with planting calendar, agronomic reasoning, and fertilizer advice in your language.",
     "sourcesTitle": "Data sources",
-    "sourceIsda": "Satellite soil maps at 30m resolution — N, P, K, pH for all of Africa",
+    "sourceIsda": "Satellite soil maps at 30m resolution N, P, K, pH for all of Africa",
     "sourceOw": "Real-time temperature and humidity from 40,000+ weather stations worldwide",
     "sourceNasa": "30-year seasonal rainfall averages from NASA's POWER climate database",
     "datasetNote": "ML model trained on the Crop Recommendation Dataset (Kaggle). Note: dataset is India-origin; recommendations are calibrated for Rwanda's climate context."
@@ -359,7 +359,7 @@
         "Monitor for bean fly and yellow mosaic disease; remove infected plants",
         "Harvest when 80 % of pods turn black; dry and thresh"
       ],
-      "tips": "High-protein pulse — good for food security and natural soil improvement."
+      "tips": "High-protein pulse good for food security and natural soil improvement."
     },
     "lentil": {
       "requirements": "Well-drained silt-loam · Temp 7–27°C · pH 6.0–8.0 · Cool highland climate",
@@ -448,7 +448,7 @@
         "Irrigate during dry season; ensure drainage is good in the wet season",
         "Remove old fronds regularly to reduce rhinoceros beetle habitat",
         "Use pheromone traps to monitor and control rhinoceros beetle",
-        "Harvest when outer husk changes color — nuts mature in 4–6 years"
+        "Harvest when outer husk changes color nuts mature in 4–6 years"
       ],
       "tips": "Coconut grows best below 400 m elevation; mulch heavily to retain moisture."
     },
@@ -515,7 +515,7 @@
         "Monitor for sorghum midge and striga weed; use resistant varieties where possible",
         "Harvest when grain is hard and moisture content drops below 20 %"
       ],
-      "tips": "Preferred in dry areas of Rwanda — sorghum yields where maize often fails."
+      "tips": "Preferred in dry areas of Rwanda sorghum yields where maize often fails."
     },
     "soybean": {
       "requirements": "Well-drained fertile loam · Temp 20–30°C · pH 6.0–7.0 · Moderate moisture",
@@ -524,7 +524,7 @@
         "Inoculate seeds with Bradyrhizobium bacteria immediately before planting",
         "Plant seeds 3–4 cm deep, 5–10 cm apart in rows 45–60 cm apart",
         "Apply phosphate fertilizer (DAP 50 kg/ha) at planting; skip nitrogen",
-        "Keep soil moist at flowering and pod-fill stages — these are critical periods",
+        "Keep soil moist at flowering and pod-fill stages these are critical periods",
         "Weed at weeks 2 and 5; monitor for pod-sucking bugs and leaf rust",
         "Harvest when 90 % of pods turn brown; thresh promptly to avoid shattering"
       ],
@@ -554,7 +554,7 @@
         "Harvest (pluck) the top two leaves and bud every 7–14 days during the growing season",
         "Deliver fresh leaf to the factory within 6 hours of plucking to preserve quality"
       ],
-      "tips": "Rwanda's highland tea commands premium prices — join a factory cooperative for best returns."
+      "tips": "Rwanda's highland tea commands premium prices join a factory cooperative for best returns."
     },
     "tomato": {
       "requirements": "Fertile well-drained soil · Temp 18–27°C · pH 5.5–7.0 · Sheltered, sunny site",
@@ -564,10 +564,10 @@
         "Install stakes or cages immediately after transplanting",
         "Apply DAP at planting; top-dress with CAN every 3 weeks during growth",
         "Tie stems to stakes as they grow; remove side shoots (suckers) weekly",
-        "Irrigate at the base — keep leaves dry to prevent blight and Septoria leaf spot",
+        "Irrigate at the base keep leaves dry to prevent blight and Septoria leaf spot",
         "Harvest when fruits are firm and fully colored; pick every 2–3 days"
       ],
-      "tips": "Stake plants early and remove suckers weekly — this doubles yield per plant."
+      "tips": "Stake plants early and remove suckers weekly this doubles yield per plant."
     },
     "wheat": {
       "requirements": "Well-drained loamy soil · Temp 10–22°C · pH 6.0–7.5 · Cool highland climate",
@@ -577,7 +577,7 @@
         "Apply DAP (100 kg/ha) at sowing; top-dress with urea at tillering stage",
         "Weed carefully at 3 and 6 weeks — wheat loses yield quickly to competition",
         "Scout for stem rust and yellow rust; spray with approved fungicide at first sign",
-        "Avoid excessive nitrogen late in the season — it increases lodging risk",
+        "Avoid excessive nitrogen late in the season it increases lodging risk",
         "Harvest when grain is hard and moisture is below 14 %; thresh and dry promptly"
       ],
       "tips": "Best suited above 1800 m in Rwanda's cool highland zones; use certified rust-resistant seed."
