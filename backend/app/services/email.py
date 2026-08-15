@@ -78,7 +78,7 @@ async def send_welcome_email(to_email: str, full_name: str) -> bool:
               <td style="background:#f9fafb;padding:20px 40px;border-top:1px solid #e5e7eb;text-align:center;">
                 <p style="font-size:12px;color:#9ca3af;margin:0;">
                   &copy; 2026 CropVana · AgriVision &nbsp;|&nbsp;
-                  <a href="https://moussassoss.github.io/agrivision/privacy-policy.html" style="color:#2D6A4F;text-decoration:none;">Privacy Policy</a>
+                  <a href="https://moussassoss.github.io/Agrivision/privacy-policy.html" style="color:#2D6A4F;text-decoration:none;">Privacy Policy</a>
                 </p>
               </td>
             </tr>
@@ -133,7 +133,7 @@ async def send_password_reset_email(to_email: str, full_name: str, otp: str) -> 
               <td style="background:#f9fafb;padding:20px 40px;border-top:1px solid #e5e7eb;text-align:center;">
                 <p style="font-size:12px;color:#9ca3af;margin:0;">
                   &copy; 2026 CropVana · AgriVision &nbsp;|&nbsp;
-                  <a href="https://moussassoss.github.io/agrivision/privacy-policy.html" style="color:#2D6A4F;text-decoration:none;">Privacy Policy</a>
+                  <a href="https://moussassoss.github.io/Agrivision/privacy-policy.html" style="color:#2D6A4F;text-decoration:none;">Privacy Policy</a>
                 </p>
               </td>
             </tr>

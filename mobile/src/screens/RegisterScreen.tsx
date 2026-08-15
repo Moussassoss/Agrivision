@@ -140,14 +140,14 @@ export default function RegisterScreen({ navigation }: any) {
               {t("register.agreePrefix")}{" "}
               <Text
                 style={styles.termsLink}
-                onPress={() => Linking.openURL("https://moussassoss.github.io/agrivision/privacy-policy.html")}
+                onPress={() => Linking.openURL("https://moussassoss.github.io/Agrivision/privacy-policy.html")}
               >
                 {t("register.privacyPolicy")}
               </Text>
               {" "}{t("register.and")}{" "}
               <Text
                 style={styles.termsLink}
-                onPress={() => Linking.openURL("https://moussassoss.github.io/agrivision/terms-of-service.html")}
+                onPress={() => Linking.openURL("https://moussassoss.github.io/Agrivision/terms-of-service.html")}
               >
                 {t("register.termsOfService")}
               </Text>

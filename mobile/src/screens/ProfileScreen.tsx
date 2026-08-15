@@ -329,7 +329,7 @@ export default function ProfileScreen({ navigation }: any) {
           <View style={[styles.infoCard, { backgroundColor: colors.card, borderColor: colors.border, gap: 0 }]}>
             <TouchableOpacity
               style={[styles.legalRow]}
-              onPress={() => Linking.openURL("https://moussassoss.github.io/agrivision/privacy-policy.html")}
+              onPress={() => Linking.openURL("https://moussassoss.github.io/Agrivision/privacy-policy.html")}
             >
               <Text style={styles.settingIcon}>🔒</Text>
               <View style={{ flex: 1 }}>
@@ -343,7 +343,7 @@ export default function ProfileScreen({ navigation }: any) {
 
             <TouchableOpacity
               style={[styles.legalRow]}
-              onPress={() => Linking.openURL("https://moussassoss.github.io/agrivision/terms-of-service.html")}
+              onPress={() => Linking.openURL("https://moussassoss.github.io/Agrivision/terms-of-service.html")}
             >
               <Text style={styles.settingIcon}>📄</Text>
               <View style={{ flex: 1 }}>
