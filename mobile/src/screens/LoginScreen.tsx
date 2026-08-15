@@ -51,7 +51,7 @@ export default function LoginScreen({ navigation }: any) {
         <View style={styles.header}>
           <Text style={styles.logo}>🌱</Text>
           <Text style={styles.title}>CropVana</Text>
-          <Text style={styles.subtitle}>{t("login.subtitle")}</Text>
+          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{t("login.subtitle")}</Text>
         </View>
 
         {/* Form */}
@@ -96,9 +96,9 @@ export default function LoginScreen({ navigation }: any) {
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-            <Text style={styles.linkText}>
+            <Text style={[styles.linkText, { color: colors.textSecondary }]}>
               {t("login.noAccount")}{" "}
-              <Text style={styles.linkBold}>{t("login.signUp")}</Text>
+              <Text style={[styles.linkBold, { color: colors.primary }]}>{t("login.signUp")}</Text>
             </Text>
           </TouchableOpacity>
         </View>

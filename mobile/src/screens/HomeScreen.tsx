@@ -191,9 +191,9 @@ export default function HomeScreen({ navigation }: any) {
 
             <Text style={[styles.sectionTitle, { color: colors.text }]}>{t("home.autoFetchedData")}</Text>
             <View style={styles.sourceRow}>
-              <SourceChip emoji="🛰️" label="iSDAsoil"    sub="N · P · K · pH" color="#E8F5E9" />
-              <SourceChip emoji="🌦️" label="OpenWeather" sub="Temp · Humidity"  color="#E3F2FD" />
-              <SourceChip emoji="🌧️" label="NASA POWER"  sub="Seasonal rain"    color="#FFF8E1" />
+              <SourceChip emoji="🛰️" label="iSDAsoil"    sub="N · P · K · pH" color="#E8F5E9" colors={colors} />
+              <SourceChip emoji="🌦️" label="OpenWeather" sub="Temp · Humidity"  color="#E3F2FD" colors={colors} />
+              <SourceChip emoji="🌧️" label="NASA POWER"  sub="Seasonal rain"    color="#FFF8E1" colors={colors} />
             </View>
 
             <TouchableOpacity
@@ -338,10 +338,10 @@ export default function HomeScreen({ navigation }: any) {
             <Text style={[styles.sectionTitle, { color: colors.text }]}>{t("home.soilDataUsed")}</Text>
             <View style={[styles.dataCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
               <View style={styles.dataGrid}>
-                <DataTile label="N"  value={`${result.soil_used.nitrogen}`}   unit="mg/kg" color="#E8F5E9" />
-                <DataTile label="P"  value={`${result.soil_used.phosphorus}`} unit="mg/kg" color="#E3F2FD" />
-                <DataTile label="K"  value={`${result.soil_used.potassium}`}  unit="mg/kg" color="#FFF8E1" />
-                <DataTile label="pH" value={`${result.soil_used.ph}`}         unit=""      color="#FCE4EC" />
+                <DataTile label="N"  value={`${result.soil_used.nitrogen}`}   unit="mg/kg" color="#E8F5E9" colors={colors} />
+                <DataTile label="P"  value={`${result.soil_used.phosphorus}`} unit="mg/kg" color="#E3F2FD" colors={colors} />
+                <DataTile label="K"  value={`${result.soil_used.potassium}`}  unit="mg/kg" color="#FFF8E1" colors={colors} />
+                <DataTile label="pH" value={`${result.soil_used.ph}`}         unit=""      color="#FCE4EC" colors={colors} />
               </View>
               <Text style={[styles.sourceTag, { color: colors.textMuted }]}>
                 {result.soil_used.source === "isdasoil" ? t("home.soilSourceSatellite") : result.soil_used.source === "manual+isdasoil" ? t("home.soilSourceManualSat") : t("home.soilSourceManual")}
@@ -352,9 +352,9 @@ export default function HomeScreen({ navigation }: any) {
             <Text style={[styles.sectionTitle, { color: colors.text }]}>{t("home.weatherDataUsed")}</Text>
             <View style={[styles.dataCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
               <View style={styles.dataGrid}>
-                <DataTile label="Temp"     value={`${result.weather_used.temperature}`}         unit="°C" color="#E3F2FD" />
-                <DataTile label="Humidity" value={`${result.weather_used.humidity}`}             unit="%"  color="#E8F5E9" />
-                <DataTile label="Rainfall" value={`${Math.round(result.weather_used.rainfall)}`} unit="mm" color="#FFF8E1" />
+                <DataTile label="Temp"     value={`${result.weather_used.temperature}`}         unit="°C" color="#E3F2FD" colors={colors} />
+                <DataTile label="Humidity" value={`${result.weather_used.humidity}`}             unit="%"  color="#E8F5E9" colors={colors} />
+                <DataTile label="Rainfall" value={`${Math.round(result.weather_used.rainfall)}`} unit="mm" color="#FFF8E1" colors={colors} />
               </View>
               <Text style={[styles.sourceTag, { color: colors.textMuted }]}>{t("home.weatherSource")}</Text>
             </View>
@@ -378,18 +378,18 @@ export default function HomeScreen({ navigation }: any) {
   );
 }
 
-const SourceChip = ({ emoji, label, sub, color }: any) => (
+const SourceChip = ({ emoji, label, sub, color, colors }: any) => (
   <View style={[styles.sourceChip, { backgroundColor: color }]}>
     <Text style={styles.sourceEmoji}>{emoji}</Text>
-    <Text style={styles.sourceLabel}>{label}</Text>
-    <Text style={styles.sourceSub}>{sub}</Text>
+    <Text style={[styles.sourceLabel, { color: colors.text }]}>{label}</Text>
+    <Text style={[styles.sourceSub, { color: colors.textSecondary }]}>{sub}</Text>
   </View>
 );
 
-const DataTile = ({ label, value, unit, color }: any) => (
+const DataTile = ({ label, value, unit, color, colors }: any) => (
   <View style={[styles.dataTile, { backgroundColor: color }]}>
-    <Text style={styles.dataTileLabel}>{label}</Text>
-    <Text style={styles.dataTileValue}>{value}<Text style={styles.dataTileUnit}> {unit}</Text></Text>
+    <Text style={[styles.dataTileLabel, { color: colors.textSecondary }]}>{label}</Text>
+    <Text style={[styles.dataTileValue, { color: colors.text }]}>{value}<Text style={[styles.dataTileUnit, { color: colors.textMuted }]}> {unit}</Text></Text>
   </View>
 );
 
