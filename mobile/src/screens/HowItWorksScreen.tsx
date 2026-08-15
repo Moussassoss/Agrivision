@@ -15,7 +15,7 @@ const PIPELINE = [
 ];
 
 const SOURCES = [
-  { icon: "🛰️", name: "iSDAsoil", desc: "howItWorks.sourceIsda",    color: "#E8F5E9" },
+  { icon: "🛰️", name: "iSDAsoil",    desc: "howItWorks.sourceIsda", color: "#E8F5E9" },
   { icon: "🌦️", name: "OpenWeather", desc: "howItWorks.sourceOw",   color: "#E3F2FD" },
   { icon: "🌧️", name: "NASA POWER",  desc: "howItWorks.sourceNasa", color: "#FFF8E1" },
 ];

@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
-  SafeAreaView, StatusBar, Share, Alert,
+  SafeAreaView, StatusBar, Share,
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../context/ThemeContext";
+import AppAlert, { AppAlertConfig } from "../components/AppAlert";
 
 const CROP_EMOJI: Record<string, string> = {
   rice: "🌾", maize: "🌽", kidneybeans: "🫘", blackgram: "🫘",
@@ -21,19 +22,23 @@ export default function ResultScreen({ route, navigation }: any) {
   const { top_crops, soil_used, weather_used, disclaimer } = result;
   const topCrop = top_crops[0];
 
+  const [alertCfg, setAlertCfg] = useState<AppAlertConfig | null>(null);
+  const [alertVisible, setAlertVisible] = useState(false);
+  const showAlert = (cfg: AppAlertConfig) => { setAlertCfg(cfg); setAlertVisible(true); };
+
   const handleShare = async () => {
     const cropName = t(`crops.${topCrop.crop}`, { defaultValue: topCrop.crop });
     try {
       await Share.share({
         message:
-          `🌾 CropVana — ${t("result.shareTitle")}\n\n` +
+          `CropVana — ${t("result.shareTitle")}\n\n` +
           `${t("result.bestCrop")}: ${cropName} (${Math.round(topCrop.confidence * 100)}%)\n` +
-          `📅 ${topCrop.planting_season}\n\n` +
-          `💡 ${topCrop.why}\n\n` +
+          `${topCrop.planting_season}\n\n` +
+          `${topCrop.why}\n\n` +
           `${t("result.shareFooter")}`,
       });
     } catch {
-      Alert.alert(t("common.error"), t("result.shareError"));
+      showAlert({ type: "error", title: t("common.error"), message: t("result.shareError") });
     }
   };
 
@@ -48,13 +53,13 @@ export default function ResultScreen({ route, navigation }: any) {
         </TouchableOpacity>
         <Text style={[styles.topTitle, { color: colors.text }]}>{t("result.title")}</Text>
         <TouchableOpacity onPress={handleShare} style={styles.shareBtn}>
-          <Text style={[styles.shareText, { color: colors.primary }]}>⬆️ {t("result.share")}</Text>
+          <Text style={[styles.shareText, { color: colors.primary }]}>{t("result.share")}</Text>
         </TouchableOpacity>
       </View>
 
       <ScrollView contentContainerStyle={styles.body} showsVerticalScrollIndicator={false}>
 
-        {/* ── Hero — top crop ── */}
+        {/* Hero — top crop */}
         <View style={[styles.heroCard, { backgroundColor: colors.heroBg }]}>
           <Text style={styles.heroEmoji}>{CROP_EMOJI[topCrop.crop] || "🌱"}</Text>
           <Text style={[styles.heroLabel, { color: "rgba(255,255,255,0.65)" }]}>{t("result.bestCrop")}</Text>
@@ -68,11 +73,11 @@ export default function ResultScreen({ route, navigation }: any) {
           </View>
 
           <View style={styles.badge}>
-            <Text style={styles.badgeText}>📅  {topCrop.planting_season}</Text>
+            <Text style={styles.badgeText}>{topCrop.planting_season}</Text>
           </View>
 
           <View style={styles.whyBox}>
-            <Text style={styles.whyText}>💡  {topCrop.why}</Text>
+            <Text style={styles.whyText}>{topCrop.why}</Text>
           </View>
 
           <TouchableOpacity
@@ -83,7 +88,7 @@ export default function ResultScreen({ route, navigation }: any) {
           </TouchableOpacity>
         </View>
 
-        {/* ── Fertilizer advice ── */}
+        {/* Fertilizer advice */}
         {topCrop.fertilizer && (
           <>
             <Text style={[styles.sectionTitle, { color: colors.text }]}>{t("result.fertilizerTitle")}</Text>
@@ -101,14 +106,14 @@ export default function ResultScreen({ route, navigation }: any) {
               })}
               <View style={[styles.fertNote, { backgroundColor: colors.primarySurface }]}>
                 <Text style={[styles.fertNoteText, { color: colors.primary }]}>
-                  ℹ️  {topCrop.fertilizer.note}
+                  {topCrop.fertilizer.note}
                 </Text>
               </View>
             </View>
           </>
         )}
 
-        {/* ── Other options ── */}
+        {/* Other options */}
         {top_crops.length > 1 && (
           <>
             <Text style={[styles.sectionTitle, { color: colors.text }]}>{t("result.otherOptions")}</Text>
@@ -134,7 +139,7 @@ export default function ResultScreen({ route, navigation }: any) {
           </>
         )}
 
-        {/* ── Soil data ── */}
+        {/* Soil data */}
         <Text style={[styles.sectionTitle, { color: colors.text }]}>{t("result.soilDataUsed")}</Text>
         <View style={[styles.dataCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
           <View style={styles.dataGrid}>
@@ -148,7 +153,7 @@ export default function ResultScreen({ route, navigation }: any) {
           </Text>
         </View>
 
-        {/* ── Weather data ── */}
+        {/* Weather data */}
         <Text style={[styles.sectionTitle, { color: colors.text }]}>{t("result.weatherDataUsed")}</Text>
         <View style={[styles.dataCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
           <View style={styles.dataGrid}>
@@ -161,12 +166,12 @@ export default function ResultScreen({ route, navigation }: any) {
           </Text>
         </View>
 
-        {/* ── Disclaimer ── */}
+        {/* Disclaimer */}
         <View style={styles.disclaimer}>
-          <Text style={styles.disclaimerText}>⚠️  {disclaimer}</Text>
+          <Text style={styles.disclaimerText}>{disclaimer}</Text>
         </View>
 
-        {/* ── Actions ── */}
+        {/* Actions */}
         <TouchableOpacity style={[styles.primaryBtn, { backgroundColor: colors.primary }]} onPress={() => navigation.popToTop()}>
           <Text style={styles.primaryBtnText}>{t("result.newRecommendation")}</Text>
         </TouchableOpacity>
@@ -176,6 +181,8 @@ export default function ResultScreen({ route, navigation }: any) {
         </TouchableOpacity>
 
       </ScrollView>
+
+      <AppAlert visible={alertVisible} config={alertCfg} onDismiss={() => setAlertVisible(false)} />
     </SafeAreaView>
   );
 }
@@ -193,7 +200,7 @@ const styles = StyleSheet.create({
   backBtn: { width: 60 },
   backText:{ fontSize: 17, fontWeight: "600" },
   topTitle:{ fontSize: 16, fontWeight: "700" },
-  shareBtn:{ alignItems: "flex-end" },
+  shareBtn:{ alignItems: "flex-end", width: 60 },
   shareText:{ fontSize: 13, fontWeight: "600" },
 
   body: { padding: 20, gap: 14, paddingBottom: 48 },
@@ -215,11 +222,11 @@ const styles = StyleSheet.create({
 
   sectionTitle: { fontSize: 17, fontWeight: "700", marginBottom: -4 },
 
-  fertCard: { borderRadius: 14, padding: 14, borderWidth: 0.5, gap: 10 },
-  fertRow:  { flexDirection: "row", alignItems: "flex-start", gap: 10 },
-  fertDot:  { fontSize: 15, fontWeight: "700", marginTop: 1, width: 18 },
-  fertText: { fontSize: 13, lineHeight: 20, flex: 1 },
-  fertNote: { borderRadius: 10, padding: 12, marginTop: 4 },
+  fertCard:     { borderRadius: 14, padding: 14, borderWidth: 0.5, gap: 10 },
+  fertRow:      { flexDirection: "row", alignItems: "flex-start", gap: 10 },
+  fertDot:      { fontSize: 15, fontWeight: "700", marginTop: 1, width: 18 },
+  fertText:     { fontSize: 13, lineHeight: 20, flex: 1 },
+  fertNote:     { borderRadius: 10, padding: 12, marginTop: 4 },
   fertNoteText: { fontSize: 12, lineHeight: 18, fontWeight: "500" },
 
   altRow:   { flexDirection: "row", gap: 10 },

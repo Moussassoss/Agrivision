@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
   View, Text, TextInput, TouchableOpacity, StyleSheet,
-  ActivityIndicator, Alert, ScrollView, StatusBar, SafeAreaView, Animated, Linking,
+  ActivityIndicator, ScrollView, StatusBar, SafeAreaView, Animated, Linking,
 } from "react-native";
 import * as Location from "expo-location";
 import { useTranslation } from "react-i18next";
@@ -10,6 +10,8 @@ import { useLanguage } from "../context/LanguageContext";
 import { useTheme } from "../context/ThemeContext";
 import { getRecommendation } from "../services/api";
 import { Skeleton } from "../components/Skeleton";
+import AppAlert, { AppAlertConfig } from "../components/AppAlert";
+import { Ionicons } from "@expo/vector-icons";
 
 const CROP_EMOJI: Record<string, string> = {
   rice: "🌾", maize: "🌽", kidneybeans: "🫘", blackgram: "🫘",
@@ -33,6 +35,10 @@ export default function HomeScreen({ navigation }: any) {
   const [soilOverride, setSoilOverride]         = useState({ nitrogen: "", phosphorus: "", potassium: "", ph: "" });
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
+  const [alertCfg, setAlertCfg] = useState<AppAlertConfig | null>(null);
+  const [alertVisible, setAlertVisible] = useState(false);
+  const showAlert = (cfg: AppAlertConfig) => { setAlertCfg(cfg); setAlertVisible(true); };
+
   useEffect(() => { requestLocation(); }, []);
 
   useEffect(() => {
@@ -45,25 +51,23 @@ export default function HomeScreen({ navigation }: any) {
   const requestLocation = async () => {
     setLoadingLocation(true);
     try {
-      // Check current permission status before requesting
       const { status: existing } = await Location.getForegroundPermissionsAsync();
 
       if (existing === "denied") {
-        // OS won't re-show the dialog — send user to device Settings
-        Alert.alert(
-          t("home.locationRequired"),
-          t("home.locationDeniedMsg"),
-          [
-            { text: t("common.cancel"), style: "cancel" },
-            { text: t("home.openSettings"), onPress: () => Linking.openSettings() },
-          ]
-        );
+        showAlert({
+          type: "warning",
+          title: t("home.locationRequired"),
+          message: t("home.locationDeniedMsg"),
+          confirmText: t("home.openSettings"),
+          cancelText: t("common.cancel"),
+          onConfirm: () => Linking.openSettings(),
+        });
         return;
       }
 
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
-        Alert.alert(t("home.locationRequired"), t("home.locationRequiredMsg"));
+        showAlert({ type: "warning", title: t("home.locationRequired"), message: t("home.locationRequiredMsg") });
         return;
       }
 
@@ -77,14 +81,17 @@ export default function HomeScreen({ navigation }: any) {
         setLocationName([p.district, p.city, p.country].filter(Boolean).join(", "));
       }
     } catch {
-      Alert.alert(t("common.error"), t("home.locationError"));
+      showAlert({ type: "error", title: t("common.error"), message: t("home.locationError") });
     } finally {
       setLoadingLocation(false);
     }
   };
 
   const handleGetRecommendation = async () => {
-    if (!location) { Alert.alert(t("home.noLocation"), t("home.noLocationMsg")); return; }
+    if (!location) {
+      showAlert({ type: "warning", title: t("home.noLocation"), message: t("home.noLocationMsg") });
+      return;
+    }
     setLoadingRec(true);
     setResult(null);
     try {
@@ -97,7 +104,7 @@ export default function HomeScreen({ navigation }: any) {
       const data = await getRecommendation(location.lat, location.lon, hasOverride ? override : undefined, language);
       setResult(data);
     } catch (e: any) {
-      Alert.alert(t("common.error"), e?.response?.data?.detail || t("home.recError"));
+      showAlert({ type: "error", title: t("common.error"), message: e?.response?.data?.detail || t("home.recError") });
     } finally {
       setLoadingRec(false);
     }
@@ -135,7 +142,9 @@ export default function HomeScreen({ navigation }: any) {
         </View>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
           <TouchableOpacity onPress={toggleLanguage} style={[styles.langBtn, { backgroundColor: colors.primarySurface }]}>
-            <Text style={[styles.langBtnText, { color: colors.primary }]}>🌐 {t("language.switchTo")}</Text>
+            <Text style={[styles.langBtnText, { color: colors.primary }]}>
+              {language === "en" ? "🇷🇼" : "🇬🇧"} {t("language.switchTo")}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate("Profile")} style={[styles.avatarBtn, { backgroundColor: colors.primarySurface }]}>
             <Text style={[styles.avatarText, { color: colors.primary }]}>
@@ -147,7 +156,7 @@ export default function HomeScreen({ navigation }: any) {
 
       <ScrollView contentContainerStyle={styles.body} showsVerticalScrollIndicator={false}>
 
-        {/* ── Loading skeleton ── */}
+        {/* Loading skeleton */}
         {loadingRec && (
           <View style={{ gap: 14 }}>
             <View style={[styles.heroCard, { backgroundColor: colors.heroBg, height: 280, justifyContent: "center", alignItems: "center", gap: 16 }]}>
@@ -164,7 +173,7 @@ export default function HomeScreen({ navigation }: any) {
           </View>
         )}
 
-        {/* ── No result yet ── */}
+        {/* No result yet */}
         {!result && !loadingRec && (
           <>
             <View style={[styles.heroCard, { backgroundColor: colors.heroBg }]}>
@@ -191,9 +200,9 @@ export default function HomeScreen({ navigation }: any) {
 
             <Text style={[styles.sectionTitle, { color: colors.text }]}>{t("home.autoFetchedData")}</Text>
             <View style={styles.sourceRow}>
-              <SourceChip emoji="🛰️" label="iSDAsoil"    sub="N · P · K · pH" color="#E8F5E9" colors={colors} />
-              <SourceChip emoji="🌦️" label="OpenWeather" sub="Temp · Humidity"  color="#E3F2FD" colors={colors} />
-              <SourceChip emoji="🌧️" label="NASA POWER"  sub="Seasonal rain"    color="#FFF8E1" colors={colors} />
+              <SourceChip label="iSDAsoil"    sub="N · P · K · pH" color="#E8F5E9" colors={colors} abbr="S" />
+              <SourceChip label="OpenWeather" sub="Temp · Humidity"  color="#E3F2FD" colors={colors} abbr="W" />
+              <SourceChip label="NASA POWER"  sub="Seasonal rain"    color="#FFF8E1" colors={colors} abbr="N" />
             </View>
 
             <TouchableOpacity
@@ -249,7 +258,9 @@ export default function HomeScreen({ navigation }: any) {
               activeOpacity={0.7}
             >
               <View style={styles.historyLeft}>
-                <Text style={styles.historyEmoji}>📋</Text>
+                <View style={[styles.historyIconBox, { backgroundColor: colors.primarySurface }]}>
+                  <Ionicons name="time" size={22} color={colors.primary} />
+                </View>
                 <View>
                   <Text style={[styles.historyTitle, { color: colors.text }]}>{t("home.pastRecs")}</Text>
                   <Text style={[styles.historySub, { color: colors.textSecondary }]}>{t("home.viewHistory")}</Text>
@@ -260,7 +271,7 @@ export default function HomeScreen({ navigation }: any) {
           </>
         )}
 
-        {/* ── Result view ── */}
+        {/* Result view */}
         {result && !loadingRec && (
           <Animated.View style={{ opacity: fadeAnim, gap: 14 }}>
 
@@ -281,10 +292,10 @@ export default function HomeScreen({ navigation }: any) {
                   </Text>
                 </View>
                 <View style={styles.badge}>
-                  <Text style={styles.badgeText}>📅  {topCrop.planting_season}</Text>
+                  <Text style={styles.badgeText}>{topCrop.planting_season}</Text>
                 </View>
                 <View style={styles.whyBox}>
-                  <Text style={styles.whyText}>💡  {topCrop.why}</Text>
+                  <Text style={styles.whyText}>{topCrop.why}</Text>
                 </View>
                 <TouchableOpacity
                   style={styles.guideBtn}
@@ -310,7 +321,7 @@ export default function HomeScreen({ navigation }: any) {
                     );
                   })}
                   <View style={[styles.fertNote, { backgroundColor: colors.primarySurface }]}>
-                    <Text style={[styles.fertNoteText, { color: colors.primary }]}>ℹ️  {topCrop.fertilizer.note}</Text>
+                    <Text style={[styles.fertNoteText, { color: colors.primary }]}>{topCrop.fertilizer.note}</Text>
                   </View>
                 </View>
               </>
@@ -371,16 +382,20 @@ export default function HomeScreen({ navigation }: any) {
 
       {/* Bottom tab bar */}
       <View style={[styles.tabBar, { borderTopColor: colors.borderLight, backgroundColor: colors.tabBar }]}>
-        <TabItem emoji="🏠" label={t("common.home")} active colors={colors} />
-        <TabItem emoji="📋" label={t("common.history")} colors={colors} onPress={() => navigation.navigate("History")} />
+        <TabItem icon="home" label={t("common.home")} active colors={colors} />
+        <TabItem icon="time" label={t("common.history")} colors={colors} onPress={() => navigation.navigate("History")} />
       </View>
+
+      <AppAlert visible={alertVisible} config={alertCfg} onDismiss={() => setAlertVisible(false)} />
     </SafeAreaView>
   );
 }
 
-const SourceChip = ({ emoji, label, sub, color, colors }: any) => (
+const SourceChip = ({ label, sub, color, colors, abbr }: any) => (
   <View style={[styles.sourceChip, { backgroundColor: color }]}>
-    <Text style={styles.sourceEmoji}>{emoji}</Text>
+    <View style={[styles.sourceAbbrCircle, { backgroundColor: "rgba(0,0,0,0.08)" }]}>
+      <Text style={[styles.sourceAbbrText, { color: colors.text }]}>{abbr}</Text>
+    </View>
     <Text style={[styles.sourceLabel, { color: colors.text }]}>{label}</Text>
     <Text style={[styles.sourceSub, { color: colors.textSecondary }]}>{sub}</Text>
   </View>
@@ -393,9 +408,13 @@ const DataTile = ({ label, value, unit, color, colors }: any) => (
   </View>
 );
 
-const TabItem = ({ emoji, label, active, onPress, colors }: any) => (
+const TabItem = ({ icon, label, active, onPress, colors }: any) => (
   <TouchableOpacity style={styles.tabItem} onPress={onPress}>
-    <Text style={styles.tabEmoji}>{emoji}</Text>
+    <Ionicons
+      name={active ? icon : `${icon}-outline` as any}
+      size={22}
+      color={active ? colors.accent : colors.textMuted}
+    />
     <Text style={[styles.tabLabel, { color: active ? colors.accent : colors.textMuted }]}>{label}</Text>
   </TouchableOpacity>
 );
@@ -428,11 +447,12 @@ const styles = StyleSheet.create({
 
   sectionTitle:    { fontSize: 17, fontWeight: "700", marginBottom: -4 },
 
-  sourceRow:       { flexDirection: "row", gap: 10 },
-  sourceChip:      { flex: 1, borderRadius: 14, padding: 12, alignItems: "center", gap: 4 },
-  sourceEmoji:     { fontSize: 20 },
-  sourceLabel:     { fontSize: 11, fontWeight: "700", color: "#1a1a1a", textAlign: "center" },
-  sourceSub:       { fontSize: 10, color: "#666", textAlign: "center" },
+  sourceRow:          { flexDirection: "row", gap: 10 },
+  sourceChip:         { flex: 1, borderRadius: 14, padding: 12, alignItems: "center", gap: 4 },
+  sourceAbbrCircle:   { width: 32, height: 32, borderRadius: 16, alignItems: "center", justifyContent: "center" },
+  sourceAbbrText:     { fontSize: 13, fontWeight: "800" },
+  sourceLabel:        { fontSize: 11, fontWeight: "700", textAlign: "center" },
+  sourceSub:          { fontSize: 10, textAlign: "center" },
 
   overrideHeader:  { flexDirection: "row", justifyContent: "space-between", alignItems: "center", borderRadius: 14, padding: 16, borderWidth: 0.5 },
   overrideTitle:   { fontSize: 15, fontWeight: "700", marginBottom: 2 },
@@ -447,12 +467,12 @@ const styles = StyleSheet.create({
   clearBtn:        { alignSelf: "center", paddingVertical: 6, paddingHorizontal: 16, borderRadius: 20, borderWidth: 0.5 },
   clearBtnText:    { fontSize: 12 },
 
-  historyCard:     { flexDirection: "row", alignItems: "center", justifyContent: "space-between", borderRadius: 14, padding: 16, borderWidth: 0.5 },
-  historyLeft:     { flexDirection: "row", alignItems: "center", gap: 12 },
-  historyEmoji:    { fontSize: 28 },
-  historyTitle:    { fontSize: 15, fontWeight: "700", marginBottom: 2 },
-  historySub:      { fontSize: 12 },
-  historyChevron:  { fontSize: 22, fontWeight: "700" },
+  historyCard:    { flexDirection: "row", alignItems: "center", justifyContent: "space-between", borderRadius: 14, padding: 16, borderWidth: 0.5 },
+  historyLeft:    { flexDirection: "row", alignItems: "center", gap: 12 },
+  historyIconBox: { width: 44, height: 44, borderRadius: 12, alignItems: "center", justifyContent: "center" },
+  historyTitle:   { fontSize: 15, fontWeight: "700", marginBottom: 2 },
+  historySub:     { fontSize: 12 },
+  historyChevron: { fontSize: 22, fontWeight: "700" },
 
   barBg:           { width: "100%", height: 8, backgroundColor: "rgba(255,255,255,0.2)", borderRadius: 4, overflow: "hidden" },
   barFill:         { height: "100%", backgroundColor: "#95D5B2", borderRadius: 4 },
@@ -463,11 +483,11 @@ const styles = StyleSheet.create({
   guideBtn:        { backgroundColor: "rgba(255,255,255,0.15)", borderRadius: 12, paddingVertical: 10, paddingHorizontal: 20, borderWidth: 0.5, borderColor: "rgba(255,255,255,0.3)" },
   guideBtnText:    { color: "#fff", fontWeight: "700", fontSize: 13, textAlign: "center" },
 
-  fertCard: { borderRadius: 14, padding: 14, borderWidth: 0.5, gap: 10 },
-  fertRow:  { flexDirection: "row", alignItems: "flex-start", gap: 10 },
-  fertDot:  { fontSize: 15, fontWeight: "700", marginTop: 1, width: 18 },
-  fertText: { fontSize: 13, lineHeight: 20, flex: 1 },
-  fertNote: { borderRadius: 10, padding: 12, marginTop: 4 },
+  fertCard:     { borderRadius: 14, padding: 14, borderWidth: 0.5, gap: 10 },
+  fertRow:      { flexDirection: "row", alignItems: "flex-start", gap: 10 },
+  fertDot:      { fontSize: 15, fontWeight: "700", marginTop: 1, width: 18 },
+  fertText:     { fontSize: 13, lineHeight: 20, flex: 1 },
+  fertNote:     { borderRadius: 10, padding: 12, marginTop: 4 },
   fertNoteText: { fontSize: 12, lineHeight: 18, fontWeight: "500" },
 
   altRow:          { flexDirection: "row", gap: 10 },
@@ -479,9 +499,9 @@ const styles = StyleSheet.create({
   dataCard:        { borderRadius: 14, padding: 14, borderWidth: 0.5, gap: 12 },
   dataGrid:        { flexDirection: "row", flexWrap: "wrap", gap: 10 },
   dataTile:        { width: "47%", borderRadius: 12, padding: 12, gap: 4 },
-  dataTileLabel:   { fontSize: 11, color: "#666", fontWeight: "500" },
-  dataTileValue:   { fontSize: 18, fontWeight: "700", color: "#1a1a1a" },
-  dataTileUnit:    { fontSize: 12, fontWeight: "400", color: "#888" },
+  dataTileLabel:   { fontSize: 11, fontWeight: "500" },
+  dataTileValue:   { fontSize: 18, fontWeight: "700" },
+  dataTileUnit:    { fontSize: 12, fontWeight: "400" },
   sourceTag:       { fontSize: 11, textAlign: "right" },
 
   primaryBtn:      { borderRadius: 14, padding: 16, alignItems: "center" },
@@ -489,8 +509,7 @@ const styles = StyleSheet.create({
   secondaryBtn:    { borderRadius: 14, padding: 14, alignItems: "center", borderWidth: 0.5 },
   secondaryBtnText:{ fontWeight: "600", fontSize: 14 },
 
-  tabBar:          { flexDirection: "row", borderTopWidth: 0.5, paddingBottom: 24, paddingTop: 10 },
-  tabItem:         { flex: 1, alignItems: "center", gap: 3 },
-  tabEmoji:        { fontSize: 20 },
-  tabLabel:        { fontSize: 11, fontWeight: "600" },
+  tabBar:   { flexDirection: "row", borderTopWidth: 0.5, paddingBottom: 24, paddingTop: 10 },
+  tabItem:  { flex: 1, alignItems: "center", gap: 2 },
+  tabLabel: { fontSize: 11, fontWeight: "600" },
 });

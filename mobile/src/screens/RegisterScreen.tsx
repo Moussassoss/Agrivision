@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
-  Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -15,6 +14,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
+import AppAlert, { AppAlertConfig } from "../components/AppAlert";
 
 export default function RegisterScreen({ navigation }: any) {
   const { t } = useTranslation();
@@ -28,21 +28,25 @@ export default function RegisterScreen({ navigation }: any) {
   const [loading, setLoading]       = useState(false);
   const [termsAccepted, setTerms]   = useState(false);
 
+  const [alertCfg, setAlertCfg] = useState<AppAlertConfig | null>(null);
+  const [alertVisible, setAlertVisible] = useState(false);
+  const showAlert = (cfg: AppAlertConfig) => { setAlertCfg(cfg); setAlertVisible(true); };
+
   const handleRegister = async () => {
     if (!fullName || !email || !password || !confirm) {
-      Alert.alert(t("common.error"), t("register.fillRequired"));
+      showAlert({ type: "warning", title: t("common.error"), message: t("register.fillRequired") });
       return;
     }
     if (!termsAccepted) {
-      Alert.alert(t("common.error"), t("register.mustAcceptTerms"));
+      showAlert({ type: "warning", title: t("common.error"), message: t("register.mustAcceptTerms") });
       return;
     }
     if (password !== confirm) {
-      Alert.alert(t("common.error"), t("register.passwordMismatch"));
+      showAlert({ type: "warning", title: t("common.error"), message: t("register.passwordMismatch") });
       return;
     }
     if (password.length < 8) {
-      Alert.alert(t("common.error"), t("register.passwordTooShort"));
+      showAlert({ type: "warning", title: t("common.error"), message: t("register.passwordTooShort") });
       return;
     }
     setLoading(true);
@@ -54,10 +58,11 @@ export default function RegisterScreen({ navigation }: any) {
         phone:     phone.trim() || undefined,
       });
     } catch (e: any) {
-      Alert.alert(
-        t("register.registrationFailed"),
-        e?.response?.data?.detail || t("register.somethingWentWrong")
-      );
+      showAlert({
+        type: "error",
+        title: t("register.registrationFailed"),
+        message: e?.response?.data?.detail || t("register.somethingWentWrong"),
+      });
     } finally {
       setLoading(false);
     }
@@ -68,7 +73,9 @@ export default function RegisterScreen({ navigation }: any) {
       <ScrollView contentContainerStyle={[styles.container, { backgroundColor: colors.surface }]}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.logo}>🌱</Text>
+          <View style={[styles.logoCircle, { backgroundColor: colors.primary }]}>
+            <Text style={styles.logoSymbol}>C</Text>
+          </View>
           <Text style={[styles.title, { color: colors.primary }]}>{t("register.title")}</Text>
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{t("register.subtitle")}</Text>
         </View>
@@ -164,27 +171,30 @@ export default function RegisterScreen({ navigation }: any) {
           </TouchableOpacity>
         </View>
       </ScrollView>
+
+      <AppAlert visible={alertVisible} config={alertCfg} onDismiss={() => setAlertVisible(false)} />
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  container:       { flexGrow: 1, justifyContent: "center", padding: 24 },
-  header:          { alignItems: "center", marginBottom: 32 },
-  logo:            { fontSize: 56, marginBottom: 8 },
-  title:           { fontSize: 28, fontWeight: "bold" },
-  subtitle:        { fontSize: 14, marginTop: 4 },
-  form:            { borderRadius: 16, padding: 24, borderWidth: 0.5, shadowColor: "#000", shadowOpacity: 0.06, shadowRadius: 10, elevation: 3 },
-  label:           { fontSize: 14, fontWeight: "600", marginBottom: 6, marginTop: 12 },
-  input:           { borderWidth: 1, borderRadius: 10, padding: 14, fontSize: 15 },
-  button:          { backgroundColor: "#2D6A4F", borderRadius: 12, padding: 16, alignItems: "center", marginTop: 24 },
-  buttonDisabled:  { opacity: 0.6 },
-  buttonText:      { color: "#fff", fontWeight: "bold", fontSize: 16 },
-  termsRow:        { flexDirection: "row", alignItems: "flex-start", gap: 10, marginTop: 20, marginBottom: 4 },
-  checkbox:        { width: 20, height: 20, borderRadius: 5, borderWidth: 1.5, alignItems: "center", justifyContent: "center", marginTop: 1, flexShrink: 0 },
-  checkmark:       { color: "#fff", fontSize: 13, fontWeight: "700", lineHeight: 15 },
-  termsText:       { flex: 1, fontSize: 13, lineHeight: 19 },
-  termsLink:       { fontWeight: "600", textDecorationLine: "underline" },
-  linkText:        { textAlign: "center", fontSize: 14, marginTop: 20 },
-  linkBold:        { fontWeight: "bold" },
+  container:      { flexGrow: 1, justifyContent: "center", padding: 24 },
+  header:         { alignItems: "center", marginBottom: 32 },
+  logoCircle:     { width: 72, height: 72, borderRadius: 36, alignItems: "center", justifyContent: "center", marginBottom: 12 },
+  logoSymbol:     { fontSize: 32, fontWeight: "800", color: "#fff" },
+  title:          { fontSize: 28, fontWeight: "bold" },
+  subtitle:       { fontSize: 14, marginTop: 4 },
+  form:           { borderRadius: 16, padding: 24, borderWidth: 0.5, shadowColor: "#000", shadowOpacity: 0.06, shadowRadius: 10, elevation: 3 },
+  label:          { fontSize: 14, fontWeight: "600", marginBottom: 6, marginTop: 12 },
+  input:          { borderWidth: 1, borderRadius: 10, padding: 14, fontSize: 15 },
+  button:         { backgroundColor: "#2D6A4F", borderRadius: 12, padding: 16, alignItems: "center", marginTop: 24 },
+  buttonDisabled: { opacity: 0.6 },
+  buttonText:     { color: "#fff", fontWeight: "bold", fontSize: 16 },
+  termsRow:       { flexDirection: "row", alignItems: "flex-start", gap: 10, marginTop: 20, marginBottom: 4 },
+  checkbox:       { width: 20, height: 20, borderRadius: 5, borderWidth: 1.5, alignItems: "center", justifyContent: "center", marginTop: 1, flexShrink: 0 },
+  checkmark:      { color: "#fff", fontSize: 13, fontWeight: "700", lineHeight: 15 },
+  termsText:      { flex: 1, fontSize: 13, lineHeight: 19 },
+  termsLink:      { fontWeight: "600", textDecorationLine: "underline" },
+  linkText:       { textAlign: "center", fontSize: 14, marginTop: 20 },
+  linkBold:       { fontWeight: "bold" },
 });

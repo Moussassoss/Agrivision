@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
-  Alert, SafeAreaView, StatusBar, RefreshControl,
+  SafeAreaView, StatusBar, RefreshControl,
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../context/ThemeContext";
 import { getHistory } from "../services/api";
 import { SkeletonCard, Skeleton } from "../components/Skeleton";
+import AppAlert, { AppAlertConfig } from "../components/AppAlert";
+import { Ionicons } from "@expo/vector-icons";
 
 const CROP_EMOJI: Record<string, string> = {
   rice: "🌾", maize: "🌽", kidneybeans: "🫘", blackgram: "🫘",
@@ -23,12 +25,16 @@ export default function HistoryScreen({ navigation }: any) {
   const [loading, setLoading]       = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
+  const [alertCfg, setAlertCfg] = useState<AppAlertConfig | null>(null);
+  const [alertVisible, setAlertVisible] = useState(false);
+  const showAlert = (cfg: AppAlertConfig) => { setAlertCfg(cfg); setAlertVisible(true); };
+
   const fetchHistory = async (isRefresh = false) => {
     if (isRefresh) setRefreshing(true); else setLoading(true);
     try {
       setRecords(await getHistory(20));
     } catch (e: any) {
-      Alert.alert(t("common.error"), e?.response?.data?.detail || t("history.loadError"));
+      showAlert({ type: "error", title: t("common.error"), message: e?.response?.data?.detail || t("history.loadError") });
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -52,17 +58,19 @@ export default function HistoryScreen({ navigation }: any) {
         <View style={{ width: 60 }} />
       </View>
 
-      {/* ── Skeleton loading ── */}
+      {/* Skeleton loading */}
       {loading ? (
         <ScrollView contentContainerStyle={styles.body}>
           <Skeleton width="35%" height={13} borderRadius={6} />
           {[1, 2, 3].map(i => <SkeletonCard key={i} style={{ borderColor: colors.border }} />)}
         </ScrollView>
 
-      /* ── Empty ── */
+      /* Empty */
       ) : records.length === 0 ? (
         <View style={styles.centered}>
-          <Text style={styles.emptyEmoji}>🌱</Text>
+          <View style={[styles.emptyIcon, { backgroundColor: colors.primarySurface }]}>
+            <Text style={[styles.emptyIconText, { color: colors.primary }]}>—</Text>
+          </View>
           <Text style={[styles.emptyTitle, { color: colors.text }]}>{t("history.emptyTitle")}</Text>
           <Text style={[styles.emptySubtitle, { color: colors.textSecondary }]}>{t("history.emptySubtitle")}</Text>
           <TouchableOpacity style={[styles.emptyBtn, { backgroundColor: colors.primary }]} onPress={() => navigation.goBack()}>
@@ -70,7 +78,7 @@ export default function HistoryScreen({ navigation }: any) {
           </TouchableOpacity>
         </View>
 
-      /* ── List ── */
+      /* List */
       ) : (
         <ScrollView
           contentContainerStyle={styles.body}
@@ -129,8 +137,8 @@ export default function HistoryScreen({ navigation }: any) {
 
                 <View style={[styles.metaRow, { borderTopColor: colors.border }]}>
                   <MetaChip icon="📍" value={`${record.latitude.toFixed(3)}, ${record.longitude.toFixed(3)}`} colors={colors} />
-                  <MetaChip icon="🌡️" value={`${record.weather.temperature}°C`} colors={colors} />
-                  <MetaChip icon="🌧️" value={`${Math.round(record.weather.rainfall)}mm`} colors={colors} />
+                  <MetaChip label="Temp" value={`${record.weather.temperature}°C`} colors={colors} />
+                  <MetaChip label="Rain" value={`${Math.round(record.weather.rainfall)}mm`} colors={colors} />
                 </View>
 
                 <Text style={[styles.viewArrow, { color: colors.accent }]}>{t("history.viewDetails")}</Text>
@@ -141,23 +149,30 @@ export default function HistoryScreen({ navigation }: any) {
       )}
 
       <View style={[styles.tabBar, { borderTopColor: colors.borderLight, backgroundColor: colors.tabBar }]}>
-        <TabItem emoji="🏠" label={t("common.home")} colors={colors} onPress={() => navigation.navigate("Home")} />
-        <TabItem emoji="📋" label={t("common.history")} active colors={colors} />
+        <TabItem icon="home" label={t("common.home")} colors={colors} onPress={() => navigation.navigate("Home")} />
+        <TabItem icon="time" label={t("common.history")} active colors={colors} />
       </View>
+
+      <AppAlert visible={alertVisible} config={alertCfg} onDismiss={() => setAlertVisible(false)} />
     </SafeAreaView>
   );
 }
 
-const MetaChip = ({ icon, value, colors }: any) => (
+const MetaChip = ({ icon, label, value, colors }: any) => (
   <View style={[styles.metaChip, { backgroundColor: colors.background, borderColor: colors.border }]}>
-    <Text style={styles.metaIcon}>{icon}</Text>
+    {icon ? <Text style={styles.metaIcon}>{icon}</Text> : null}
+    {label ? <Text style={[styles.metaLabel, { color: colors.textMuted }]}>{label}</Text> : null}
     <Text style={[styles.metaValue, { color: colors.textSecondary }]}>{value}</Text>
   </View>
 );
 
-const TabItem = ({ emoji, label, active, onPress, colors }: any) => (
+const TabItem = ({ icon, label, active, onPress, colors }: any) => (
   <TouchableOpacity style={styles.tabItem} onPress={onPress}>
-    <Text style={styles.tabEmoji}>{emoji}</Text>
+    <Ionicons
+      name={active ? icon : `${icon}-outline` as any}
+      size={22}
+      color={active ? colors.accent : colors.textMuted}
+    />
     <Text style={[styles.tabLabel, { color: active ? colors.accent : colors.textMuted }]}>{label}</Text>
   </TouchableOpacity>
 );
@@ -170,7 +185,8 @@ const styles = StyleSheet.create({
   topTitle:{ fontSize: 16, fontWeight: "700" },
 
   centered:      { flex: 1, justifyContent: "center", alignItems: "center", padding: 32, gap: 12 },
-  emptyEmoji:    { fontSize: 56 },
+  emptyIcon:     { width: 72, height: 72, borderRadius: 36, alignItems: "center", justifyContent: "center" },
+  emptyIconText: { fontSize: 28, fontWeight: "700" },
   emptyTitle:    { fontSize: 20, fontWeight: "700", textAlign: "center" },
   emptySubtitle: { fontSize: 14, textAlign: "center", lineHeight: 21 },
   emptyBtn:      { borderRadius: 30, paddingVertical: 13, paddingHorizontal: 28, marginTop: 8 },
@@ -196,14 +212,14 @@ const styles = StyleSheet.create({
   otherChip:    { borderRadius: 20, paddingHorizontal: 10, paddingVertical: 4, borderWidth: 0.5 },
   otherChipText:{ fontSize: 12, fontWeight: "500" },
 
-  metaRow:  { flexDirection: "row", flexWrap: "wrap", gap: 6, paddingTop: 6, borderTopWidth: 0.5 },
-  metaChip: { flexDirection: "row", alignItems: "center", gap: 4, borderRadius: 20, paddingHorizontal: 10, paddingVertical: 4, borderWidth: 0.5 },
-  metaIcon: { fontSize: 11 },
-  metaValue:{ fontSize: 11, fontWeight: "500" },
-  viewArrow:{ fontSize: 12, fontWeight: "600", textAlign: "right" },
+  metaRow:   { flexDirection: "row", flexWrap: "wrap", gap: 6, paddingTop: 6, borderTopWidth: 0.5 },
+  metaChip:  { flexDirection: "row", alignItems: "center", gap: 4, borderRadius: 20, paddingHorizontal: 10, paddingVertical: 4, borderWidth: 0.5 },
+  metaIcon:  { fontSize: 11 },
+  metaLabel: { fontSize: 10, fontWeight: "600" },
+  metaValue: { fontSize: 11, fontWeight: "500" },
+  viewArrow: { fontSize: 12, fontWeight: "600", textAlign: "right" },
 
   tabBar:  { flexDirection: "row", borderTopWidth: 0.5, paddingBottom: 24, paddingTop: 10 },
-  tabItem: { flex: 1, alignItems: "center", gap: 3 },
-  tabEmoji:{ fontSize: 20 },
+  tabItem: { flex: 1, alignItems: "center", gap: 2 },
   tabLabel:{ fontSize: 11, fontWeight: "600" },
 });

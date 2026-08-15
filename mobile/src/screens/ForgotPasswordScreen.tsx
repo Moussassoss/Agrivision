@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
-  Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -14,6 +13,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../context/ThemeContext";
 import { forgotPassword, resetPassword } from "../services/api";
+import AppAlert, { AppAlertConfig } from "../components/AppAlert";
 
 export default function ForgotPasswordScreen({ navigation }: any) {
   const { t } = useTranslation();
@@ -25,21 +25,27 @@ export default function ForgotPasswordScreen({ navigation }: any) {
   const [confirm, setConfirm]         = useState("");
   const [loading, setLoading]         = useState(false);
 
+  const [alertCfg, setAlertCfg] = useState<AppAlertConfig | null>(null);
+  const [alertVisible, setAlertVisible] = useState(false);
+  const showAlert = (cfg: AppAlertConfig) => { setAlertCfg(cfg); setAlertVisible(true); };
+
   const handleRequestReset = async () => {
     if (!email) {
-      Alert.alert(t("common.error"), t("forgotPassword.enterEmail"));
+      showAlert({ type: "warning", title: t("common.error"), message: t("forgotPassword.enterEmail") });
       return;
     }
     setLoading(true);
     try {
       await forgotPassword(email.trim().toLowerCase());
-      Alert.alert(
-        t("forgotPassword.codeSentTitle"),
-        t("forgotPassword.codeSentMessage"),
-        [{ text: t("common.continue"), onPress: () => setStep("reset") }]
-      );
+      showAlert({
+        type: "success",
+        title: t("forgotPassword.codeSentTitle"),
+        message: t("forgotPassword.codeSentMessage"),
+        confirmText: t("common.continue"),
+        onConfirm: () => setStep("reset"),
+      });
     } catch (e: any) {
-      Alert.alert(t("common.error"), e?.response?.data?.detail || t("forgotPassword.somethingWentWrong"));
+      showAlert({ type: "error", title: t("common.error"), message: e?.response?.data?.detail || t("forgotPassword.somethingWentWrong") });
     } finally {
       setLoading(false);
     }
@@ -47,27 +53,29 @@ export default function ForgotPasswordScreen({ navigation }: any) {
 
   const handleResetPassword = async () => {
     if (!token || !newPassword || !confirm) {
-      Alert.alert(t("common.error"), t("forgotPassword.fillAllFields"));
+      showAlert({ type: "warning", title: t("common.error"), message: t("forgotPassword.fillAllFields") });
       return;
     }
     if (newPassword !== confirm) {
-      Alert.alert(t("common.error"), t("forgotPassword.passwordMismatch"));
+      showAlert({ type: "warning", title: t("common.error"), message: t("forgotPassword.passwordMismatch") });
       return;
     }
     if (newPassword.length < 8) {
-      Alert.alert(t("common.error"), t("forgotPassword.passwordTooShort"));
+      showAlert({ type: "warning", title: t("common.error"), message: t("forgotPassword.passwordTooShort") });
       return;
     }
     setLoading(true);
     try {
       await resetPassword(token.trim(), newPassword);
-      Alert.alert(
-        t("forgotPassword.successTitle"),
-        t("forgotPassword.successMessage"),
-        [{ text: t("forgotPassword.logInBtn"), onPress: () => navigation.navigate("Login") }]
-      );
+      showAlert({
+        type: "success",
+        title: t("forgotPassword.successTitle"),
+        message: t("forgotPassword.successMessage"),
+        confirmText: t("forgotPassword.logInBtn"),
+        onConfirm: () => navigation.navigate("Login"),
+      });
     } catch (e: any) {
-      Alert.alert(t("common.error"), e?.response?.data?.detail || t("forgotPassword.invalidToken"));
+      showAlert({ type: "error", title: t("common.error"), message: e?.response?.data?.detail || t("forgotPassword.invalidToken") });
     } finally {
       setLoading(false);
     }
@@ -81,7 +89,9 @@ export default function ForgotPasswordScreen({ navigation }: any) {
       <ScrollView contentContainerStyle={[styles.container, { backgroundColor: colors.surface }]}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.logo}>🔐</Text>
+          <View style={[styles.logoCircle, { backgroundColor: colors.primary }]}>
+            <Text style={styles.logoSymbol}>K</Text>
+          </View>
           <Text style={[styles.title, { color: colors.primary }]}>
             {step === "email" ? t("forgotPassword.titleEmail") : t("forgotPassword.titleReset")}
           </Text>
@@ -171,26 +181,29 @@ export default function ForgotPasswordScreen({ navigation }: any) {
           </TouchableOpacity>
         </View>
       </ScrollView>
+
+      <AppAlert visible={alertVisible} config={alertCfg} onDismiss={() => setAlertVisible(false)} />
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  container:       { flexGrow: 1, justifyContent: "center", padding: 24 },
-  header:          { alignItems: "center", marginBottom: 24 },
-  logo:            { fontSize: 56, marginBottom: 8 },
-  title:           { fontSize: 28, fontWeight: "bold" },
-  subtitle:        { fontSize: 14, textAlign: "center", marginTop: 6, lineHeight: 20, paddingHorizontal: 16 },
-  stepContainer:   { flexDirection: "row", alignItems: "center", justifyContent: "center", marginBottom: 24, gap: 8 },
-  stepDot:         { width: 12, height: 12, borderRadius: 6 },
-  stepLine:        { width: 40, height: 2 },
-  form:            { borderRadius: 16, padding: 24, borderWidth: 0.5, shadowColor: "#000", shadowOpacity: 0.06, shadowRadius: 10, elevation: 3 },
-  label:           { fontSize: 14, fontWeight: "600", marginBottom: 6, marginTop: 12 },
-  input:           { borderWidth: 1, borderRadius: 10, padding: 14, fontSize: 15 },
-  button:          { backgroundColor: "#2D6A4F", borderRadius: 12, padding: 16, alignItems: "center", marginTop: 24 },
-  buttonDisabled:  { opacity: 0.6 },
-  buttonText:      { color: "#fff", fontWeight: "bold", fontSize: 16 },
-  backText:        { fontSize: 14, fontWeight: "600", textAlign: "center", marginTop: 16 },
-  linkText:        { textAlign: "center", fontSize: 14, marginTop: 20 },
-  linkBold:        { fontWeight: "bold" },
+  container:     { flexGrow: 1, justifyContent: "center", padding: 24 },
+  header:        { alignItems: "center", marginBottom: 24 },
+  logoCircle:    { width: 72, height: 72, borderRadius: 36, alignItems: "center", justifyContent: "center", marginBottom: 16 },
+  logoSymbol:    { fontSize: 32, fontWeight: "800", color: "#fff" },
+  title:         { fontSize: 28, fontWeight: "bold" },
+  subtitle:      { fontSize: 14, textAlign: "center", marginTop: 6, lineHeight: 20, paddingHorizontal: 16 },
+  stepContainer: { flexDirection: "row", alignItems: "center", justifyContent: "center", marginBottom: 24, gap: 8 },
+  stepDot:       { width: 12, height: 12, borderRadius: 6 },
+  stepLine:      { width: 40, height: 2 },
+  form:          { borderRadius: 16, padding: 24, borderWidth: 0.5, shadowColor: "#000", shadowOpacity: 0.06, shadowRadius: 10, elevation: 3 },
+  label:         { fontSize: 14, fontWeight: "600", marginBottom: 6, marginTop: 12 },
+  input:         { borderWidth: 1, borderRadius: 10, padding: 14, fontSize: 15 },
+  button:        { backgroundColor: "#2D6A4F", borderRadius: 12, padding: 16, alignItems: "center", marginTop: 24 },
+  buttonDisabled:{ opacity: 0.6 },
+  buttonText:    { color: "#fff", fontWeight: "bold", fontSize: 16 },
+  backText:      { fontSize: 14, fontWeight: "600", textAlign: "center", marginTop: 16 },
+  linkText:      { textAlign: "center", fontSize: 14, marginTop: 20 },
+  linkBold:      { fontWeight: "bold" },
 });

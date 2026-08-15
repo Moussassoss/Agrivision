@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react";
 import { Animated, View, StyleSheet, ViewStyle } from "react-native";
-import { useTheme } from "../context/ThemeContext";
 
 interface SkeletonProps {
   width?: number | string;
@@ -10,7 +9,6 @@ interface SkeletonProps {
 }
 
 export function Skeleton({ width = "100%", height = 16, borderRadius = 8, style }: SkeletonProps) {
-  const { isDark } = useTheme();
   const shimmer = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -23,7 +21,7 @@ export function Skeleton({ width = "100%", height = 16, borderRadius = 8, style 
   }, []);
 
   const opacity = shimmer.interpolate({ inputRange: [0, 1], outputRange: [0.4, 0.9] });
-  const baseColor = isDark ? "#2A4035" : "#E0E0E0";
+  const baseColor = "#E0E0E0";
 
   return (
     <Animated.View

@@ -6,7 +6,6 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
-  Alert,
   SafeAreaView,
   StatusBar,
   ActivityIndicator,
@@ -18,6 +17,7 @@ import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
 import { useTheme } from "../context/ThemeContext";
 import { forgotPassword, resetPassword, deleteAccount } from "../services/api";
+import AppAlert, { AppAlertConfig } from "../components/AppAlert";
 
 type PasswordStep = "idle" | "sending" | "awaitingCode" | "resetting" | "done";
 
@@ -36,6 +36,10 @@ export default function ProfileScreen({ navigation }: any) {
   const [deleteConfirm, setDeleteConfirm] = useState("");
   const [deleting, setDeleting]           = useState(false);
 
+  const [alertCfg, setAlertCfg] = useState<AppAlertConfig | null>(null);
+  const [alertVisible, setAlertVisible] = useState(false);
+  const showAlert = (cfg: AppAlertConfig) => { setAlertCfg(cfg); setAlertVisible(true); };
+
   const handleRequestLocation = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status === "granted") {
@@ -52,7 +56,7 @@ export default function ProfileScreen({ navigation }: any) {
         await forgotPassword(user!.email);
         setPasswordStep("awaitingCode");
       } catch {
-        Alert.alert(t("common.error"), t("profile.resetTokenError"));
+        showAlert({ type: "error", title: t("common.error"), message: t("profile.resetTokenError") });
         setPasswordStep("idle");
       }
       return;
@@ -60,15 +64,15 @@ export default function ProfileScreen({ navigation }: any) {
 
     if (passwordStep === "awaitingCode") {
       if (!resetToken.trim()) {
-        Alert.alert(t("common.error"), t("profile.enterToken"));
+        showAlert({ type: "warning", title: t("common.error"), message: t("profile.enterToken") });
         return;
       }
       if (newPassword.length < 8) {
-        Alert.alert(t("common.error"), t("profile.passwordTooShort"));
+        showAlert({ type: "warning", title: t("common.error"), message: t("profile.passwordTooShort") });
         return;
       }
       if (newPassword !== confirmPass) {
-        Alert.alert(t("common.error"), t("profile.passwordMismatch"));
+        showAlert({ type: "warning", title: t("common.error"), message: t("profile.passwordMismatch") });
         return;
       }
       setPasswordStep("resetting");
@@ -78,9 +82,9 @@ export default function ProfileScreen({ navigation }: any) {
         setResetToken("");
         setNewPassword("");
         setConfirmPass("");
-        Alert.alert(t("profile.passwordChanged"), t("profile.passwordChangedMsg"));
+        showAlert({ type: "success", title: t("profile.passwordChanged"), message: t("profile.passwordChangedMsg") });
       } catch {
-        Alert.alert(t("common.error"), t("profile.resetError"));
+        showAlert({ type: "error", title: t("common.error"), message: t("profile.resetError") });
         setPasswordStep("awaitingCode");
       }
     }
@@ -93,33 +97,33 @@ export default function ProfileScreen({ navigation }: any) {
   const handleDeleteAccount = async () => {
     const confirmWord = language === "rw" ? "SIBA" : "DELETE";
     if (deleteConfirm.trim().toUpperCase() !== confirmWord) {
-      Alert.alert(t("common.error"), t("profile.deleteAccountTypeError"));
+      showAlert({ type: "warning", title: t("common.error"), message: t("profile.deleteAccountTypeError") });
       return;
     }
     setDeleting(true);
     try {
       await deleteAccount();
-      Alert.alert("", t("profile.deleteAccountSuccess"));
-      await signOut();
+      showAlert({
+        type: "success",
+        title: t("profile.deleteAccountSuccess"),
+        confirmText: "OK",
+        onConfirm: () => signOut(),
+      });
     } catch {
-      Alert.alert(t("common.error"), t("profile.deleteAccountError"));
+      showAlert({ type: "error", title: t("common.error"), message: t("profile.deleteAccountError") });
       setDeleting(false);
     }
   };
 
   const handleLogout = () => {
-    Alert.alert(
-      t("profile.logoutConfirmTitle"),
-      t("profile.logoutConfirmMsg"),
-      [
-        { text: t("common.cancel"), style: "cancel" },
-        {
-          text: t("profile.logout"),
-          style: "destructive",
-          onPress: signOut,
-        },
-      ]
-    );
+    showAlert({
+      type: "confirm",
+      title: t("profile.logoutConfirmTitle"),
+      message: t("profile.logoutConfirmMsg"),
+      confirmText: t("profile.logout"),
+      cancelText: t("common.cancel"),
+      onConfirm: signOut,
+    });
   };
 
   const cancelPasswordChange = () => {
@@ -159,10 +163,10 @@ export default function ProfileScreen({ navigation }: any) {
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>{t("profile.accountInfo")}</Text>
           <View style={[styles.infoCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
-            <InfoRow icon="👤" label={t("profile.name")}  value={user?.full_name || "—"} colors={colors} />
-            <InfoRow icon="📧" label={t("profile.email")} value={user?.email    || "—"} colors={colors} />
+            <InfoRow label={t("profile.name")}  value={user?.full_name || "—"} colors={colors} />
+            <InfoRow label={t("profile.email")} value={user?.email    || "—"} colors={colors} />
             {user?.phone && (
-              <InfoRow icon="📱" label={t("profile.phone")} value={user.phone} colors={colors} />
+              <InfoRow label={t("profile.phone")} value={user.phone} colors={colors} />
             )}
           </View>
         </View>
@@ -175,7 +179,6 @@ export default function ProfileScreen({ navigation }: any) {
             {/* Language toggle */}
             <View style={styles.settingRow}>
               <View style={styles.settingLeft}>
-                <Text style={styles.settingIcon}>🌐</Text>
                 <View>
                   <Text style={styles.settingLabel}>{t("profile.language")}</Text>
                   <Text style={styles.settingValue}>
@@ -195,7 +198,7 @@ export default function ProfileScreen({ navigation }: any) {
             {/* Location */}
             <View style={styles.settingRow}>
               <View style={styles.settingLeft}>
-                <Text style={styles.settingIcon}>📍</Text>
+                <Text style={styles.locationPin}>📍</Text>
                 <View>
                   <Text style={styles.settingLabel}>{t("profile.locationAccess")}</Text>
                   {locStatus && (
@@ -216,12 +219,14 @@ export default function ProfileScreen({ navigation }: any) {
           style={[styles.infoCard, { backgroundColor: colors.primarySurface, borderColor: colors.border, flexDirection: "row", alignItems: "center", gap: 12 }]}
           onPress={() => navigation.navigate("HowItWorks")}
         >
-          <Text style={{ fontSize: 24 }}>🔬</Text>
+          <View style={[styles.howItWorksIcon, { backgroundColor: colors.primary }]}>
+            <Text style={styles.howItWorksIconText}>?</Text>
+          </View>
           <View style={{ flex: 1 }}>
             <Text style={[styles.settingLabel, { color: colors.primary }]}>{t("profile.howItWorks")}</Text>
             <Text style={[styles.settingValue, { color: colors.textSecondary }]}>{t("profile.howItWorksSub")}</Text>
           </View>
-          <Text style={[styles.settingIcon, { color: colors.primary }]}>›</Text>
+          <Text style={[styles.chevron, { color: colors.primary }]}>›</Text>
         </TouchableOpacity>
 
         {/* Change password */}
@@ -310,29 +315,27 @@ export default function ProfileScreen({ navigation }: any) {
           <Text style={[styles.sectionTitle, { color: colors.text }]}>{t("profile.legal")}</Text>
           <View style={[styles.infoCard, { backgroundColor: colors.card, borderColor: colors.border, gap: 0 }]}>
             <TouchableOpacity
-              style={[styles.legalRow]}
+              style={styles.legalRow}
               onPress={() => Linking.openURL("https://moussassoss.github.io/Agrivision/privacy-policy.html")}
             >
-              <Text style={styles.settingIcon}>🔒</Text>
               <View style={{ flex: 1 }}>
                 <Text style={[styles.settingLabel, { color: colors.text }]}>{t("profile.privacyPolicy")}</Text>
                 <Text style={[styles.settingValue, { color: colors.textSecondary }]}>{t("profile.privacyPolicySub")}</Text>
               </View>
-              <Text style={[styles.settingIcon, { color: colors.textSecondary }]}>›</Text>
+              <Text style={[styles.chevron, { color: colors.textSecondary }]}>›</Text>
             </TouchableOpacity>
 
             <View style={[styles.divider, { backgroundColor: colors.border }]} />
 
             <TouchableOpacity
-              style={[styles.legalRow]}
+              style={styles.legalRow}
               onPress={() => Linking.openURL("https://moussassoss.github.io/Agrivision/terms-of-service.html")}
             >
-              <Text style={styles.settingIcon}>📄</Text>
               <View style={{ flex: 1 }}>
                 <Text style={[styles.settingLabel, { color: colors.text }]}>{t("profile.termsOfService")}</Text>
                 <Text style={[styles.settingValue, { color: colors.textSecondary }]}>{t("profile.termsOfServiceSub")}</Text>
               </View>
-              <Text style={[styles.settingIcon, { color: colors.textSecondary }]}>›</Text>
+              <Text style={[styles.chevron, { color: colors.textSecondary }]}>›</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -348,7 +351,7 @@ export default function ProfileScreen({ navigation }: any) {
             </TouchableOpacity>
           ) : (
             <View style={[styles.infoCard, { backgroundColor: "#FFF5F5", borderColor: "#FFCDD2", borderWidth: 1 }]}>
-              <Text style={styles.deleteDangerTitle}>⚠️  {t("profile.deleteAccount")}</Text>
+              <Text style={styles.deleteDangerTitle}>{t("profile.deleteAccount")}</Text>
               <Text style={[styles.deleteHint, { color: colors.textSecondary }]}>{t("profile.deleteAccountHint")}</Text>
               <TextInput
                 style={styles.deleteInput}
@@ -381,13 +384,14 @@ export default function ProfileScreen({ navigation }: any) {
         </TouchableOpacity>
 
       </ScrollView>
+
+      <AppAlert visible={alertVisible} config={alertCfg} onDismiss={() => setAlertVisible(false)} />
     </SafeAreaView>
   );
 }
 
-const InfoRow = ({ icon, label, value, colors }: { icon: string; label: string; value: string; colors: any }) => (
+const InfoRow = ({ label, value, colors }: { label: string; value: string; colors: any }) => (
   <View style={styles.infoRow}>
-    <Text style={styles.infoIcon}>{icon}</Text>
     <View style={{ flex: 1 }}>
       <Text style={[styles.infoLabel, { color: colors.textMuted }]}>{label}</Text>
       <Text style={[styles.infoValue, { color: colors.text }]}>{value}</Text>
@@ -405,12 +409,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderBottomWidth: 0.5,
-    borderBottomColor: "#F0F0F0",
-    backgroundColor: "#fff",
   },
   backBtn:  { width: 60 },
   backText: { fontSize: 17, color: "#4CAF50", fontWeight: "600" },
-  topTitle: { fontSize: 16, fontWeight: "700", color: "#1a1a1a" },
+  topTitle: { fontSize: 16, fontWeight: "700" },
 
   body: { padding: 20, paddingBottom: 48, gap: 20 },
 
@@ -428,44 +430,35 @@ const styles = StyleSheet.create({
   emailTag:     { fontSize: 14, color: "#888" },
 
   section:      { gap: 10 },
-  sectionTitle: { fontSize: 16, fontWeight: "700", color: "#1a1a1a" },
+  sectionTitle: { fontSize: 16, fontWeight: "700" },
 
   infoCard: {
-    backgroundColor: "#F9F9F9",
     borderRadius: 14,
     padding: 16,
     borderWidth: 0.5,
-    borderColor: "#EBEBEB",
     gap: 12,
   },
-  infoRow:   { flexDirection: "row", alignItems: "center", gap: 12 },
-  infoIcon:  { fontSize: 20 },
-  infoLabel: { fontSize: 11, color: "#888", fontWeight: "500", marginBottom: 2 },
-  infoValue: { fontSize: 15, color: "#1a1a1a", fontWeight: "600" },
+  infoRow:   { flexDirection: "row", alignItems: "center" },
+  infoLabel: { fontSize: 11, fontWeight: "500", marginBottom: 2 },
+  infoValue: { fontSize: 15, fontWeight: "600" },
 
-  settingRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  settingLeft:  { flexDirection: "row", alignItems: "center", gap: 12, flex: 1 },
-  settingIcon:  { fontSize: 20 },
-  settingLabel: { fontSize: 14, color: "#1a1a1a", fontWeight: "600", marginBottom: 2 },
-  settingValue: { fontSize: 12, color: "#888" },
+  settingRow:  { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
+  settingLeft: { flexDirection: "row", alignItems: "center", gap: 10, flex: 1 },
+  locationPin: { fontSize: 16 },
+  settingLabel:{ fontSize: 14, fontWeight: "600", marginBottom: 2 },
+  settingValue:{ fontSize: 12 },
+  chevron:     { fontSize: 20, fontWeight: "700" },
 
-  toggleBtn: {
-    backgroundColor: "#E8F5E9",
-    borderRadius: 20,
-    paddingHorizontal: 14,
-    paddingVertical: 7,
-  },
+  toggleBtn:     { backgroundColor: "#E8F5E9", borderRadius: 20, paddingHorizontal: 14, paddingVertical: 7 },
   toggleBtnText: { fontSize: 13, color: "#2D6A4F", fontWeight: "700" },
 
-  divider: { height: 0.5, backgroundColor: "#EBEBEB" },
+  divider: { height: 0.5 },
 
-  passwordHint: { fontSize: 13, color: "#888", lineHeight: 19, marginBottom: 10 },
+  howItWorksIcon:     { width: 40, height: 40, borderRadius: 20, alignItems: "center", justifyContent: "center" },
+  howItWorksIconText: { fontSize: 20, fontWeight: "800", color: "#fff" },
 
-  inputLabel: { fontSize: 12, fontWeight: "600", color: "#555", marginBottom: 6 },
+  passwordHint: { fontSize: 13, lineHeight: 19, marginBottom: 10 },
+  inputLabel:   { fontSize: 12, fontWeight: "600", marginBottom: 6 },
   input: {
     backgroundColor: "#fff",
     borderWidth: 0.5,
@@ -478,32 +471,16 @@ const styles = StyleSheet.create({
 
   centeredRow: { flexDirection: "row", alignItems: "center", gap: 10 },
 
-  outlineBtn: {
-    borderRadius: 12,
-    padding: 13,
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#2D6A4F",
-  },
+  outlineBtn:     { borderRadius: 12, padding: 13, alignItems: "center", borderWidth: 1, borderColor: "#2D6A4F" },
   outlineBtnText: { color: "#2D6A4F", fontWeight: "700", fontSize: 14 },
 
-  primaryBtn: {
-    backgroundColor: "#2D6A4F",
-    borderRadius: 12,
-    padding: 14,
-    alignItems: "center",
-  },
+  primaryBtn:     { backgroundColor: "#2D6A4F", borderRadius: 12, padding: 14, alignItems: "center" },
   primaryBtnText: { color: "#fff", fontWeight: "700", fontSize: 14 },
 
   cancelBtn:     { alignItems: "center", paddingVertical: 6 },
   cancelBtnText: { fontSize: 13, color: "#aaa" },
 
-  legalRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    paddingVertical: 12,
-  },
+  legalRow: { flexDirection: "row", alignItems: "center", paddingVertical: 12 },
 
   logoutBtn: {
     backgroundColor: "#FFF0F0",
@@ -516,11 +493,11 @@ const styles = StyleSheet.create({
   },
   logoutBtnText: { color: "#D32F2F", fontWeight: "700", fontSize: 15 },
 
-  deleteRevealBtn: { alignItems: "center", paddingVertical: 8 },
+  deleteRevealBtn:  { alignItems: "center", paddingVertical: 8 },
   deleteRevealText: { fontSize: 13, color: "#B71C1C", fontWeight: "500" },
 
   deleteDangerTitle: { fontSize: 15, fontWeight: "700", color: "#B71C1C", marginBottom: 6 },
-  deleteHint: { fontSize: 13, color: "#555", lineHeight: 19, marginBottom: 14 },
+  deleteHint:        { fontSize: 13, lineHeight: 19, marginBottom: 14 },
   deleteInput: {
     backgroundColor: "#fff",
     borderWidth: 1,
