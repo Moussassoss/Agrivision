@@ -86,7 +86,6 @@ async def register(request: Request, body: UserRegister, db: AsyncSession = Depe
     user = User(
         email           = body.email,
         full_name       = body.full_name,
-        phone           = body.phone,
         hashed_password = hash_password(body.password),
     )
     db.add(user)
@@ -135,7 +134,6 @@ async def me(current_user: User = Depends(get_current_user)):
         "user_id":   str(current_user.id),
         "email":     current_user.email,
         "full_name": current_user.full_name,
-        "phone":     current_user.phone,
     }
 
 

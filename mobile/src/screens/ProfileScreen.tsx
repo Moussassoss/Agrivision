@@ -165,9 +165,6 @@ export default function ProfileScreen({ navigation }: any) {
           <View style={[styles.infoCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
             <InfoRow label={t("profile.name")}  value={user?.full_name || "—"} colors={colors} />
             <InfoRow label={t("profile.email")} value={user?.email    || "—"} colors={colors} />
-            {user?.phone && (
-              <InfoRow label={t("profile.phone")} value={user.phone} colors={colors} />
-            )}
           </View>
         </View>
 

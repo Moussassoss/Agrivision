@@ -22,7 +22,6 @@ export default function RegisterScreen({ navigation }: any) {
   const { colors } = useTheme();
   const [fullName, setFullName]     = useState("");
   const [email, setEmail]           = useState("");
-  const [phone, setPhone]           = useState("");
   const [password, setPassword]     = useState("");
   const [confirm, setConfirm]       = useState("");
   const [loading, setLoading]       = useState(false);
@@ -55,7 +54,6 @@ export default function RegisterScreen({ navigation }: any) {
         full_name: fullName.trim(),
         email:     email.trim().toLowerCase(),
         password,
-        phone:     phone.trim() || undefined,
       });
     } catch (e: any) {
       showAlert({
@@ -100,16 +98,6 @@ export default function RegisterScreen({ navigation }: any) {
             onChangeText={setEmail}
             keyboardType="email-address"
             autoCapitalize="none"
-          />
-
-          <Text style={[styles.label, { color: colors.text }]}>{t("register.phone")}</Text>
-          <TextInput
-            style={[styles.input, { backgroundColor: colors.inputBg, borderColor: colors.inputBorder, color: colors.text }]}
-            placeholder={t("register.phonePlaceholder")}
-            placeholderTextColor={colors.textMuted}
-            value={phone}
-            onChangeText={setPhone}
-            keyboardType="phone-pad"
           />
 
           <Text style={[styles.label, { color: colors.text }]}>{t("register.password")}</Text>

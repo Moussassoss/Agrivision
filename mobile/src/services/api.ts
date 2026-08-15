@@ -25,7 +25,6 @@ export const register = async (data: {
   email: string;
   password: string;
   full_name: string;
-  phone?: string;
 }) => {
   const res = await api.post("/auth/register", data);
   return res.data;

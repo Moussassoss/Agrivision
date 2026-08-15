@@ -53,7 +53,6 @@ class UserRegister(BaseModel):
     email: str = Field(..., description="Farmer's email address")
     password: str = Field(..., min_length=8, description="Min 8 characters")
     full_name: str = Field(..., min_length=2)
-    phone: Optional[str] = None
 
 
 class UserLogin(BaseModel):

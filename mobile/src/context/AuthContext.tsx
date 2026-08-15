@@ -6,7 +6,6 @@ interface User {
   user_id: string;
   email: string;
   full_name: string;
-  phone?: string;
 }
 
 interface AuthContextType {
@@ -18,7 +17,6 @@ interface AuthContextType {
     email: string;
     password: string;
     full_name: string;
-    phone?: string;
   }) => Promise<void>;
   signOut: () => Promise<void>;
 }
@@ -61,7 +59,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     email: string;
     password: string;
     full_name: string;
-    phone?: string;
   }) => {
     await register(formData);
     await signIn(formData.email, formData.password);
