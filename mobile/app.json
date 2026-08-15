@@ -26,7 +26,9 @@
         "NSPrivacyAccessedAPITypes": [
           {
             "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
-            "NSPrivacyAccessedAPITypeReasons": ["CA92.1"]
+            "NSPrivacyAccessedAPITypeReasons": [
+              "CA92.1"
+            ]
           }
         ]
       },
@@ -63,8 +65,9 @@
       "privacyPolicyUrl": "https://moussassoss.github.io/agrivision/privacy-policy.html",
       "termsOfServiceUrl": "https://moussassoss.github.io/agrivision/terms-of-service.html",
       "eas": {
-        "projectId": "YOUR_EAS_PROJECT_ID"
+        "projectId": "b2c0b8fd-1d0b-4590-b65f-eb6514ee094f"
       }
-    }
+    },
+    "owner": "ssossinfo"
   }
 }

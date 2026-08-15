@@ -14,20 +14,23 @@
       }
     },
     "production": {
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://cropvana-api.onrender.com/"
+      },
       "ios": {
-        "resourceClass": "m-medium"
+        "resourceClass": "m-medium",
+        "bundleIdentifier": "com.agrivision.cropvana"
       },
       "android": {
-        "buildType": "apk"
+        "buildType": "app-bundle"
       }
     }
   },
   "submit": {
     "production": {
       "ios": {
-        "appleId": "YOUR_APPLE_ID@example.com",
-        "ascAppId": "YOUR_APP_STORE_CONNECT_APP_ID",
-        "appleTeamId": "YOUR_APPLE_TEAM_ID"
+        "appleId": "ssossinfo88@gmail.com",
+        "appleTeamId": "NX3J363N53"
       },
       "android": {
         "serviceAccountKeyPath": "./google-play-key.json",

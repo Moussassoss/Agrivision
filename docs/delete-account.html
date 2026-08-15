@@ -1,0 +1,496 @@
+<title>Delete Your Account — CropVana</title>
+<style>
+  :root {
+    --green-900: #1A2E25;
+    --green-700: #2D6A4F;
+    --green-500: #52B788;
+    --green-100: #EAF4EE;
+    --green-50:  #F4FAF6;
+    --muted:     #5E7D6D;
+    --border:    #C8DDD5;
+    --amber:     #C05621;
+    --amber-bg:  #FEF3EA;
+    --text:      #1A2E25;
+    --surface:   #FFFFFF;
+    --bg:        #F4FAF6;
+    --step-num:  #2D6A4F;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --green-900: #D4EDE0;
+      --green-700: #52B788;
+      --green-500: #74C99F;
+      --green-100: #1A3028;
+      --green-50:  #152620;
+      --muted:     #7EB89E;
+      --border:    #2A4035;
+      --amber:     #F6A96A;
+      --amber-bg:  #2C1A0E;
+      --text:      #D8EEE2;
+      --surface:   #1C3028;
+      --bg:        #111C17;
+      --step-num:  #52B788;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --green-900: #D4EDE0;
+    --green-700: #52B788;
+    --green-500: #74C99F;
+    --green-100: #1A3028;
+    --green-50:  #152620;
+    --muted:     #7EB89E;
+    --border:    #2A4035;
+    --amber:     #F6A96A;
+    --amber-bg:  #2C1A0E;
+    --text:      #D8EEE2;
+    --surface:   #1C3028;
+    --bg:        #111C17;
+    --step-num:  #52B788;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+
+  .logo-mark {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--green-700);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+
+  .logo-sub {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+
+  /* Hero */
+  .hero {
+    margin-bottom: 36px;
+  }
+
+  .hero h1 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    color: var(--text);
+    text-wrap: balance;
+    margin-bottom: 10px;
+  }
+
+  .hero p {
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.65;
+    max-width: 480px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  .card-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--green-700);
+    background: var(--green-100);
+    border-radius: 20px;
+    padding: 4px 10px;
+    margin-bottom: 14px;
+  }
+
+  .card-label.secondary {
+    color: var(--muted);
+    background: transparent;
+    border: 1px solid var(--border);
+  }
+
+  .card h2 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 18px;
+    letter-spacing: -0.01em;
+  }
+
+  /* Steps */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .step {
+    display: flex;
+    gap: 14px;
+    position: relative;
+  }
+
+  .step:not(:last-child) .step-left::after {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 32px;
+    bottom: -6px;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .step-left {
+    position: relative;
+    flex-shrink: 0;
+    padding-bottom: 20px;
+  }
+
+  .step-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--green-100);
+    color: var(--step-num);
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step:last-child .step-left {
+    padding-bottom: 0;
+  }
+
+  .step-body {
+    padding-top: 5px;
+    padding-bottom: 20px;
+  }
+
+  .step:last-child .step-body {
+    padding-bottom: 0;
+  }
+
+  .step-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .step-desc {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .step-tag {
+    display: inline-block;
+    background: var(--green-100);
+    color: var(--green-700);
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 6px;
+    padding: 2px 7px;
+    margin-top: 4px;
+  }
+
+  /* Email method */
+  .email-method {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .email-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+
+  .email-row span {
+    font-size: 15px;
+  }
+
+  .email-link {
+    color: var(--green-700);
+    text-decoration: none;
+    font-weight: 600;
+    word-break: break-all;
+  }
+
+  .email-link:hover { text-decoration: underline; }
+
+  .field-hint {
+    font-size: 0.8rem;
+    color: var(--muted);
+    padding: 12px 14px;
+    background: var(--bg);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  .field-hint strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* Warning notice */
+  .notice {
+    background: var(--amber-bg);
+    border: 1px solid color-mix(in srgb, var(--amber) 30%, transparent);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .notice-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .notice-text {
+    font-size: 0.85rem;
+    color: var(--amber);
+    line-height: 1.55;
+  }
+
+  .notice-text strong {
+    font-weight: 700;
+  }
+
+  /* Data list */
+  .data-section {
+    margin-top: 32px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+  }
+
+  .data-section h3 {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  .data-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .data-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  .data-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green-500);
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+
+  .retention-note {
+    margin-top: 14px;
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.55;
+    padding: 12px 14px;
+    border-radius: 8px;
+    background: var(--green-50);
+    border: 1px solid var(--border);
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-size: 0.78rem;
+    color: var(--muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer a {
+    color: var(--green-700);
+    text-decoration: none;
+  }
+
+  .footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 480px) {
+    .hero h1 { font-size: 1.5rem; }
+    .data-grid { grid-template-columns: 1fr; }
+    .footer { flex-direction: column; align-items: flex-start; gap: 8px; }
+  }
+</style>
+
+<div class="page">
+
+  <div class="header">
+    <div class="logo-mark">🌱</div>
+    <div>
+      <div class="logo-text">CropVana</div>
+      <div class="logo-sub">cropvana.app</div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <h1>Delete your account</h1>
+    <p>You can delete your CropVana account and all associated data at any time — directly from the app, or by contacting us.</p>
+  </div>
+
+  <div class="notice">
+    <div class="notice-icon">⚠</div>
+    <div class="notice-text">
+      <strong>This action is permanent.</strong> Deleting your account removes all your recommendations history, profile information, and cannot be undone.
+    </div>
+  </div>
+
+  <!-- In-app method -->
+  <div class="card">
+    <div class="card-label">Recommended</div>
+    <h2>Delete from the app</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-left">
+          <div class="step-num">1</div>
+        </div>
+        <div class="step-body">
+          <div class="step-title">Open CropVana</div>
+          <div class="step-desc">Make sure you're signed in to the account you want to delete.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left">
+          <div class="step-num">2</div>
+        </div>
+        <div class="step-body">
+          <div class="step-title">Go to your Profile</div>
+          <div class="step-desc">Tap your initials avatar in the top-right corner of the home screen.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left">
+          <div class="step-num">3</div>
+        </div>
+        <div class="step-body">
+          <div class="step-title">Scroll to Danger Zone</div>
+          <div class="step-desc">Scroll to the bottom of your profile page.</div>
+          <div class="step-tag">Danger Zone section</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left">
+          <div class="step-num">4</div>
+        </div>
+        <div class="step-body">
+          <div class="step-title">Tap "Delete my account" and confirm</div>
+          <div class="step-desc">Your account and all data will be permanently removed immediately.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Email method -->
+  <div class="card">
+    <div class="card-label secondary">Alternative</div>
+    <h2>Request deletion by email</h2>
+    <div class="email-method">
+      <div class="email-row">
+        <span>✉</span>
+        <div>Send a request to <a href="mailto:hamatguire@gmail.com?subject=Account%20Deletion%20Request" class="email-link">hamatguire@gmail.com</a></div>
+      </div>
+      <div class="field-hint">
+        <strong>Include in your email:</strong> the email address registered on your CropVana account, and "Account Deletion Request" as the subject line. We'll process your request within <strong>30 days</strong>.
+      </div>
+    </div>
+  </div>
+
+  <!-- Data details -->
+  <div class="data-section">
+    <h3>What gets deleted</h3>
+    <div class="data-grid">
+      <div class="data-item"><div class="data-dot"></div>Account name &amp; email</div>
+      <div class="data-item"><div class="data-dot"></div>Phone number</div>
+      <div class="data-item"><div class="data-dot"></div>Crop recommendation history</div>
+      <div class="data-item"><div class="data-dot"></div>Saved location data</div>
+      <div class="data-item"><div class="data-dot"></div>Soil &amp; weather queries</div>
+      <div class="data-item"><div class="data-dot"></div>Authentication tokens</div>
+    </div>
+    <div class="retention-note">
+      Anonymized, aggregated usage data that cannot identify you may be retained for improving the model. Password reset tokens are purged immediately on deletion.
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>© 2026 CropVana</span>
+    <div style="display:flex;gap:16px;">
+      <a href="./privacy-policy.html">Privacy Policy</a>
+      <a href="./terms-of-service.html">Terms of Service</a>
+    </div>
+  </div>
+
+</div>
