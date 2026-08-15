@@ -159,10 +159,10 @@ export default function ProfileScreen({ navigation }: any) {
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>{t("profile.accountInfo")}</Text>
           <View style={[styles.infoCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
-            <InfoRow icon="👤" label={t("profile.name")}  value={user?.full_name || "—"} />
-            <InfoRow icon="📧" label={t("profile.email")} value={user?.email    || "—"} />
+            <InfoRow icon="👤" label={t("profile.name")}  value={user?.full_name || "—"} colors={colors} />
+            <InfoRow icon="📧" label={t("profile.email")} value={user?.email    || "—"} colors={colors} />
             {user?.phone && (
-              <InfoRow icon="📱" label={t("profile.phone")} value={user.phone} />
+              <InfoRow icon="📱" label={t("profile.phone")} value={user.phone} colors={colors} />
             )}
           </View>
         </View>
@@ -249,7 +249,7 @@ export default function ProfileScreen({ navigation }: any) {
 
             {(passwordStep === "idle" || passwordStep === "done") && (
               <View>
-                <Text style={styles.passwordHint}>{t("profile.changePasswordHint")}</Text>
+                <Text style={[styles.passwordHint, { color: colors.textSecondary }]}>{t("profile.changePasswordHint")}</Text>
                 <TouchableOpacity style={styles.outlineBtn} onPress={handleChangePassword}>
                   <Text style={styles.outlineBtnText}>{t("profile.sendResetCode")}</Text>
                 </TouchableOpacity>
@@ -259,16 +259,16 @@ export default function ProfileScreen({ navigation }: any) {
             {passwordStep === "sending" && (
               <View style={styles.centeredRow}>
                 <ActivityIndicator color="#2D6A4F" />
-                <Text style={styles.passwordHint}>{t("profile.sendingCode")}</Text>
+                <Text style={[styles.passwordHint, { color: colors.textSecondary }]}>{t("profile.sendingCode")}</Text>
               </View>
             )}
 
             {passwordStep === "awaitingCode" && (
               <View style={{ gap: 12 }}>
-                <Text style={styles.passwordHint}>{t("profile.codeSentHint")}</Text>
+                <Text style={[styles.passwordHint, { color: colors.textSecondary }]}>{t("profile.codeSentHint")}</Text>
 
                 <View>
-                  <Text style={styles.inputLabel}>{t("profile.resetCode")}</Text>
+                  <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>{t("profile.resetCode")}</Text>
                   <TextInput
                     style={styles.input}
                     value={resetToken}
@@ -280,7 +280,7 @@ export default function ProfileScreen({ navigation }: any) {
                 </View>
 
                 <View>
-                  <Text style={styles.inputLabel}>{t("profile.newPassword")}</Text>
+                  <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>{t("profile.newPassword")}</Text>
                   <TextInput
                     style={styles.input}
                     value={newPassword}
@@ -292,7 +292,7 @@ export default function ProfileScreen({ navigation }: any) {
                 </View>
 
                 <View>
-                  <Text style={styles.inputLabel}>{t("profile.confirmPassword")}</Text>
+                  <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>{t("profile.confirmPassword")}</Text>
                   <TextInput
                     style={styles.input}
                     value={confirmPass}
@@ -316,7 +316,7 @@ export default function ProfileScreen({ navigation }: any) {
             {passwordStep === "resetting" && (
               <View style={styles.centeredRow}>
                 <ActivityIndicator color="#2D6A4F" />
-                <Text style={styles.passwordHint}>{t("profile.updatingPassword")}</Text>
+                <Text style={[styles.passwordHint, { color: colors.textSecondary }]}>{t("profile.updatingPassword")}</Text>
               </View>
             )}
 
@@ -367,7 +367,7 @@ export default function ProfileScreen({ navigation }: any) {
           ) : (
             <View style={[styles.infoCard, { backgroundColor: "#FFF5F5", borderColor: "#FFCDD2", borderWidth: 1 }]}>
               <Text style={styles.deleteDangerTitle}>⚠️  {t("profile.deleteAccount")}</Text>
-              <Text style={styles.deleteHint}>{t("profile.deleteAccountHint")}</Text>
+              <Text style={[styles.deleteHint, { color: colors.textSecondary }]}>{t("profile.deleteAccountHint")}</Text>
               <TextInput
                 style={styles.deleteInput}
                 value={deleteConfirm}
@@ -403,12 +403,12 @@ export default function ProfileScreen({ navigation }: any) {
   );
 }
 
-const InfoRow = ({ icon, label, value }: { icon: string; label: string; value: string }) => (
+const InfoRow = ({ icon, label, value, colors }: { icon: string; label: string; value: string; colors: any }) => (
   <View style={styles.infoRow}>
     <Text style={styles.infoIcon}>{icon}</Text>
     <View style={{ flex: 1 }}>
-      <Text style={styles.infoLabel}>{label}</Text>
-      <Text style={styles.infoValue}>{value}</Text>
+      <Text style={[styles.infoLabel, { color: colors.textMuted }]}>{label}</Text>
+      <Text style={[styles.infoValue, { color: colors.text }]}>{value}</Text>
     </View>
   </View>
 );
