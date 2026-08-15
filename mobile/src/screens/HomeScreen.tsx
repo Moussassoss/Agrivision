@@ -23,7 +23,7 @@ export default function HomeScreen({ navigation }: any) {
   const { t } = useTranslation();
   const { language, toggleLanguage } = useLanguage();
   const { user }                                 = useAuth();
-  const { colors, isDark }                       = useTheme();
+  const { colors }                               = useTheme();
   const [location, setLocation]                 = useState<{ lat: number; lon: number } | null>(null);
   const [locationName, setLocationName]         = useState("");
   const [loadingLocation, setLoadingLocation]   = useState(false);
@@ -191,9 +191,9 @@ export default function HomeScreen({ navigation }: any) {
 
             <Text style={[styles.sectionTitle, { color: colors.text }]}>{t("home.autoFetchedData")}</Text>
             <View style={styles.sourceRow}>
-              <SourceChip emoji="🛰️" label="iSDAsoil"    sub="N · P · K · pH" color="#E8F5E9" colors={colors} isDark={isDark} />
-              <SourceChip emoji="🌦️" label="OpenWeather" sub="Temp · Humidity"  color="#E3F2FD" colors={colors} isDark={isDark} />
-              <SourceChip emoji="🌧️" label="NASA POWER"  sub="Seasonal rain"    color="#FFF8E1" colors={colors} isDark={isDark} />
+              <SourceChip emoji="🛰️" label="iSDAsoil"    sub="N · P · K · pH" color="#E8F5E9" colors={colors} />
+              <SourceChip emoji="🌦️" label="OpenWeather" sub="Temp · Humidity"  color="#E3F2FD" colors={colors} />
+              <SourceChip emoji="🌧️" label="NASA POWER"  sub="Seasonal rain"    color="#FFF8E1" colors={colors} />
             </View>
 
             <TouchableOpacity
@@ -378,8 +378,8 @@ export default function HomeScreen({ navigation }: any) {
   );
 }
 
-const SourceChip = ({ emoji, label, sub, color, colors, isDark }: any) => (
-  <View style={[styles.sourceChip, { backgroundColor: isDark ? colors.surface : color }]}>
+const SourceChip = ({ emoji, label, sub, color, colors }: any) => (
+  <View style={[styles.sourceChip, { backgroundColor: color }]}>
     <Text style={styles.sourceEmoji}>{emoji}</Text>
     <Text style={[styles.sourceLabel, { color: colors.text }]}>{label}</Text>
     <Text style={[styles.sourceSub, { color: colors.textSecondary }]}>{sub}</Text>

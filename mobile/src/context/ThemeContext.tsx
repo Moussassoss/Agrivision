@@ -1,10 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { useColorScheme } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { createContext, useContext } from "react";
 
-const THEME_KEY = "@agrivision_theme";
-
-export const lightColors = {
+export const colors = {
   background:    "#FFFFFF",
   backgroundAlt: "#F9F9F9",
   surface:       "#E8F5E9",
@@ -26,65 +22,16 @@ export const lightColors = {
   statusBar:     "dark-content" as "dark-content" | "light-content",
 };
 
-export const darkColors: typeof lightColors = {
-  background:    "#0D1B12",
-  backgroundAlt: "#132019",
-  surface:       "#1A2E20",
-  card:          "#1A2E20",
-  border:        "#2A4035",
-  borderLight:   "#1F3028",
-  text:          "#E8F5E9",
-  textSecondary: "#9DB8A6",
-  textMuted:     "#5A7A65",
-  primary:       "#52B788",
-  primaryLight:  "#74C69D",
-  primarySurface:"#1A2E20",
-  accent:        "#52B788",
-  heroBg:        "#1A3D29",
-  heroText:      "#E8F5E9",
-  inputBg:       "#1A2E20",
-  inputBorder:   "#2A4035",
-  tabBar:        "#0D1B12",
-  statusBar:     "light-content" as "dark-content" | "light-content",
-};
-
 interface ThemeContextType {
-  isDark: boolean;
-  colors: typeof lightColors;
-  toggleTheme: () => void;
+  colors: typeof colors;
 }
 
-const ThemeContext = createContext<ThemeContextType>({
-  isDark: false,
-  colors: lightColors,
-  toggleTheme: () => {},
-});
+const ThemeContext = createContext<ThemeContextType>({ colors });
 
-export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const systemScheme = useColorScheme();
-  const [isDark, setIsDark] = useState(systemScheme === "dark");
-
-  useEffect(() => {
-    AsyncStorage.getItem(THEME_KEY).then((saved) => {
-      if (saved !== null) setIsDark(saved === "dark");
-    }).catch(() => {});
-  }, []);
-
-  const toggleTheme = () => {
-    setIsDark((prev) => {
-      const next = !prev;
-      AsyncStorage.setItem(THEME_KEY, next ? "dark" : "light").catch(() => {});
-      return next;
-    });
-  };
-
-  const colors = isDark ? darkColors : lightColors;
-
-  return (
-    <ThemeContext.Provider value={{ isDark, colors, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
-};
+export const ThemeProvider = ({ children }: { children: React.ReactNode }) => (
+  <ThemeContext.Provider value={{ colors }}>
+    {children}
+  </ThemeContext.Provider>
+);
 
 export const useTheme = () => useContext(ThemeContext);

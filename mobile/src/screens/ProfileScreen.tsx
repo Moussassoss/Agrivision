@@ -25,7 +25,7 @@ export default function ProfileScreen({ navigation }: any) {
   const { t } = useTranslation();
   const { user, signOut } = useAuth();
   const { language, toggleLanguage } = useLanguage();
-  const { colors, isDark, toggleTheme } = useTheme();
+  const { colors } = useTheme();
 
   const [passwordStep, setPasswordStep]   = useState<PasswordStep>("idle");
   const [resetToken, setResetToken]       = useState("");
@@ -187,24 +187,6 @@ export default function ProfileScreen({ navigation }: any) {
                 <Text style={styles.toggleBtnText}>
                   {language === "en" ? "🇷🇼 RW" : "🇬🇧 EN"}
                 </Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={[styles.divider, { backgroundColor: colors.border }]} />
-
-            {/* Dark mode */}
-            <View style={styles.settingRow}>
-              <View style={styles.settingLeft}>
-                <Text style={styles.settingIcon}>{isDark ? "🌙" : "☀️"}</Text>
-                <View>
-                  <Text style={[styles.settingLabel, { color: colors.text }]}>{t("profile.darkMode")}</Text>
-                  <Text style={[styles.settingValue, { color: colors.textSecondary }]}>
-                    {isDark ? t("profile.darkModeOn") : t("profile.darkModeOff")}
-                  </Text>
-                </View>
-              </View>
-              <TouchableOpacity style={[styles.toggleBtn, { backgroundColor: colors.primarySurface }]} onPress={toggleTheme}>
-                <Text style={[styles.toggleBtnText, { color: colors.primary }]}>{isDark ? "🌙" : "☀️"}</Text>
               </TouchableOpacity>
             </View>
 

@@ -22,7 +22,7 @@ const SOURCES = [
 
 export default function HowItWorksScreen({ navigation }: any) {
   const { t } = useTranslation();
-  const { colors, isDark } = useTheme();
+  const { colors } = useTheme();
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]}>
@@ -91,8 +91,8 @@ export default function HowItWorksScreen({ navigation }: any) {
         ))}
 
         {/* Dataset note */}
-        <View style={[styles.noteCard, { backgroundColor: isDark ? "#1a2518" : "#FFFDE7", borderLeftColor: "#FDD835" }]}>
-          <Text style={[styles.noteText, { color: isDark ? "#c8d8c0" : "#795548" }]}>
+        <View style={[styles.noteCard, { backgroundColor: "#FFFDE7", borderLeftColor: "#FDD835" }]}>
+          <Text style={[styles.noteText, { color: "#795548" }]}>
             📊  {t("howItWorks.datasetNote")}
           </Text>
         </View>
